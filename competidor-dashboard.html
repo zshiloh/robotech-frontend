@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Competidor - ROBOTECH</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-custom fixed-top">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+        <span>ROBOTECH</span>
+      </a>
+      <div class="d-flex align-items-center">
+        <!-- Notificaciones -->
+        <div class="dropdown me-3">
+          <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-bell fa-lg"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              id="notificacionesBadge" style="display: none;">0</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" style="width: 400px; max-height: 500px; overflow-y: auto;"
+            id="notificacionesDropdownMenu" aria-labelledby="notificacionesDropdown">
+            <li class="dropdown-item-text text-center py-3">
+              <div class="spinner-border spinner-border-sm" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Dropdown de Usuario -->
+        <div class="dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+              <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item" href="competidor-dashboard.html">
+                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="usuario-perfil.html">
+                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h5><i class="fas fa-robot"></i> Competidor</h5>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="competidor-dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="competidor-robot.html"><i class="fas fa-robot"></i> Mi Robot</a></li>
+      <li><a href="competidor-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a></li>
+      <li><a href="competidor-solicitudes.html"><i class="fas fa-paper-plane"></i> Mis Solicitudes</a></li>
+      <li><a href="competidor-inscripciones.html"><i class="fas fa-trophy"></i> Inscripciones</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" style="margin-top: 60px;">
+    <div class="container-fluid">
+
+      <!-- Bienvenida -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card bg-gradient text-white"
+            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="card-body py-4">
+              <h2 class="mb-2"><i class="fas fa-robot"></i> Bienvenido, <span
+                  id="nombreCompletoDashboard">Competidor</span>!</h2>
+              <p class="mb-0">Gestiona tu robot, únete a clubes y participa en torneos</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas Principales -->
+      <div class="row g-4 mb-4">
+
+        <!-- Mi Robot -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0"><i class="fas fa-robot text-primary"></i> Mi Robot</h5>
+                <span class="badge bg-primary" id="badgeRobot">Cargando...</span>
+              </div>
+
+              <div id="infoRobot">
+                <div class="text-center py-3">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <a href="competidor-robot.html" class="btn btn-outline-primary btn-sm w-100">
+                  <i class="fas fa-cog"></i> Gestionar Robot
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mi Club -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0"><i class="fas fa-users text-success"></i> Mi Club</h5>
+                <span class="badge bg-success" id="badgeClub">Cargando...</span>
+              </div>
+
+              <div id="infoClub">
+                <div class="text-center py-3">
+                  <div class="spinner-border text-success" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <a href="competidor-invitaciones.html" class="btn btn-outline-success btn-sm w-100">
+                  <i class="fas fa-envelope"></i> Ver Invitaciones
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invitaciones Pendientes -->
+        <div class="col-md-12 col-lg-4">
+          <div class="card h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0"><i class="fas fa-envelope text-warning"></i> Invitaciones</h5>
+                <span class="badge bg-warning text-dark" id="badgeInvitaciones">0</span>
+              </div>
+
+              <div id="listaInvitaciones">
+                <div class="text-center py-3">
+                  <div class="spinner-border text-warning" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <a href="competidor-invitaciones.html" class="btn btn-outline-warning btn-sm w-100">
+                  <i class="fas fa-list"></i> Ver Todas
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Próximos Torneos -->
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0"><i class="fas fa-trophy text-warning"></i> Próximos Torneos</h5>
+              <a href="competidor-inscripciones.html" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i> Inscribirme
+              </a>
+            </div>
+            <div class="card-body">
+              <div id="listaTorneos">
+                <div class="text-center py-3">
+                  <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/notificaciones.js"></script>
+
+  <script>
+    protectPage(NOMBRES_ROLES.COMPETIDOR);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const usuario = getCurrentUser();
+      document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Competidor';
+      document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+      document.getElementById('nombreCompletoDashboard').textContent = usuario.nombreCompleto || 'Competidor';
+
+      cargarDashboard();
+    });
+
+    async function cargarDashboard() {
+      await Promise.all([
+        cargarRobot(),
+        cargarClub(),
+        cargarInvitaciones(),
+        cargarTorneos()
+      ]);
+    }
+
+    // =====================================
+    // CARGAR MI ROBOT
+    // =====================================
+    async function cargarRobot() {
+      const infoDiv = document.getElementById('infoRobot');
+      const badge = document.getElementById('badgeRobot');
+
+      try {
+        const result = await fetchAPI('/api/competidor/robot', 'GET');
+
+        if (result.success && result.data) {
+          const robot = result.data;
+
+          if (robot.nombreRobot) {
+            // Tiene especificaciones
+            badge.textContent = 'Activo';
+            badge.className = 'badge bg-success';
+
+            infoDiv.innerHTML = `
+              <div class="mb-2">
+                <strong>${escaparHTML(robot.nombreRobot)}</strong>
+              </div>
+              <div class="small text-muted mb-1">
+                <i class="fas fa-weight"></i> ${robot.peso}g
+              </div>
+              <div class="small text-muted mb-1">
+                <i class="fas fa-tag"></i> ${escaparHTML(robot.nombreCategoriaPeso || 'Sin categoría')}
+              </div>
+              <div class="small text-muted">
+                <i class="fas fa-trophy"></i> ${robot.victorias || 0}V - ${robot.derrotas || 0}D
+              </div>
+            `;
+          } else {
+            // NO tiene especificaciones
+            badge.textContent = 'Incompleto';
+            badge.className = 'badge bg-warning text-dark';
+
+            infoDiv.innerHTML = `
+              <div class="text-center py-2">
+                <i class="fas fa-exclamation-circle fa-2x text-warning mb-2"></i>
+                <p class="small text-muted mb-0">Completa las especificaciones de tu robot para poder inscribirte en torneos</p>
+              </div>
+            `;
+          }
+        } else {
+          throw new Error('No se pudo cargar el robot');
+        }
+      } catch (error) {
+        console.error('Error al cargar robot:', error);
+        badge.textContent = 'Error';
+        badge.className = 'badge bg-danger';
+        infoDiv.innerHTML = '<p class="small text-danger mb-0">Error al cargar datos del robot</p>';
+      }
+    }
+
+    // =====================================
+    // CARGAR MI CLUB
+    // =====================================
+    async function cargarClub() {
+      const infoDiv = document.getElementById('infoClub');
+      const badge = document.getElementById('badgeClub');
+
+      try {
+        const result = await fetchAPI('/api/competidor/mi-perfil', 'GET');
+
+        if (result.success && result.data) {
+          const perfil = result.data;
+
+          if (perfil.nombreClub) {
+            // Pertenece a un club
+            badge.textContent = 'Activo';
+            badge.className = 'badge bg-success';
+
+            infoDiv.innerHTML = `
+              <div class="mb-2">
+                <strong>${escaparHTML(perfil.nombreClub)}</strong>
+              </div>
+              <div class="small text-muted">
+                <i class="fas fa-users"></i> Miembro activo
+              </div>
+            `;
+          } else {
+            // NO pertenece a un club
+            badge.textContent = 'Sin club';
+            badge.className = 'badge bg-secondary';
+
+            infoDiv.innerHTML = `
+              <div class="text-center py-2">
+                <i class="fas fa-user-slash fa-2x text-muted mb-2"></i>
+                <p class="small text-muted mb-0">No perteneces a ningún club. Espera invitaciones o solicita unirte.</p>
+              </div>
+            `;
+          }
+        } else {
+          throw new Error('No se pudo cargar el perfil');
+        }
+      } catch (error) {
+        console.error('Error al cargar club:', error);
+        badge.textContent = 'Error';
+        badge.className = 'badge bg-danger';
+        infoDiv.innerHTML = '<p class="small text-danger mb-0">Error al cargar datos del club</p>';
+      }
+    }
+
+    // =====================================
+    // CARGAR INVITACIONES
+    // =====================================
+    async function cargarInvitaciones() {
+      const listaDiv = document.getElementById('listaInvitaciones');
+      const badge = document.getElementById('badgeInvitaciones');
+
+      try {
+        const result = await fetchAPI('/api/competidor/invitaciones?limite=3', 'GET');
+
+        if (result.success && result.data) {
+          const invitaciones = result.data.filter(inv => inv.estado === 'Pendiente');
+
+          badge.textContent = invitaciones.length;
+
+          if (invitaciones.length === 0) {
+            listaDiv.innerHTML = `
+              <div class="text-center py-2">
+                <i class="fas fa-inbox fa-2x text-muted mb-2"></i>
+                <p class="small text-muted mb-0">No tienes invitaciones pendientes</p>
+              </div>
+            `;
+          } else {
+            let html = '<div class="list-group list-group-flush">';
+
+            invitaciones.forEach(inv => {
+              html += `
+                <div class="list-group-item px-0 py-2">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <div class="fw-bold small">${escaparHTML(inv.nombreClub)}</div>
+                      <div class="small text-muted">${obtenerTiempoRelativo(inv.fechaEnvio)}</div>
+                    </div>
+                    <span class="badge bg-warning text-dark">Nueva</span>
+                  </div>
+                </div>
+              `;
+            });
+
+            html += '</div>';
+            listaDiv.innerHTML = html;
+          }
+        } else {
+          throw new Error('No se pudieron cargar las invitaciones');
+        }
+      } catch (error) {
+        console.error('Error al cargar invitaciones:', error);
+        listaDiv.innerHTML = '<p class="small text-danger mb-0">Error al cargar invitaciones</p>';
+      }
+    }
+
+    // =====================================
+    // CARGAR TORNEOS DISPONIBLES
+    // =====================================
+    async function cargarTorneos() {
+      const listaDiv = document.getElementById('listaTorneos');
+
+      try {
+        const result = await fetchAPI('/api/public/torneos', 'GET');
+
+        if (result.success && result.data) {
+          // Filtrar solo torneos en CONFIGURACION
+          const torneos = result.data.filter(t => t.idEstado === ESTADOS.CONFIGURACION);
+
+          if (torneos.length === 0) {
+            listaDiv.innerHTML = `
+              <div class="text-center py-4">
+                <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
+                <p class="text-muted mb-0">No hay torneos disponibles en este momento</p>
+              </div>
+            `;
+          } else {
+            let html = '<div class="table-responsive"><table class="table table-hover mb-0"><thead><tr>';
+            html += '<th>Torneo</th><th>Fechas</th><th>Sede</th><th>Categorías</th><th>Acción</th>';
+            html += '</tr></thead><tbody>';
+
+            torneos.slice(0, 5).forEach(torneo => {
+              html += `
+                <tr>
+                  <td><strong>${escaparHTML(torneo.nombreTorneo)}</strong></td>
+                  <td class="small">${formatearFechaCorta(torneo.fechaInicio)} - ${formatearFechaCorta(torneo.fechaFin)}</td>
+                  <td>${escaparHTML(torneo.nombreSede)}</td>
+                  <td><span class="badge bg-info">${torneo.totalCategorias || 0}</span></td>
+                  <td>
+                    <a href="competidor-inscripciones.html?torneo=${torneo.idTorneo}" class="btn btn-sm btn-primary">
+                      <i class="fas fa-pen"></i> Inscribirme
+                    </a>
+                  </td>
+                </tr>
+              `;
+            });
+
+            html += '</tbody></table></div>';
+            listaDiv.innerHTML = html;
+          }
+        } else {
+          throw new Error('No se pudieron cargar los torneos');
+        }
+      } catch (error) {
+        console.error('Error al cargar torneos:', error);
+        listaDiv.innerHTML = '<p class="text-danger">Error al cargar torneos disponibles</p>';
+      }
+    }
+  </script>
+</body>
+
+</html>

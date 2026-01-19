@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Torneos - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        :root {
+            --admin-gradient: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+            --admin-color: #e91e63;
+            --admin-dark: #c2185b;
+            --sidebar-width: 280px;
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR MODERNA */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--admin-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--admin-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--admin-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--admin-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--admin-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--admin-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            pointer-events: none;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.1), rgba(194, 24, 91, 0.1));
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+            right: 0 !important;
+            left: auto !important;
+            transform-origin: top right !important;
+        }
+
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(233, 30, 99, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(233, 30, 99, 0.05);
+            border-left: 3px solid #e91e63;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--admin-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1.3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notification-badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #e91e63;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .notifications-footer a:hover {
+            color: #c2185b;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .empty-notifications i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* SIDEBAR MODERNA */
+        .sidebar-modern {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-header-modern {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header-modern h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu-modern {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern li {
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu-modern li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sidebar-menu-modern li a i {
+            width: 24px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu-modern li a:hover {
+            background: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(194, 24, 91, 0.1) 100%);
+            color: var(--admin-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-modern li a.active {
+            background: var(--admin-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+        }
+
+        .sidebar-menu-modern li a.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content-modern {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--navbar-height);
+            padding: 2.5rem;
+            min-height: calc(100vh - var(--navbar-height));
+        }
+
+        .torneos-hero {
+            background: var(--admin-gradient);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .torneos-hero::before {
+            content: "\f091";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(-50%) rotate(-15deg);
+            }
+
+            50% {
+                transform: translateY(-55%) rotate(-10deg);
+            }
+        }
+
+        .torneos-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .torneos-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toolbar-torneos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 3rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #e91e63;
+            box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .filter-select {
+            padding: 0.85rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            min-width: 180px;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 500;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #e91e63;
+            box-shadow: 0 0 0 4px rgba(233, 30, 99, 0.1);
+        }
+
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1.25rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .results-count {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1.05rem;
+        }
+
+        .nav-tabs-torneos {
+            border-bottom: 3px solid #dee2e6;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .nav-tabs-torneos .nav-link {
+            border: none;
+            color: #6c757d;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border-radius: 0;
+        }
+
+        .nav-tabs-torneos .nav-link:hover {
+            color: #e91e63;
+            background-color: rgba(233, 30, 99, 0.05);
+        }
+
+        .nav-tabs-torneos .nav-link.active {
+            color: #e91e63;
+            background-color: transparent;
+            border-bottom: 4px solid #e91e63;
+        }
+
+        .torneo-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease both;
+        }
+
+        .torneo-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .torneo-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .torneo-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+        .torneo-card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .torneo-card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+
+        .torneo-card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        .torneo-card:nth-child(7) {
+            animation-delay: 0.35s;
+        }
+
+        .torneo-card:nth-child(8) {
+            animation-delay: 0.4s;
+        }
+
+        .torneo-card:nth-child(9) {
+            animation-delay: 0.45s;
+        }
+
+        .torneo-card:nth-child(10) {
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .torneo-card:hover {
+            border-color: #e91e63;
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .torneo-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--admin-gradient);
+        }
+
+        .torneo-header {
+            display: flex;
+            align-items: start;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .torneo-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            background: var(--admin-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(233, 30, 99, 0.4);
+        }
+
+        .torneo-main-info {
+            flex-grow: 1;
+        }
+
+        .torneo-nombre {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .torneo-descripcion {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .badge-estado-torneo {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 25px;
+            font-weight: 700;
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+        }
+
+        .torneo-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item-torneo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 3px solid #e91e63;
+        }
+
+        .info-icon-torneo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--admin-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .info-content-torneo {
+            flex-grow: 1;
+        }
+
+        .info-label-torneo {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value-torneo {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .progress-participantes {
+            margin-top: 1rem;
+        }
+
+        .progress {
+            height: 25px;
+            border-radius: 15px;
+            background: #e9ecef;
+        }
+
+        .progress-bar-admin {
+            background: linear-gradient(90deg, #e91e63 0%, #c2185b 100%);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        .torneo-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .btn-torneo-action {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .btn-ver-torneo {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-ver-torneo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+            color: white;
+        }
+
+        .btn-editar-torneo {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .btn-editar-torneo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.4);
+            color: white;
+        }
+
+        .btn-eliminar-torneo {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+        }
+
+        .btn-eliminar-torneo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.4);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state i {
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+            color: #e91e63;
+        }
+
+        .empty-state h3 {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-header {
+            background: var(--admin-gradient);
+            color: white;
+            border-bottom: none;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-header .btn-close {
+            filter: brightness(0) invert(1);
+        }
+
+        .modal-content {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .detalle-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .detalle-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .detalle-value {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .organizador-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-modern.show {
+                transform: translateX(0);
+            }
+
+            .main-content-modern {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .torneos-hero {
+                padding: 2rem;
+            }
+
+            .torneos-hero h1 {
+                font-size: 2rem;
+            }
+
+            .badge-estado-torneo {
+                position: static;
+                display: inline-block;
+                margin-bottom: 1rem;
+            }
+
+            .notifications-dropdown {
+                width: 320px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .notifications-dropdown {
+                width: 280px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Moderna -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-actions">
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <span class="user-name" id="usuarioNombre">Admin</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+                        style="min-width: 250px; border-radius: 16px; border: none; padding: 0.5rem;">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user-shield"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;"
+                                        id="usuarioNombreMenu">Admin</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav">
+                                        admin@robotech.com</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="usuario-perfil.html"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="#"
+                                onclick="logout()"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar Sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Moderna -->
+    <aside class="sidebar-modern">
+        <div class="sidebar-header-modern">
+            <h5><i class="fas fa-user-shield"></i> Panel de Control</h5>
+        </div>
+        <ul class="sidebar-menu-modern">
+            <li><a href="admin-dashboard.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="admin-usuarios.html"><i class="fas fa-users"></i> <span>Usuarios</span></a></li>
+            <li><a href="admin-clubes.html"><i class="fas fa-shield-alt"></i> <span>Clubes</span></a></li>
+            <li><a href="admin-torneos.html" class="active"><i class="fas fa-trophy"></i> <span>Torneos</span></a></li>
+            <li><a href="admin-configuracion.html"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content-modern">
+        <div class="container-fluid">
+            <div class="torneos-hero">
+                <h1><i class="fas fa-trophy"></i> Gestión de Torneos</h1>
+                <p>Supervisa todos los torneos del sistema</p>
+            </div>
+            <div class="toolbar-torneos">
+                <div class="search-box">
+                    <i class="fas fa-search"></i><input type="text" id="searchInput"
+                        placeholder="Buscar por nombre de torneo u organizador..." />
+                </div>
+                <select class="filter-select" id="filterEstado">
+                    <option value="">Todos los Estados</option>
+                    <option value="CONFIGURACION">Configuración</option>
+                    <option value="EN_PROGRESO">En Progreso</option>
+                    <option value="FINALIZADO">Finalizado</option>
+                </select>
+            </div>
+            <div class="results-info">
+                <div class="results-count" id="resultsCount">Cargando torneos...</div>
+                <button class="btn btn-sm btn-outline-secondary" onclick="limpiarFiltros()">
+                    <i class="fas fa-times"></i> Limpiar Filtros
+                </button>
+            </div>
+            <ul class="nav nav-tabs nav-tabs-torneos">
+                <li class="nav-item">
+                    <button class="nav-link active" id="todos-tab" data-bs-toggle="tab" data-bs-target="#todos"
+                        type="button">
+                        <i class="fas fa-list"></i> Todos
+                        <span class="badge bg-secondary ms-2" id="badgeTodos">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="activos-tab" data-bs-toggle="tab" data-bs-target="#activos"
+                        type="button">
+                        <i class="fas fa-fire"></i> Activos
+                        <span class="badge bg-success ms-2" id="badgeActivos">0</span>
+                    </button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" id="finalizados-tab" data-bs-toggle="tab" data-bs-target="#finalizados"
+                        type="button">
+                        <i class="fas fa-check-circle"></i> Finalizados
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="todos">
+                    <div id="listaTodos">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="activos">
+                    <div id="listaActivos">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-success" style="width: 3rem; height: 3rem"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="finalizados">
+                    <div id="listaFinalizados">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-secondary" style="width: 3rem; height: 3rem"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="modal fade" id="modalDetalles" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Torneo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="detallesContent">
+                        <div class="text-center py-5">
+                            <div class="spinner-border"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+    <script>
+        protectPage(NOMBRES_ROLES.ADMINISTRADOR);
+        let torneos = [],
+            torneosFiltrados = [],
+            modalDetalles;
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            const nombreCompleto = usuario.nombreCompleto || 'Administrador';
+            const email = usuario.email || '';
+            document.getElementById("usuarioNombre").textContent = nombreCompleto;
+            document.getElementById("usuarioNombreMenu").textContent = nombreCompleto;
+            document.getElementById("emailUsuarioNav").textContent = email;
+            modalDetalles = new bootstrap.Modal(document.getElementById("modalDetalles"));
+            cargarTorneos();
+            document.getElementById("searchInput").addEventListener("input", aplicarFiltros);
+            document.getElementById("filterEstado").addEventListener("change", aplicarFiltros);
+            cargarNotificaciones();
+            setInterval(cargarNotificaciones, 30000);
+        });
+        async function cargarTorneos() {
+            try {
+                const result = await fetchAPI("/api/admin/torneos", "GET");
+                if (result.success && result.data) {
+                    torneos = result.data;
+                    torneosFiltrados = torneos;
+                    actualizarBadges();
+                    renderizarTodos();
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarError();
+            }
+        }
+        function aplicarFiltros() {
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const estado = document.getElementById("filterEstado").value;
+            torneosFiltrados = torneos.filter((t) => {
+                const matchSearch =
+                    !search ||
+                    (t.nombreTorneo && t.nombreTorneo.toLowerCase().includes(search)) ||
+                    (t.nombreOrganizador &&
+                        t.nombreOrganizador.toLowerCase().includes(search));
+                const matchEstado = !estado || t.estado === estado;
+                return matchSearch && matchEstado;
+            });
+            actualizarBadges();
+            renderizarTodos();
+        }
+        function actualizarBadges() {
+            const activos = torneosFiltrados.filter(
+                (t) => t.estado === "EN_PROGRESO" || t.estado === "CONFIGURACION"
+            );
+            const finalizados = torneosFiltrados.filter(
+                (t) => t.estado === "FINALIZADO"
+            );
+            document.getElementById("badgeTodos").textContent = torneosFiltrados.length;
+            document.getElementById("badgeActivos").textContent = activos.length;
+            document.getElementById("resultsCount").textContent = `${torneosFiltrados.length} torneo(s) encontrado(s)`;
+        }
+        function renderizarTodos() {
+            const activos = torneosFiltrados.filter(
+                (t) => t.estado === "EN_PROGRESO" || t.estado === "CONFIGURACION"
+            );
+            const finalizados = torneosFiltrados.filter(
+                (t) => t.estado === "FINALIZADO"
+            );
+            renderizarTorneos("todos", torneosFiltrados);
+            renderizarTorneos("activos", activos);
+            renderizarTorneos("finalizados", finalizados);
+        }
+        function renderizarTorneos(tipo, lista) {
+            const contenedorId =
+                tipo === "todos"
+                    ? "listaTodos"
+                    : tipo === "activos"
+                        ? "listaActivos"
+                        : "listaFinalizados";
+            const contenedor = document.getElementById(contenedorId);
+            if (lista.length === 0) {
+                contenedor.innerHTML = obtenerEmptyState(tipo);
+                return;
+            }
+            let html = "";
+            lista.forEach((torneo) => {
+                const colorEstado = obtenerColorEstado(torneo.estado);
+                const textoEstado = obtenerTextoEstado(torneo.estado);
+                const porcentaje =
+                    torneo.maximoParticipantes > 0
+                        ? Math.round(
+                            (torneo.participantesActuales / torneo.maximoParticipantes) *
+                            100
+                        )
+                        : 0;
+                html += `<div class="torneo-card"><span class="badge badge-estado-torneo bg-${colorEstado}">${textoEstado}</span><div class="torneo-header"><div class="torneo-icon">🏆</div><div class="torneo-main-info"><div class="torneo-nombre">${escaparHTML(
+                    torneo.nombreTorneo || "Torneo"
+                )}</div>${torneo.descripcion
+                    ? `<div class="torneo-descripcion">${escaparHTML(
+                        torneo.descripcion
+                    )}</div>`
+                    : ""
+                    }${torneo.nombreOrganizador
+                        ? `<span class="organizador-badge"><i class="fas fa-user"></i> ${escaparHTML(
+                            torneo.nombreOrganizador
+                        )}</span>`
+                        : ""
+                    }</div></div><div class="torneo-info-grid"><div class="info-item-torneo"><div class="info-icon-torneo"><i class="fas fa-calendar-alt"></i></div><div class="info-content-torneo"><div class="info-label-torneo">Fecha Inicio</div><div class="info-value-torneo">${torneo.fechaInicio ? formatearFechaCorta(torneo.fechaInicio) : "N/A"
+                    }</div></div></div><div class="info-item-torneo"><div class="info-icon-torneo"><i class="fas fa-calendar-check"></i></div><div class="info-content-torneo"><div class="info-label-torneo">Fecha Fin</div><div class="info-value-torneo">${torneo.fechaFin ? formatearFechaCorta(torneo.fechaFin) : "N/A"
+                    }</div></div></div><div class="info-item-torneo"><div class="info-icon-torneo"><i class="fas fa-map-marker-alt"></i></div><div class="info-content-torneo"><div class="info-label-torneo">Ubicación</div><div class="info-value-torneo">${escaparHTML(
+                        torneo.ubicacion || "N/A"
+                    )}</div></div></div><div class="info-item-torneo"><div class="info-icon-torneo"><i class="fas fa-users"></i></div><div class="info-content-torneo"><div class="info-label-torneo">Participantes</div><div class="info-value-torneo">${torneo.participantesActuales || 0
+                    }/${torneo.maximoParticipantes || 0
+                    }</div></div></div></div><div class="progress-participantes"><div class="progress"><div class="progress-bar progress-bar-admin" style="width:${porcentaje}%">${porcentaje}% ocupado</div></div></div><div class="torneo-actions mt-3"><button class="btn btn-torneo-action btn-ver-torneo" onclick="verDetalles(${torneo.idTorneo
+                    })"><i class="fas fa-eye"></i> Ver Detalles</button><button class="btn btn-torneo-action btn-editar-torneo" onclick="editarTorneo(${torneo.idTorneo
+                    })"><i class="fas fa-edit"></i> Editar</button><button class="btn btn-torneo-action btn-eliminar-torneo" onclick="eliminarTorneo(${torneo.idTorneo
+                    })"><i class="fas fa-trash"></i> Eliminar</button></div></div>`;
+            });
+            contenedor.innerHTML = html;
+        }
+        async function verDetalles(id) {
+            modalDetalles.show();
+            const torneo = torneos.find((t) => t.idTorneo === id);
+            if (!torneo) return;
+            const contenedor = document.getElementById("detallesContent");
+            let html = `<h4 class="mb-4">${escaparHTML(
+                torneo.nombreTorneo
+            )}</h4><div class="detalle-row"><span class="detalle-label">Estado:</span><span class="detalle-value"><span class="badge bg-${obtenerColorEstado(
+                torneo.estado
+            )}">${obtenerTextoEstado(
+                torneo.estado
+            )}</span></span></div><div class="detalle-row"><span class="detalle-label">Organizador:</span><span class="detalle-value">${escaparHTML(
+                torneo.nombreOrganizador || "N/A"
+            )}</span></div><div class="detalle-row"><span class="detalle-label">Fecha Inicio:</span><span class="detalle-value">${torneo.fechaInicio
+                ? formatearFechaCompleta(torneo.fechaInicio)
+                : "N/A"
+                }</span></div><div class="detalle-row"><span class="detalle-label">Fecha Fin:</span><span class="detalle-value">${torneo.fechaFin ? formatearFechaCompleta(torneo.fechaFin) : "N/A"
+                }</span></div><div class="detalle-row"><span class="detalle-label">Ubicación:</span><span class="detalle-value">${escaparHTML(
+                    torneo.ubicacion || "N/A"
+                )}</span></div><div class="detalle-row"><span class="detalle-label">Participantes:</span><span class="detalle-value">${torneo.participantesActuales || 0
+                } / ${torneo.maximoParticipantes || 0
+                }</span></div><div class="detalle-row"><span class="detalle-label">Combates Realizados:</span><span class="detalle-value">${torneo.combatesRealizados || 0
+                }</span></div><div class="detalle-row"><span class="detalle-label">Fecha de Creación:</span><span class="detalle-value">${torneo.fechaCreacion
+                    ? formatearFechaCompleta(torneo.fechaCreacion)
+                    : "N/A"
+                }</span></div>`;
+            if (torneo.descripcion) {
+                html += `<div class="mt-3"><strong>Descripción:</strong><p class="mt-2">${escaparHTML(
+                    torneo.descripcion
+                )}</p></div>`;
+            }
+            contenedor.innerHTML = html;
+        }
+        function editarTorneo(id) {
+            mostrarAlerta("Funcionalidad de edición próximamente", "info");
+        }
+        async function eliminarTorneo(id) {
+            const torneo = torneos.find((t) => t.idTorneo === id);
+            if (!torneo) return;
+            if (
+                !confirmar(
+                    `¿Eliminar torneo "${torneo.nombreTorneo}"? Esta acción no se puede deshacer.`
+                )
+            )
+                return;
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/admin/torneos/${id}`, "DELETE");
+                ocultarLoading();
+                if (result.success) {
+                    mostrarAlerta("Torneo eliminado", "success");
+                    await cargarTorneos();
+                } else {
+                    mostrarAlerta(result.data?.message || "Error", "error");
+                }
+            } catch (error) {
+                ocultarLoading();
+                mostrarAlerta("Error de conexión", "error");
+            }
+        }
+        function limpiarFiltros() {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("filterEstado").value = "";
+            aplicarFiltros();
+        }
+        function obtenerEmptyState(tipo) {
+            const estados = {
+                todos: {
+                    titulo: "No hay torneos registrados",
+                    mensaje: "Los torneos aparecerán aquí",
+                },
+                activos: {
+                    titulo: "No hay torneos activos",
+                    mensaje: "Los torneos activos aparecerán aquí",
+                },
+                finalizados: {
+                    titulo: "No hay torneos finalizados",
+                    mensaje: "Los torneos finalizados aparecerán aquí",
+                },
+            };
+            const e = estados[tipo];
+            return `<div class="empty-state"><i class="fas fa-trophy"></i><h3>${e.titulo}</h3><p class="text-muted">${e.mensaje}</p></div>`;
+        }
+        function obtenerColorEstado(estado) {
+            return (
+                {
+                    CONFIGURACION: "warning",
+                    EN_PROGRESO: "success",
+                    FINALIZADO: "secondary",
+                }[estado] || "secondary"
+            );
+        }
+        function obtenerTextoEstado(estado) {
+            return (
+                {
+                    CONFIGURACION: "Configuración",
+                    EN_PROGRESO: "En Progreso",
+                    FINALIZADO: "Finalizado",
+                }[estado] || estado
+            );
+        }
+        function mostrarError() {
+            ["listaTodos", "listaActivos", "listaFinalizados"].forEach((id) => {
+                document.getElementById(id).innerHTML =
+                    '<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> Error al cargar</div>';
+            });
+        }
+        async function cargarNotificaciones() {
+            try {
+                const result = await obtenerNotificaciones();
+                if (result.success && result.data) {
+                    renderizarNotificaciones(result.data);
+                }
+            } catch (error) {
+                console.error('Error cargando notificaciones:', error);
+            }
+        }
+        function renderizarNotificaciones(notificaciones) {
+            const badge = document.getElementById('notificacionesBadge');
+            const menu = document.getElementById('notificacionesDropdownMenu');
+            const noLeidas = notificaciones.filter(n => !n.leido).length;
+            if (noLeidas > 0) {
+                badge.textContent = noLeidas;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+            if (!notificaciones || notificaciones.length === 0) {
+                menu.innerHTML = `
+          <li class="empty-notifications">
+            <i class="fas fa-bell-slash"></i>
+            <p class="mb-0">No tienes notificaciones</p>
+          </li>
+        `;
+                return;
+            }
+            let html = `
+        <li class="notifications-header">
+          <span class="notifications-title">Notificaciones</span>
+          <span style="color: #718096; font-size: 0.9rem;">${notificaciones.length}</span>
+        </li>
+      `;
+            notificaciones.slice(0, 5).forEach(notif => {
+                const iconClass = notif.leido ? '' : 'unread';
+                html += `
+          <li class="notification-item ${iconClass}" onclick="marcarComoLeida(${notif.id})">
+            <div class="d-flex gap-2 align-items-start">
+              <div class="notification-icon flex-shrink-0">
+                <i class="fas fa-${notif.tipo === 'INFO' ? 'info-circle' : notif.tipo === 'EXITO' ? 'check-circle' : 'exclamation-triangle'}"></i>
+              </div>
+              <div class="notification-content flex-grow-1" style="min-width: 0;">
+                <div class="d-flex justify-content-between align-items-center gap-2 mb-1">
+                  <div class="notification-title" style="flex: 1; min-width: 0;">${escaparHTML(notif.titulo)}</div>
+                  ${!notif.leido ? '<span class="notification-badge-new flex-shrink-0">Nueva</span>' : ''}
+                </div>
+                <div class="notification-message">${escaparHTML(notif.mensaje)}</div>
+                <div class="notification-time">
+                  <i class="fas fa-clock me-1"></i>${formatearFechaRelativa(notif.fechaCreacion)}
+                </div>
+              </div>
+            </div>
+          </li>
+        `;
+            });
+            html += `
+        <li class="notifications-footer">
+          <a href="notificaciones.html">
+            <i class="fas fa-bell me-2"></i>Ver todas las notificaciones
+          </a>
+        </li>
+      `;
+            menu.innerHTML = html;
+        }
+        async function marcarComoLeida(notificacionId) {
+            try {
+                await marcarNotificacionComoLeida(notificacionId);
+                cargarNotificaciones();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        function escaparHTML(texto) {
+            const div = document.createElement('div');
+            div.textContent = texto;
+            return div.innerHTML;
+        }
+        function formatearFechaRelativa(fecha) {
+            if (!fecha) return 'Ahora';
+            const ahora = new Date();
+            const fechaObj = new Date(fecha);
+            const diff = Math.floor((ahora - fechaObj) / 1000);
+            if (diff < 60) return 'Hace un momento';
+            if (diff < 3600) return `Hace ${Math.floor(diff / 60)} min`;
+            if (diff < 86400) return `Hace ${Math.floor(diff / 3600)} h`;
+            if (diff < 604800) return `Hace ${Math.floor(diff / 86400)} días`;
+            return fechaObj.toLocaleDateString();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Jurado - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para jurado */
+        .jurado-hero {
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            border-radius: 15px;
+            padding: 2.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(103, 58, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jurado-hero::before {
+            content: '\f0e3';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.08;
+            right: -3rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .kpi-grid-jurado {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card-jurado {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card-jurado:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .kpi-card-jurado.purple {
+            border-left-color: #673ab7;
+        }
+
+        .kpi-card-jurado.blue {
+            border-left-color: #2196f3;
+        }
+
+        .kpi-card-jurado.green {
+            border-left-color: #4caf50;
+        }
+
+        .kpi-card-jurado.orange {
+            border-left-color: #ff9800;
+        }
+
+        .kpi-icon-jurado {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+            font-size: 3rem;
+            opacity: 0.1;
+        }
+
+        .kpi-value-jurado {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .kpi-label-jurado {
+            color: #6c757d;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-card-jurado {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header-jurado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .section-title-jurado {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title-jurado i {
+            color: #673ab7;
+            font-size: 1.5rem;
+        }
+
+        .combate-item-jurado {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(90deg, rgba(103, 58, 183, 0.05) 0%, transparent 100%);
+            border-radius: 8px;
+            border-left: 3px solid #673ab7;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .combate-item-jurado:hover {
+            background: linear-gradient(90deg, rgba(103, 58, 183, 0.1) 0%, transparent 100%);
+            transform: translateX(5px);
+        }
+
+        .combate-icon-jurado {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3);
+        }
+
+        .combate-info-jurado {
+            flex-grow: 1;
+        }
+
+        .combate-nombre-jurado {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .combate-meta-jurado {
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action-jurado {
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(103, 58, 183, 0.3);
+        }
+
+        .btn-action-jurado:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(103, 58, 183, 0.4);
+            color: white;
+        }
+
+        .empty-state-jurado {
+            text-align: center;
+            padding: 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state-jurado i {
+            font-size: 3rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+
+        .alert-item-jurado {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem;
+            background: linear-gradient(90deg, rgba(103, 58, 183, 0.05) 0%, transparent 100%);
+            border-radius: 8px;
+            border-left: 3px solid;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .alert-item-jurado:hover {
+            background: linear-gradient(90deg, rgba(103, 58, 183, 0.1) 0%, transparent 100%);
+            transform: translateX(5px);
+        }
+
+        .alert-item-jurado.warning {
+            border-left-color: #ffc107;
+        }
+
+        .alert-item-jurado.info {
+            border-left-color: #2196f3;
+        }
+
+        .alert-item-jurado.success {
+            border-left-color: #4caf50;
+        }
+
+        .alert-icon-jurado {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .alert-icon-jurado.warning {
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            color: white;
+        }
+
+        .alert-icon-jurado.info {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+        }
+
+        .alert-icon-jurado.success {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+        }
+
+        .alert-content-jurado {
+            flex-grow: 1;
+        }
+
+        .alert-title-jurado {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-text-jurado {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .evaluacion-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .evaluacion-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .evaluacion-info {
+            flex-grow: 1;
+        }
+
+        .evaluacion-combate {
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .evaluacion-fecha {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .evaluacion-nota {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #673ab7;
+            text-align: center;
+            min-width: 60px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 400px;" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="jurado-dashboard.html"><i
+                                    class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="usuario-perfil.html"><i class="fas fa-user-edit me-2"></i>Mi
+                                Perfil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                    class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-gavel"></i> Jurado</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="jurado-dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="jurado-combates.html"><i class="fas fa-list"></i> Mis Combates</a></li>
+            <li><a href="jurado-evaluar.html"><i class="fas fa-clipboard-check"></i> Evaluar</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <div class="jurado-hero">
+                <h1 class="mb-2"><i class="fas fa-gavel"></i> Dashboard de Jurado</h1>
+                <p class="mb-0" style="font-size: 1.1rem; opacity: 0.95;">
+                    Evalúa combates con imparcialidad y profesionalismo
+                </p>
+            </div>
+
+            <!-- KPIs Grid -->
+            <div class="kpi-grid-jurado">
+
+                <div class="kpi-card-jurado purple">
+                    <i class="fas fa-clipboard-list kpi-icon-jurado"></i>
+                    <div class="kpi-value-jurado" id="kpiAsignados">0</div>
+                    <div class="kpi-label-jurado">Combates Asignados</div>
+                </div>
+
+                <div class="kpi-card-jurado blue">
+                    <i class="fas fa-hourglass-half kpi-icon-jurado"></i>
+                    <div class="kpi-value-jurado" id="kpiPendientes">0</div>
+                    <div class="kpi-label-jurado">Por Evaluar</div>
+                </div>
+
+                <div class="kpi-card-jurado green">
+                    <i class="fas fa-check-circle kpi-icon-jurado"></i>
+                    <div class="kpi-value-jurado" id="kpiEvaluados">0</div>
+                    <div class="kpi-label-jurado">Evaluados</div>
+                </div>
+
+                <div class="kpi-card-jurado orange">
+                    <i class="fas fa-star kpi-icon-jurado"></i>
+                    <div class="kpi-value-jurado" id="kpiPromedio">0.0</div>
+                    <div class="kpi-label-jurado">Promedio Notas</div>
+                </div>
+
+            </div>
+
+            <!-- Alertas / Acciones Pendientes -->
+            <div class="section-card-jurado">
+                <div class="section-header-jurado">
+                    <div class="section-title-jurado">
+                        <i class="fas fa-bell"></i>
+                        <span>Acciones Pendientes</span>
+                    </div>
+                    <span class="badge bg-warning text-dark" id="badgeAcciones">0</span>
+                </div>
+                <div id="listaAcciones">
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <!-- Combates Pendientes -->
+                <div class="col-lg-8 mb-4">
+                    <div class="section-card-jurado">
+                        <div class="section-header-jurado">
+                            <div class="section-title-jurado">
+                                <i class="fas fa-clipboard-check"></i>
+                                <span>Combates Por Evaluar</span>
+                            </div>
+                            <a href="jurado-combates.html" class="btn btn-action-jurado btn-sm">
+                                Ver Todos <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                        <div id="listaCombatesPendientes">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluaciones Recientes -->
+                <div class="col-lg-4 mb-4">
+                    <div class="section-card-jurado">
+                        <div class="section-header-jurado">
+                            <div class="section-title-jurado">
+                                <i class="fas fa-history"></i>
+                                <span>Recientes</span>
+                            </div>
+                        </div>
+                        <div id="listaEvaluacionesRecientes">
+                            <div class="text-center py-3">
+                                <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.JURADO);
+
+        let combates = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Jurado';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            cargarDashboard();
+        });
+
+        async function cargarDashboard() {
+            await cargarCombates();
+            actualizarKPIs();
+            renderizarAcciones();
+            renderizarCombatesPendientes();
+            renderizarEvaluacionesRecientes();
+        }
+
+        async function cargarCombates() {
+            try {
+                const result = await fetchAPI('/api/jurado/combates', 'GET');
+                if (result.success && result.data) {
+                    combates = result.data;
+                    console.log('✅ Combates cargados:', combates.length);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function actualizarKPIs() {
+            const asignados = combates.length;
+            const pendientes = combates.filter(c => !c.evaluado).length;
+            const evaluados = combates.filter(c => c.evaluado).length;
+
+            let sumaNotas = 0;
+            let countNotas = 0;
+            combates.forEach(c => {
+                if (c.notaFinal) {
+                    sumaNotas += c.notaFinal;
+                    countNotas++;
+                }
+            });
+            const promedio = countNotas > 0 ? (sumaNotas / countNotas).toFixed(1) : '0.0';
+
+            document.getElementById('kpiAsignados').textContent = asignados;
+            document.getElementById('kpiPendientes').textContent = pendientes;
+            document.getElementById('kpiEvaluados').textContent = evaluados;
+            document.getElementById('kpiPromedio').textContent = promedio;
+        }
+
+        function renderizarAcciones() {
+            const contenedor = document.getElementById('listaAcciones');
+            const pendientes = combates.filter(c => !c.evaluado);
+
+            document.getElementById('badgeAcciones').textContent = pendientes.length;
+
+            if (pendientes.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state-jurado">
+            <i class="fas fa-check-circle"></i>
+            <p class="mb-0">No hay combates pendientes de evaluar</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = `
+        <div class="alert-item-jurado warning">
+          <div class="alert-icon-jurado warning">
+            <i class="fas fa-clipboard-check"></i>
+          </div>
+          <div class="alert-content-jurado">
+            <div class="alert-title-jurado">${pendientes.length} Combate(s) Por Evaluar</div>
+            <div class="alert-text-jurado">Tienes combates asignados esperando tu evaluación</div>
+          </div>
+          <div>
+            <a href="jurado-evaluar.html" class="btn btn-sm btn-outline-warning">
+              Evaluar <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      `;
+
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarCombatesPendientes() {
+            const contenedor = document.getElementById('listaCombatesPendientes');
+            const pendientes = combates.filter(c => !c.evaluado).slice(0, 5);
+
+            if (pendientes.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state-jurado">
+            <i class="fas fa-clipboard-check"></i>
+            <p class="mb-0">No hay combates por evaluar</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = '';
+            pendientes.forEach(combate => {
+                html += `
+          <div class="combate-item-jurado">
+            <div class="combate-icon-jurado">
+              ⚔️
+            </div>
+            <div class="combate-info-jurado">
+              <div class="combate-nombre-jurado">
+                ${escaparHTML(combate.nombreRobot1 || 'Robot 1')} vs ${escaparHTML(combate.nombreRobot2 || 'Robot 2')}
+              </div>
+              <div class="combate-meta-jurado">
+                <span><i class="fas fa-trophy"></i> ${escaparHTML(combate.nombreTorneo || 'Torneo')}</span>
+                ${combate.fase ? `<span><i class="fas fa-layer-group"></i> ${escaparHTML(combate.fase)}</span>` : ''}
+              </div>
+            </div>
+            <a href="jurado-evaluar.html?id=${combate.idCombate}" class="btn btn-action-jurado btn-sm">
+              Evaluar <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarEvaluacionesRecientes() {
+            const contenedor = document.getElementById('listaEvaluacionesRecientes');
+            const evaluados = combates.filter(c => c.evaluado).slice(0, 5);
+
+            if (evaluados.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state-jurado">
+            <i class="fas fa-history"></i>
+            <p class="mb-0 small">Sin evaluaciones</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = '';
+            evaluados.forEach(combate => {
+                html += `
+          <div class="evaluacion-item">
+            <div class="evaluacion-info">
+              <div class="evaluacion-combate">
+                ${escaparHTML(combate.nombreRobot1 || 'R1')} vs ${escaparHTML(combate.nombreRobot2 || 'R2')}
+              </div>
+              <div class="evaluacion-fecha">
+                <i class="fas fa-calendar me-1"></i>
+                ${combate.fechaEvaluacion ? formatearFechaCorta(combate.fechaEvaluacion) : 'Reciente'}
+              </div>
+            </div>
+            <div class="evaluacion-nota">
+              ${combate.notaFinal || '0.0'}
+            </div>
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

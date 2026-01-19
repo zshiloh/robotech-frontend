@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Invitaciones - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para invitaciones */
+        .invitaciones-hero {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invitaciones-hero::before {
+            content: '\f0e0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .nav-tabs-custom {
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs-custom .nav-link {
+            border: none;
+            color: #6c757d;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-tabs-custom .nav-link:hover {
+            color: #f5576c;
+            background-color: rgba(245, 87, 108, 0.05);
+        }
+
+        .nav-tabs-custom .nav-link.active {
+            color: #f5576c;
+            background-color: transparent;
+            border-bottom: 3px solid #f5576c;
+        }
+
+        .nav-tabs-custom .nav-link .badge {
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .invitacion-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #dee2e6;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .invitacion-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .invitacion-card.pendiente {
+            border-left-color: #ffc107;
+            background: linear-gradient(to right, #fff9e6 0%, white 10%);
+        }
+
+        .invitacion-card.aceptada {
+            border-left-color: #28a745;
+            background: linear-gradient(to right, #e8f5e9 0%, white 10%);
+        }
+
+        .invitacion-card.rechazada {
+            border-left-color: #dc3545;
+            background: linear-gradient(to right, #ffebee 0%, white 10%);
+        }
+
+        .club-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .invitacion-info {
+            flex-grow: 1;
+        }
+
+        .club-nombre {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .invitacion-fecha {
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-estado {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .btn-action {
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-aceptar {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-aceptar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+
+        .btn-rechazar {
+            background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%);
+            color: white;
+        }
+
+        .btn-rechazar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #adb5bd;
+        }
+
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .action-success {
+            animation: successPulse 0.6s ease;
+        }
+
+        @keyframes successPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(0.95);
+            }
+        }
+
+        .stats-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-right: 1rem;
+        }
+
+        .stats-counter i {
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="competidor-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <!-- Notificaciones -->
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        style="width: 400px; max-height: 500px; overflow-y: auto;" id="notificacionesDropdownMenu"
+                        aria-labelledby="notificacionesDropdown">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de Usuario -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="competidor-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-robot"></i> Competidor</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="competidor-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="competidor-robot.html"><i class="fas fa-robot"></i> Mi Robot</a></li>
+            <li><a href="competidor-invitaciones.html" class="active"><i class="fas fa-envelope"></i> Invitaciones</a>
+            </li>
+            <li><a href="competidor-solicitudes.html"><i class="fas fa-paper-plane"></i> Mis Solicitudes</a></li>
+            <li><a href="competidor-inscripciones.html"><i class="fas fa-trophy"></i> Inscripciones</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <!-- Hero Section -->
+            <div class="invitaciones-hero">
+                <h1 class="mb-2"><i class="fas fa-envelope-open-text"></i> Mis Invitaciones</h1>
+                <p class="mb-3">Gestiona las invitaciones que has recibido de diferentes clubes</p>
+                <div>
+                    <span class="stats-counter" id="counterPendientes">
+                        <i class="fas fa-clock"></i>
+                        <span><strong>0</strong> Pendientes</span>
+                    </span>
+                    <span class="stats-counter" id="counterAceptadas">
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>0</strong> Aceptadas</span>
+                    </span>
+                    <span class="stats-counter" id="counterRechazadas">
+                        <i class="fas fa-times-circle"></i>
+                        <span><strong>0</strong> Rechazadas</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs nav-tabs-custom" id="invitacionesTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pendientes-tab" data-bs-toggle="tab"
+                        data-bs-target="#pendientes" type="button" role="tab">
+                        <i class="fas fa-clock"></i> Pendientes
+                        <span class="badge bg-warning text-dark" id="badgePendientes">0</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="aceptadas-tab" data-bs-toggle="tab" data-bs-target="#aceptadas"
+                        type="button" role="tab">
+                        <i class="fas fa-check-circle"></i> Aceptadas
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="rechazadas-tab" data-bs-toggle="tab" data-bs-target="#rechazadas"
+                        type="button" role="tab">
+                        <i class="fas fa-times-circle"></i> Rechazadas
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="invitacionesTabContent">
+
+                <!-- Tab: Pendientes -->
+                <div class="tab-pane fade show active" id="pendientes" role="tabpanel">
+                    <div id="listaPendientes">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Aceptadas -->
+                <div class="tab-pane fade" id="aceptadas" role="tabpanel">
+                    <div id="listaAceptadas">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Rechazadas -->
+                <div class="tab-pane fade" id="rechazadas" role="tabpanel">
+                    <div id="listaRechazadas">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.COMPETIDOR);
+
+        let invitaciones = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Competidor';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            cargarInvitaciones();
+        });
+
+        // =====================================
+        // CARGAR INVITACIONES
+        // =====================================
+        async function cargarInvitaciones() {
+            try {
+                console.log('📨 Cargando invitaciones...');
+
+                const result = await fetchAPI('/api/competidor/invitaciones', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    invitaciones = result.data;
+                    console.log('✅ Invitaciones cargadas:', invitaciones.length);
+
+                    // Separar por estado
+                    const pendientes = invitaciones.filter(inv => inv.estado === 'Pendiente');
+                    const aceptadas = invitaciones.filter(inv => inv.estado === 'Aceptada');
+                    const rechazadas = invitaciones.filter(inv => inv.estado === 'Rechazada');
+
+                    // Actualizar contadores
+                    actualizarContadores(pendientes.length, aceptadas.length, rechazadas.length);
+
+                    // Renderizar cada lista
+                    renderizarInvitaciones('pendientes', pendientes);
+                    renderizarInvitaciones('aceptadas', aceptadas);
+                    renderizarInvitaciones('rechazadas', rechazadas);
+
+                } else {
+                    throw new Error('No se pudieron cargar las invitaciones');
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar invitaciones:', error);
+                mostrarError();
+            }
+        }
+
+        // =====================================
+        // ACTUALIZAR CONTADORES
+        // =====================================
+        function actualizarContadores(pendientes, aceptadas, rechazadas) {
+            // Hero counters
+            document.getElementById('counterPendientes').querySelector('strong').textContent = pendientes;
+            document.getElementById('counterAceptadas').querySelector('strong').textContent = aceptadas;
+            document.getElementById('counterRechazadas').querySelector('strong').textContent = rechazadas;
+
+            // Tab badge
+            const badge = document.getElementById('badgePendientes');
+            if (pendientes > 0) {
+                badge.textContent = pendientes;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        // =====================================
+        // RENDERIZAR INVITACIONES
+        // =====================================
+        function renderizarInvitaciones(tipo, lista) {
+            const contenedorId = tipo === 'pendientes' ? 'listaPendientes' :
+                tipo === 'aceptadas' ? 'listaAceptadas' : 'listaRechazadas';
+
+            const contenedor = document.getElementById(contenedorId);
+
+            if (lista.length === 0) {
+                contenedor.innerHTML = obtenerEmptyState(tipo);
+                return;
+            }
+
+            let html = '';
+
+            lista.forEach(invitacion => {
+                const inicial = invitacion.nombreClub.charAt(0).toUpperCase();
+                const tiempoRelativo = obtenerTiempoRelativo(invitacion.fechaEnvio);
+                const claseEstado = tipo === 'pendientes' ? 'pendiente' :
+                    tipo === 'aceptadas' ? 'aceptada' : 'rechazada';
+
+                html += `
+          <div class="invitacion-card ${claseEstado}" id="invitacion-${invitacion.idInvitacion}">
+            
+            <span class="badge badge-estado bg-${obtenerColorBadge(tipo)}">
+              ${invitacion.estado}
+            </span>
+            
+            <div class="d-flex align-items-start gap-3">
+              
+              <!-- Avatar del Club -->
+              <div class="club-avatar">
+                ${inicial}
+              </div>
+              
+              <!-- Información -->
+              <div class="invitacion-info">
+                <div class="club-nombre">
+                  <i class="fas fa-users text-primary me-2"></i>${escaparHTML(invitacion.nombreClub)}
+                </div>
+                <p class="text-muted small mb-2">
+                  Te invitó a unirte a su club como competidor
+                </p>
+                <div class="invitacion-fecha">
+                  <i class="fas fa-calendar-alt"></i>
+                  <span>${tiempoRelativo}</span>
+                  ${invitacion.fechaRespuesta ? `
+                    <span class="ms-3">
+                      <i class="fas fa-reply"></i>
+                      Respondido: ${formatearFechaCorta(invitacion.fechaRespuesta)}
+                    </span>
+                  ` : ''}
+                </div>
+              </div>
+              
+            </div>
+            
+            <!-- Acciones (solo para pendientes) -->
+            ${tipo === 'pendientes' ? `
+              <div class="d-flex gap-2 justify-content-end mt-3">
+                <button class="btn btn-rechazar btn-action" onclick="rechazarInvitacion(${invitacion.idInvitacion})">
+                  <i class="fas fa-times"></i> Rechazar
+                </button>
+                <button class="btn btn-aceptar btn-action" onclick="aceptarInvitacion(${invitacion.idInvitacion})">
+                  <i class="fas fa-check"></i> Aceptar
+                </button>
+              </div>
+            ` : ''}
+            
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // ACEPTAR INVITACIÓN
+        // =====================================
+        async function aceptarInvitacion(idInvitacion) {
+            const invitacion = invitaciones.find(inv => inv.idInvitacion === idInvitacion);
+
+            if (!invitacion) return;
+
+            const confirmado = confirmar(
+                `¿Deseas aceptar la invitación del club "${invitacion.nombreClub}"?\n\n` +
+                `Al aceptar, te convertirás en miembro de este club.`
+            );
+
+            if (!confirmado) return;
+
+            const card = document.getElementById(`invitacion-${idInvitacion}`);
+            card.style.opacity = '0.5';
+            card.style.pointerEvents = 'none';
+
+            try {
+                const result = await fetchAPI(`/api/competidor/invitaciones/${idInvitacion}/aceptar`, 'POST');
+
+                if (result.success) {
+                    // Animación de éxito
+                    card.classList.add('action-success');
+
+                    mostrarAlerta('¡Invitación aceptada! Ahora eres miembro del club.', 'success');
+
+                    // Recargar invitaciones después de 1 segundo
+                    setTimeout(() => {
+                        cargarInvitaciones();
+                    }, 1000);
+
+                } else {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    mostrarAlerta(result.data?.message || 'Error al aceptar invitación', 'error');
+                }
+            } catch (error) {
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al aceptar invitación', 'error');
+            }
+        }
+
+        // =====================================
+        // RECHAZAR INVITACIÓN
+        // =====================================
+        async function rechazarInvitacion(idInvitacion) {
+            const invitacion = invitaciones.find(inv => inv.idInvitacion === idInvitacion);
+
+            if (!invitacion) return;
+
+            const confirmado = confirmar(
+                `¿Deseas rechazar la invitación del club "${invitacion.nombreClub}"?\n\n` +
+                `Esta acción no se puede deshacer.`
+            );
+
+            if (!confirmado) return;
+
+            const card = document.getElementById(`invitacion-${idInvitacion}`);
+            card.style.opacity = '0.5';
+            card.style.pointerEvents = 'none';
+
+            try {
+                const result = await fetchAPI(`/api/competidor/invitaciones/${idInvitacion}/rechazar`, 'PUT');
+
+                if (result.success) {
+                    // Animación de éxito
+                    card.classList.add('action-success');
+
+                    mostrarAlerta('Invitación rechazada correctamente', 'info');
+
+                    // Recargar invitaciones después de 1 segundo
+                    setTimeout(() => {
+                        cargarInvitaciones();
+                    }, 1000);
+
+                } else {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    mostrarAlerta(result.data?.message || 'Error al rechazar invitación', 'error');
+                }
+            } catch (error) {
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al rechazar invitación', 'error');
+            }
+        }
+
+        // =====================================
+        // EMPTY STATES
+        // =====================================
+        function obtenerEmptyState(tipo) {
+            const estados = {
+                pendientes: {
+                    icon: 'fa-inbox',
+                    titulo: 'No tienes invitaciones pendientes',
+                    mensaje: 'Cuando un club te invite, aparecerá aquí'
+                },
+                aceptadas: {
+                    icon: 'fa-check-circle',
+                    titulo: 'No has aceptado ninguna invitación',
+                    mensaje: 'Las invitaciones que aceptes aparecerán aquí'
+                },
+                rechazadas: {
+                    icon: 'fa-times-circle',
+                    titulo: 'No has rechazado ninguna invitación',
+                    mensaje: 'Las invitaciones que rechaces aparecerán aquí'
+                }
+            };
+
+            const estado = estados[tipo];
+            const colorClasses = {
+                pendientes: 'text-warning',
+                aceptadas: 'text-success',
+                rechazadas: 'text-danger'
+            };
+
+            return `
+        <div class="empty-state">
+          <i class="fas ${estado.icon} empty-state-icon ${colorClasses[tipo]}"></i>
+          <h4>${estado.titulo}</h4>
+          <p>${estado.mensaje}</p>
+        </div>
+      `;
+        }
+
+        // =====================================
+        // HELPERS
+        // =====================================
+        function obtenerColorBadge(tipo) {
+            const colores = {
+                pendientes: 'warning',
+                aceptadas: 'success',
+                rechazadas: 'danger'
+            };
+            return colores[tipo] || 'secondary';
+        }
+
+        function mostrarError() {
+            ['listaPendientes', 'listaAceptadas', 'listaRechazadas'].forEach(id => {
+                document.getElementById(id).innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            Error al cargar invitaciones. Por favor, recarga la página.
+          </div>
+        `;
+            });
+        }
+    </script>
+</body>
+
+</html>

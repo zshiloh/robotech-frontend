@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+            --primary-color: #00bcd4;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: 70px;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+        }
+
+        .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .main-content {
+            margin-top: 100px;
+            margin-bottom: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-banner {
+            background: var(--primary-gradient);
+            border-radius: 24px;
+            padding: 2.5rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 188, 212, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '\f0f3';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .hero-banner h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.75rem 1.5rem;
+            border-radius: 16px;
+            background: white;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.2);
+        }
+
+        .filter-pill.active {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .notif-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s;
+            border-left: 6px solid transparent;
+            position: relative;
+        }
+
+        .notif-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .notif-card.unread {
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.05) 0%, rgba(0, 151, 167, 0.02) 100%);
+            border-left-color: var(--primary-color);
+        }
+
+        .notif-card.unread::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: var(--primary-gradient);
+        }
+
+        .notif-icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .notif-icon-box.info {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+        }
+
+        .notif-icon-box.success {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            color: white;
+        }
+
+        .notif-icon-box.warning {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+        }
+
+        .notif-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .notif-message {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .notif-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #00bcd4 0%, #00acc1 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .btn-modern {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.5);
+            color: white;
+        }
+
+        .btn-mark-read {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            opacity: 0.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .loading-box {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+
+        .spinner-modern {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f0f0f0;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .notif-card {
+            animation: fadeInUp 0.6s ease both;
+        }
+
+        .notif-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .notif-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .notif-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        .modal-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-gradient);
+        }
+
+        .modal-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.1), rgba(0, 151, 167, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .modal-icon i {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .modal-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .modal-message {
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.9rem 1.5rem;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.5);
+        }
+
+        .modal-btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-modern fixed-top">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+            <button class="user-menu-btn" onclick="volverAlDashboard()">
+                <div class="user-avatar">
+                    <i class="fas fa-arrow-left"></i>
+                </div>
+                <span>Volver</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="hero-banner">
+            <h1><i class="fas fa-bell"></i> Notificaciones</h1>
+            <p class="mb-0">Gestiona todas tus notificaciones</p>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+            <div class="filter-pills">
+                <div class="filter-pill active" data-filtro="todas" onclick="filtrarNotificaciones('todas')">Todas</div>
+                <div class="filter-pill" data-filtro="no-leidas" onclick="filtrarNotificaciones('no-leidas')">
+                    No leídas <span class="badge badge-new" id="badgeNoLeidas">0</span>
+                </div>
+                <div class="filter-pill" data-filtro="leidas" onclick="filtrarNotificaciones('leidas')">Leídas</div>
+            </div>
+            <button class="btn btn-modern" onclick="marcarTodasComoLeidas()">
+                <i class="fas fa-check-double"></i> Marcar todas como leídas
+            </button>
+        </div>
+
+        <div id="loadingNotificaciones" class="loading-box">
+            <div class="spinner-modern mx-auto"></div>
+            <p class="text-muted mt-3">Cargando notificaciones...</p>
+        </div>
+
+        <div id="notificacionesContainer" style="display:none;">
+            <div id="listaNotificaciones"></div>
+        </div>
+
+        <div id="emptyNotificaciones" style="display:none;" class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h4>No hay notificaciones</h4>
+            <p>Cuando recibas notificaciones, aparecerán aquí</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        let todasLasNotificaciones = [];
+        let filtroActual = 'todas';
+
+        // Iconos de notificaciones (sin duplicados)
+        const ICONOS = {
+            'CLUB_DISPONIBLE': 'fas fa-envelope-open-text',
+            'CLUB_PENDIENTE': 'fas fa-clock',
+            'INVITACION_CLUB': 'fas fa-envelope',
+            'RESULTADO_REGISTRADO': 'fas fa-trophy',
+            'EXPULSADO_CLUB': 'fas fa-user-times',
+            'CLUB_REACTIVADO': 'fas fa-check-circle',
+            'TORNEO_FINALIZADO': 'fas fa-flag-checkered',
+            'INSCRIPCION_TORNEO': 'fas fa-user-plus',
+            'SOLICITUD_ACEPTADA': 'fas fa-thumbs-up',
+            'SOLICITUD_RECHAZADA': 'fas fa-thumbs-down',
+            'CLUB_VALIDADO': 'fas fa-check-circle',
+            'CLUB_RECHAZADO': 'fas fa-times-circle',
+            'INVITACION_ACEPTADA': 'fas fa-user-check',
+            'SOLICITUD_RECIBIDA': 'fas fa-inbox',
+            'TORNEO_LISTO_FINALIZAR': 'fas fa-calendar-check',
+            'TORNEO_INICIADO': 'fas fa-play-circle',
+            'NUEVO_CLUB': 'fas fa-users',
+            'PASSWORD_CAMBIADA': 'fas fa-key',
+            'INFO': 'fas fa-info-circle',
+            'EXITO': 'fas fa-check-circle',
+            'SUCCESS': 'fas fa-check-circle',
+            'WARNING': 'fas fa-exclamation-triangle'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            cargarTodasLasNotificaciones();
+        });
+
+        function volverAlDashboard() {
+            if (document.referrer && document.referrer.includes(window.location.hostname)) {
+                window.history.back();
+                return;
+            }
+            const roles = getCurrentUserRoles();
+            if (roles.includes(NOMBRES_ROLES.ADMINISTRADOR)) window.location.href = 'admin-dashboard.html';
+            else if (roles.includes(NOMBRES_ROLES.ORGANIZADOR)) window.location.href = 'organizador-dashboard.html';
+            else if (roles.includes(NOMBRES_ROLES.REPRESENTANTE)) window.location.href = 'representante-dashboard.html';
+            else if (roles.includes(NOMBRES_ROLES.COMPETIDOR)) window.location.href = 'competidor-dashboard.html';
+            else if (roles.includes(NOMBRES_ROLES.JURADO)) window.location.href = 'jurado-dashboard.html';
+            else window.location.href = 'index.html';
+        }
+
+        async function cargarTodasLasNotificaciones() {
+            const loading = document.getElementById('loadingNotificaciones');
+            const container = document.getElementById('notificacionesContainer');
+            const empty = document.getElementById('emptyNotificaciones');
+
+            loading.style.display = 'block';
+            container.style.display = 'none';
+            empty.style.display = 'none';
+
+            try {
+                const [resultLeidas, resultNoLeidas] = await Promise.all([
+                    obtenerNotificaciones(true, 100),
+                    obtenerNotificaciones(false, 100)
+                ]);
+
+                const notificacionesMap = new Map();
+                [resultNoLeidas, resultLeidas].forEach(result => {
+                    if (result.success && result.data) {
+                        result.data.forEach(n => notificacionesMap.set(n.idNotificacion || n.id, n));
+                    }
+                });
+
+                todasLasNotificaciones = Array.from(notificacionesMap.values())
+                    .sort((a, b) => new Date(b.fechaCreacion) - new Date(a.fechaCreacion));
+
+                loading.style.display = 'none';
+
+                if (todasLasNotificaciones.length === 0) {
+                    empty.style.display = 'block';
+                } else {
+                    container.style.display = 'block';
+                    actualizarBadgeFiltro();
+                    mostrarNotificaciones(todasLasNotificaciones);
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                console.error('Error:', error);
+                mostrarAlerta('Error al cargar notificaciones', 'error');
+            }
+        }
+
+        function mostrarNotificaciones(notificaciones) {
+            const lista = document.getElementById('listaNotificaciones');
+            lista.innerHTML = '';
+
+            notificaciones.forEach(notif => {
+                const leida = notif.leida || notif.leido;
+                const idNotif = notif.idNotificacion || notif.id;
+
+                // Usar funciones de notificaciones.js si existen
+                const escapar = typeof escaparHTML === 'function' ? escaparHTML : (t => {
+                    const d = document.createElement('div');
+                    d.textContent = t || '';
+                    return d.innerHTML;
+                });
+
+                const tiempo = typeof obtenerTiempoRelativo === 'function' ?
+                    obtenerTiempoRelativo(notif.fechaCreacion) : 'Hace poco';
+
+                const icono = ICONOS[notif.tipo] || 'fas fa-bell';
+                let tipoIcono = 'info';
+                if (['EXITO', 'SUCCESS', 'CLUB_VALIDADO'].includes(notif.tipo)) tipoIcono = 'success';
+                if (['WARNING'].includes(notif.tipo)) tipoIcono = 'warning';
+
+                const card = document.createElement('div');
+                card.className = `notif-card ${!leida ? 'unread' : ''}`;
+                card.style.cursor = 'pointer';
+                card.dataset.notifInfo = JSON.stringify(notif);
+
+                card.innerHTML = `
+                    <div class="d-flex gap-3 align-items-start">
+                        <div class="notif-icon-box ${tipoIcono}">
+                            <i class="${icono}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="notif-title">${escapar(notif.titulo)}</div>
+                                ${!leida ? '<span class="badge badge-new">Nueva</span>' : ''}
+                            </div>
+                            <div class="notif-message">${escapar(notif.mensaje)}</div>
+                            <div class="notif-meta">
+                                <div><i class="fas fa-clock me-1"></i> ${tiempo}</div>
+                                ${!leida ? `
+                                    <button class="btn btn-modern btn-mark-read" 
+                                            onclick="event.stopPropagation(); marcarUnaComoLeida(${idNotif})">
+                                        <i class="fas fa-check"></i> Marcar como leída
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Click handler para manejar notificaciones (reutiliza de notificaciones.js)
+                card.addEventListener('click', async function () {
+                    try {
+                        const notifData = JSON.parse(this.dataset.notifInfo);
+
+                        // Reutilizar función de notificaciones.js si existe
+                        if (typeof manejarClickNotificacion === 'function') {
+                            await manejarClickNotificacion(notifData);
+                            return;
+                        }
+
+                        // Si no, implementación local
+                        const tipo = notifData.tipo || '';
+                        const titulo = notifData.titulo || '';
+
+                        // Club disponible para reclamar
+                        if (tipo === 'CLUB_DISPONIBLE' || titulo.toLowerCase().includes('club disponible')) {
+                            const result = await fetchAPI('/api/clubes/sin-reclamar', 'GET');
+                            if (result.success && result.data) {
+                                window.location.href = `reclamar-club.html?id=${result.data.idClub}`;
+                            }
+                        }
+                        // NUEVO: Club pendiente de validación (admin)
+                        else if (tipo === 'CLUB_PENDIENTE' || tipo === 'NUEVO_CLUB' ||
+                            titulo.toLowerCase().includes('club pendiente') ||
+                            titulo.toLowerCase().includes('nuevo club pendiente')) {
+                            window.location.href = 'admin-clubes.html?tab=pendientes';
+                        }
+                        // Otras notificaciones: solo marcar como leída
+                        else if (!notifData.leida && !notifData.leido) {
+                            await marcarUnaComoLeida(notifData.idNotificacion || notifData.id);
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                });
+
+                lista.appendChild(card);
+            });
+        }
+
+        async function marcarUnaComoLeida(idNotificacion) {
+            try {
+                await marcarNotificacionLeida(idNotificacion);
+                mostrarAlerta('Notificación marcada como leída', 'success');
+
+                const notif = todasLasNotificaciones.find(n => (n.idNotificacion || n.id) === idNotificacion);
+                if (notif) {
+                    notif.leida = true;
+                    notif.leido = true;
+                }
+
+                actualizarBadgeFiltro();
+                filtrarNotificaciones(filtroActual);
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarAlerta('Error al marcar notificación', 'error');
+            }
+        }
+
+        async function marcarTodasComoLeidas() {
+            const confirmado = await confirmarModerno(
+                '¿Marcar todas como leídas?',
+                'Todas tus notificaciones se marcarán como leídas.',
+                'Marcar todas',
+                'Cancelar'
+            );
+
+            if (!confirmado) return;
+
+            try {
+                await marcarTodasLasNotificacionesLeidas();
+                mostrarAlerta('Todas marcadas como leídas', 'success');
+
+                todasLasNotificaciones.forEach(n => {
+                    n.leida = true;
+                    n.leido = true;
+                });
+
+                actualizarBadgeFiltro();
+                filtrarNotificaciones(filtroActual);
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarAlerta('Error al marcar notificaciones', 'error');
+            }
+        }
+
+        function filtrarNotificaciones(filtro) {
+            filtroActual = filtro;
+            document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+            document.querySelector(`[data-filtro="${filtro}"]`).classList.add('active');
+
+            let filtradas = todasLasNotificaciones;
+            if (filtro === 'no-leidas') filtradas = todasLasNotificaciones.filter(n => !n.leida && !n.leido);
+            if (filtro === 'leidas') filtradas = todasLasNotificaciones.filter(n => n.leida || n.leido);
+
+            mostrarNotificaciones(filtradas);
+        }
+
+        function actualizarBadgeFiltro() {
+            const noLeidas = todasLasNotificaciones.filter(n => !n.leida && !n.leido).length;
+            document.getElementById('badgeNoLeidas').textContent = noLeidas;
+        }
+
+        function confirmarModerno(titulo, mensaje, textoAceptar = 'Aceptar', textoCancelar = 'Cancelar') {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.className = 'modal-overlay';
+                overlay.innerHTML = `
+                    <div class="modal-box">
+                        <div class="modal-icon"><i class="fas fa-check-double"></i></div>
+                        <h3 class="modal-title">${titulo}</h3>
+                        <p class="modal-message">${mensaje}</p>
+                        <div class="modal-buttons">
+                            <button class="modal-btn modal-btn-secondary" id="btnCancelar">${textoCancelar}</button>
+                            <button class="modal-btn modal-btn-primary" id="btnAceptar">
+                                <i class="fas fa-check me-2"></i>${textoAceptar}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+
+                const cerrarModal = (resultado) => {
+                    overlay.style.animation = 'fadeOut 0.2s ease';
+                    setTimeout(() => {
+                        document.body.removeChild(overlay);
+                        resolve(resultado);
+                    }, 200);
+                };
+
+                overlay.querySelector('#btnAceptar').addEventListener('click', () => cerrarModal(true));
+                overlay.querySelector('#btnCancelar').addEventListener('click', () => cerrarModal(false));
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) cerrarModal(false);
+                });
+
+                document.addEventListener('keydown', function handleEsc(e) {
+                    if (e.key === 'Escape') {
+                        cerrarModal(false);
+                        document.removeEventListener('keydown', handleEsc);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

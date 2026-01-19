@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Club Rechazado - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+            --primary-color: #00bcd4;
+            --primary-dark: #0097a7;
+            --danger-gradient: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Navbar */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--danger-gradient);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(244, 67, 54, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '\f071';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.08;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .hero-section h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section p {
+            font-size: 1.1rem;
+            margin: 0;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Alert Box */
+        .alert-rechazo {
+            background: white;
+            border-left: 4px solid #f44336;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .alert-rechazo h5 {
+            color: #f44336;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .alert-rechazo p {
+            color: #2d3748;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 188, 212, 0.1);
+        }
+
+        .char-counter {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-top: 0.25rem;
+        }
+
+        .btn-reenviar {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-reenviar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 188, 212, 0.5);
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: #e2e8f0;
+            color: #2d3748;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .btn-cancelar:hover {
+            background: #cbd5e0;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .info-box p {
+            margin: 0;
+            color: #1565c0;
+            font-weight: 500;
+        }
+
+        .info-box ul {
+            margin: 0.5rem 0 0 1.5rem;
+            color: #1565c0;
+        }
+
+        /* Loading */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="text-center">
+            <div class="spinner-border text-light" style="width: 4rem; height: 4rem;"></div>
+            <p class="text-white mt-3 fs-5">Cargando...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1><i class="fas fa-exclamation-triangle"></i> Club Rechazado</h1>
+            <p>Tu solicitud de club fue rechazada. Puedes corregir los datos y reenviarla para validación.</p>
+        </div>
+
+        <!-- Alert con Motivo de Rechazo -->
+        <div class="alert-rechazo" id="alertRechazo">
+            <h5><i class="fas fa-info-circle"></i> Motivo del Rechazo:</h5>
+            <p id="motivoRechazo">Cargando...</p>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <p><strong><i class="fas fa-lightbulb"></i> Consejos para que tu club sea aprobado:</strong></p>
+            <ul>
+                <li>Elige un nombre único y representativo</li>
+                <li>Escribe una descripción clara de tu club</li>
+                <li>Corrige los puntos mencionados en el motivo de rechazo</li>
+                <li>Evita nombres ofensivos o genéricos</li>
+            </ul>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <h3><i class="fas fa-edit"></i> Editar Datos del Club</h3>
+
+            <form id="formReenviarClub">
+
+                <div class="mb-4">
+                    <label class="form-label" for="nombreClub">Nombre del Club *</label>
+                    <input type="text" class="form-control" id="nombreClub" required maxlength="100"
+                        placeholder="Ej: Robótica Avanzada">
+                    <div class="char-counter">
+                        <span id="nombreCounter">0</span> / 100 caracteres
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="descripcion">Descripción del Club</label>
+                    <textarea class="form-control" id="descripcion" rows="5" maxlength="500"
+                        placeholder="Describe tu club, sus objetivos y qué lo hace especial..."></textarea>
+                    <div class="char-counter">
+                        <span id="descripcionCounter">0</span> / 500 caracteres
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-cancelar"
+                            onclick="window.location.href='usuario-dashboard.html'">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-reenviar">
+                            <i class="fas fa-paper-plane"></i> Reenviar para Validación
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+
+    <script>
+        let clubId = null;
+        let clubData = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Verificar autenticación
+            if (!isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Cargar datos del club directamente (sin necesidad de ID en URL)
+            await cargarDatosClub();
+
+            // Configurar contadores de caracteres
+            document.getElementById('nombreClub').addEventListener('input', (e) => {
+                document.getElementById('nombreCounter').textContent = e.target.value.length;
+            });
+
+            document.getElementById('descripcion').addEventListener('input', (e) => {
+                document.getElementById('descripcionCounter').textContent = e.target.value.length;
+            });
+
+            // Configurar formulario
+            document.getElementById('formReenviarClub').addEventListener('submit', reenviarClub);
+        });
+
+        async function cargarDatosClub() {
+            mostrarLoading();
+
+            try {
+                // Usar endpoint /api/clubes/mi-club (obtiene el club del usuario actual)
+                const result = await fetchAPI('/api/clubes/mi-club', 'GET');
+
+                if (result.success && result.data) {
+                    // Manejar doble anidación igual que en dashboard
+                    clubData = result.data.data ? result.data.data : result.data;
+                    clubId = clubData.idClub || clubData.id;
+
+                    if (clubData.estado !== 'Rechazado') {
+                        ocultarLoading();
+                        await mostrarModalAlerta(
+                            'Error',
+                            'Este club no está en estado rechazado',
+                            'error',
+                            'Cerrar'
+                        );
+                        window.location.href = 'usuario-dashboard.html';
+                        return;
+                    }
+
+                    // Llenar formulario con datos actuales
+                    document.getElementById('nombreClub').value = clubData.nombreClub || '';
+                    document.getElementById('descripcion').value = clubData.descripcion || '';
+                    document.getElementById('motivoRechazo').textContent = clubData.motivoRechazo || 'No se especificó un motivo';
+
+                    // Actualizar contadores
+                    document.getElementById('nombreCounter').textContent = (clubData.nombreClub || '').length;
+                    document.getElementById('descripcionCounter').textContent = (clubData.descripcion || '').length;
+
+                } else {
+                    throw new Error('No se pudieron cargar los datos del club');
+                }
+
+                ocultarLoading();
+
+            } catch (error) {
+                ocultarLoading();
+                await mostrarModalAlerta(
+                    'Error',
+                    'No se pudieron cargar los datos del club',
+                    'error',
+                    'Cerrar'
+                );
+                window.location.href = 'usuario-dashboard.html';
+            }
+        }
+
+        async function reenviarClub(e) {
+            e.preventDefault();
+
+            const nombreClub = document.getElementById('nombreClub').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+
+            // Validaciones
+            if (!nombreClub || nombreClub.length < 3) {
+                await mostrarModalAlerta(
+                    'Error de Validación',
+                    'El nombre del club debe tener al menos 3 caracteres',
+                    'error',
+                    'Cerrar'
+                );
+                return;
+            }
+
+            // Confirmar reenvío
+            const confirmar = await confirmarModal(
+                '¿Reenviar Club?',
+                `¿Estás seguro de reenviar el club "${nombreClub}" para validación?\n\nLos administradores lo revisarán nuevamente.`,
+                'Sí, Reenviar',
+                'Cancelar'
+            );
+
+            if (!confirmar) return;
+
+            mostrarLoading();
+
+            try {
+                const result = await fetchAPI(`/api/clubes/${clubId}/reenviar`, 'PUT', {
+                    nombreClub: nombreClub,
+                    descripcion: descripcion
+                });
+
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        '¡Éxito!',
+                        'Tu club ha sido reenviado para validación. Los administradores lo revisarán pronto.',
+                        'success',
+                        'Entendido'
+                    );
+                    window.location.href = 'usuario-dashboard.html';
+                } else {
+                    await mostrarModalAlerta(
+                        'Error',
+                        result.message || 'No se pudo reenviar el club',
+                        'error',
+                        'Cerrar'
+                    );
+                }
+
+            } catch (error) {
+                ocultarLoading();
+                await mostrarModalAlerta(
+                    'Error',
+                    'Error de conexión con el servidor',
+                    'error',
+                    'Cerrar'
+                );
+            }
+        }
+    </script>
+
+</body>
+
+</html>

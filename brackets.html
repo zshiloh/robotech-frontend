@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brackets del Torneo - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #2d3748;
+            --light-gray: #718096;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f7fafc;
+            padding-top: 70px;
+        }
+
+        /* ============================================
+           NAVBAR MODERNA UNIFICADA
+        ============================================ */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav-center {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            margin-right: 2rem;
+        }
+
+        .nav-link-modern {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .nav-link-modern:hover {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-link-modern.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link-modern.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-outline-modern {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s;
+            background: transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline-modern:hover {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-modern {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .user-menu:hover {
+            background: var(--primary-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: all 0.3s;
+            white-space: nowrap;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        /* HERO SECTION */
+        .brackets-hero {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            color: white;
+            margin: 2rem auto;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+            max-width: 1200px;
+        }
+
+        .brackets-hero::before {
+            content: "\f542";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.1;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .brackets-hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .brackets-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* SELECTOR DE CATEGORÍA */
+        .selector-categoria {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .selector-categoria label {
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .selector-categoria select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .selector-categoria select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* LEYENDA DE ESTADOS */
+        .legend-box {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .legend-title {
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        .legend-color.pendiente {
+            background: #fef3c7;
+            border: 2px solid var(--warning-color);
+        }
+
+        .legend-color.en-curso {
+            background: #dbeafe;
+            border: 2px solid #3b82f6;
+        }
+
+        .legend-color.finalizado {
+            background: #d1fae5;
+            border: 2px solid var(--success-color);
+        }
+
+        /* BRACKETS CONTAINER */
+        .brackets-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .bracket-tree {
+            display: flex;
+            gap: 3rem;
+            padding: 2rem 0;
+            min-width: max-content;
+        }
+
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            min-width: 300px;
+        }
+
+        .round-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .bracket-match {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .bracket-match:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .bracket-match.pendiente {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border-color: var(--warning-color);
+        }
+
+        .bracket-match.en-curso {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-color: #3b82f6;
+        }
+
+        .bracket-match.finalizado {
+            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+            border-color: var(--success-color);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .match-id {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6b7280;
+        }
+
+        .match-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .match-status.pendiente {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .match-status.en-curso {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .match-status.finalizado {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .match-competitor {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .match-competitor.winner {
+            background: linear-gradient(135deg, #fef08a 0%, #fde047 100%);
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(250, 204, 21, 0.3);
+            transform: scale(1.02);
+        }
+
+        .match-competitor.loser {
+            background: #f3f4f6;
+            opacity: 0.7;
+        }
+
+        .match-competitor.tbd {
+            background: #f9fafb;
+            border: 2px dashed #d1d5db;
+        }
+
+        .competitor-name {
+            font-weight: 600;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .competitor-name i {
+            color: var(--primary-color);
+        }
+
+        .robot-name {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .match-date {
+            font-size: 0.85rem;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .match-date i {
+            margin-right: 0.25rem;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #9ca3af;
+        }
+
+        /* LOADING */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #e2e8f0;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* ALERT CUSTOM */
+        .alert-custom {
+            border-radius: 12px;
+            border: none;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-custom i {
+            font-size: 1.5rem;
+        }
+
+        .alert-custom.warning {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+        }
+
+        .alert-custom.info {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Moderna Unificada -->
+    <div class="navbar-modern d-flex align-items-center justify-content-between">
+        <a href="index.html" class="navbar-brand-modern">
+            <div class="logo-circle">
+                <i class="fas fa-robot"></i>
+            </div>
+            <span class="brand-text">ROBOTECH</span>
+        </a>
+
+        <div class="navbar-nav-center">
+            <a href="index.html" class="nav-link-modern">Inicio</a>
+            <a href="clubes.html" class="nav-link-modern">Clubes</a>
+            <a href="torneos.html" class="nav-link-modern">Torneos</a>
+            <a href="rankings.html" class="nav-link-modern">Rankings</a>
+        </div>
+
+        <div class="navbar-actions" style="margin-left: 2rem;">
+            <!-- No Autenticado -->
+            <div id="navActionsGuest" style="display: flex; gap: 1rem;">
+                <a href="login.html" class="btn-outline-modern">
+                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                </a>
+                <a href="registro.html" class="btn-primary-modern">
+                    <i class="fas fa-user-plus me-2"></i>Registrarse
+                </a>
+            </div>
+
+            <!-- Autenticado -->
+            <div id="navActionsAuth" style="display: none; align-items: center; gap: 1rem;">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Usuario -->
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar" id="avatarUsuarioNav">U</div>
+                        <span class="user-name" id="nombreUsuarioNav">Usuario</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar" style="width: 40px; height: 40px;" id="avatarUsuarioMenu">U
+                                </div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                        id="nombreUsuarioMenu">Usuario</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav">
+                                        email@example.com</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item" href="#" onclick="irAMiDashboard(); return false;">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Mi Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar Sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO SECTION -->
+    <div class="container">
+        <div class="brackets-hero">
+            <h1><i class="fas fa-sitemap"></i> Brackets del Torneo</h1>
+            <p id="heroSubtitle">Visualiza la estructura de eliminación y sigue el progreso de cada combate</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="main-container">
+        <!-- SELECTOR DE CATEGORÍA -->
+        <div class="selector-categoria">
+            <label for="categoriaSelect">
+                <i class="fas fa-filter"></i> Selecciona una Categoría
+            </label>
+            <select id="categoriaSelect" class="form-select">
+                <option value="">Cargando categorías...</option>
+            </select>
+        </div>
+
+        <!-- LEYENDA DE ESTADOS -->
+        <div class="legend-box" id="legendBox" style="display: none;">
+            <div class="legend-title">
+                <i class="fas fa-info-circle"></i> Leyenda de Estados
+            </div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color pendiente"></div>
+                    <span>Pendiente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color en-curso"></div>
+                    <span>En Curso</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color finalizado"></div>
+                    <span>Finalizado</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- BRACKETS CONTAINER -->
+        <div class="brackets-container">
+            <div id="bracketsContent">
+                <div class="empty-state">
+                    <i class="fas fa-sitemap"></i>
+                    <h3>Selecciona una Categoría</h3>
+                    <p class="text-muted">Elige una categoría para visualizar sus brackets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOADING OVERLAY -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content text-center">
+            <div class="loading-spinner mx-auto"></div>
+            <div class="loading-text">Cargando brackets...</div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        // ==================================================
+        // VARIABLES GLOBALES
+        // ==================================================
+        let torneoId = null;
+        let categoriaIdInicial = null;
+        let categorias = [];
+        let bracketsActuales = [];
+
+        // ==================================================
+        // ACTUALIZAR NAVBAR
+        // ==================================================
+        function actualizarNavbar() {
+            const navActionsGuest = document.getElementById("navActionsGuest");
+            const navActionsAuth = document.getElementById("navActionsAuth");
+            const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
+            const nombreUsuarioMenu = document.getElementById("nombreUsuarioMenu");
+            const emailUsuarioNav = document.getElementById("emailUsuarioNav");
+            const avatarUsuarioNav = document.getElementById("avatarUsuarioNav");
+            const avatarUsuarioMenu = document.getElementById("avatarUsuarioMenu");
+
+            if (isAuthenticated()) {
+                navActionsGuest.style.display = "none";
+                navActionsAuth.style.display = "flex";
+
+                const usuario = getCurrentUser();
+                if (usuario) {
+                    const nombreCompleto = usuario.nombreCompleto || "Usuario";
+                    const email = usuario.email || "";
+                    const iniciales = nombreCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+                    nombreUsuarioNav.textContent = nombreCompleto;
+                    nombreUsuarioMenu.textContent = nombreCompleto;
+                    emailUsuarioNav.textContent = email;
+                    avatarUsuarioNav.textContent = iniciales;
+                    avatarUsuarioMenu.textContent = iniciales;
+                }
+            } else {
+                navActionsGuest.style.display = "flex";
+                navActionsAuth.style.display = "none";
+            }
+        }
+
+        // ==================================================
+        // INICIALIZACIÓN
+        // ==================================================
+        document.addEventListener('DOMContentLoaded', function () {
+            actualizarNavbar();
+
+            // Aceptar tanto 'torneoId' como 'torneo'
+            torneoId = obtenerParametroURL('torneoId') || obtenerParametroURL('torneo');
+            categoriaIdInicial = obtenerParametroURL('categoriaId') || obtenerParametroURL('categoria');
+
+            console.log("torneoId:", torneoId);
+            console.log("categoriaIdInicial:", categoriaIdInicial);
+
+            if (!torneoId) {
+                mostrarError('No se especificó un torneo válido');
+                return;
+            }
+
+            cargarCategorias();
+
+            document.getElementById('categoriaSelect').addEventListener('change', function () {
+                const categoriaId = this.value;
+                if (categoriaId) {
+                    cargarBrackets(categoriaId);
+                } else {
+                    mostrarEmptyState();
+                }
+            });
+        });
+
+        // ==================================================
+        // OBTENER PARÁMETRO DE URL
+        // ==================================================
+        function obtenerParametroURL(nombre) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(nombre);
+        }
+
+        // ==================================================
+        // CARGAR CATEGORÍAS DEL TORNEO
+        // ==================================================
+        async function cargarCategorias() {
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/public/torneos/${torneoId}/categorias`, 'GET');
+
+                console.log("Categorías cargadas:", result);
+
+                ocultarLoading();
+
+                if (result.success && result.data && Array.isArray(result.data)) {
+                    categorias = result.data;
+                    renderizarSelectorCategorias();
+                } else {
+                    mostrarError('No se pudieron cargar las categorías');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error al cargar categorías:', error);
+                mostrarError('Error al cargar las categorías del torneo');
+            }
+        }
+
+        // ==================================================
+        // RENDERIZAR SELECTOR DE CATEGORÍAS
+        // ==================================================
+        function renderizarSelectorCategorias() {
+            const select = document.getElementById('categoriaSelect');
+
+            if (categorias.length === 0) {
+                select.innerHTML = '<option value="">No hay categorías disponibles</option>';
+                return;
+            }
+
+            select.innerHTML = '<option value="">Selecciona una categoría...</option>' +
+                categorias.map(cat => `
+                    <option value="${cat.idCategoria}" ${categoriaIdInicial == cat.idCategoria ? 'selected' : ''}>
+                        ${cat.nombreCategoria} (${cat.inscritosActuales || 0} inscritos)
+                    </option>
+                `).join('');
+
+            // Si hay una categoría inicial en la URL, cargar sus brackets
+            if (categoriaIdInicial) {
+                cargarBrackets(categoriaIdInicial);
+            }
+        }
+
+        // ==================================================
+        // CARGAR BRACKETS DE UNA CATEGORÍA
+        // ==================================================
+        async function cargarBrackets(categoriaId) {
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/public/brackets/${categoriaId}`, 'GET');
+
+                console.log("Brackets cargados:", result);
+
+                ocultarLoading();
+
+                if (result.success && result.data) {
+                    const brackets = Array.isArray(result.data) ? result.data : [result.data];
+                    bracketsActuales = brackets;
+
+                    if (brackets.length > 0) {
+                        document.getElementById('legendBox').style.display = 'block';
+                        renderizarBrackets(brackets);
+                    } else {
+                        mostrarMensaje('No hay brackets disponibles para esta categoría', 'info');
+                    }
+                } else {
+                    mostrarMensaje('Los brackets aún no están disponibles para esta categoría', 'warning');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error al cargar brackets:', error);
+                mostrarMensaje('Los brackets aún no están disponibles para esta categoría', 'warning');
+            }
+        }
+
+        // ==================================================
+        // RENDERIZAR BRACKETS
+        // ==================================================
+        function renderizarBrackets(brackets) {
+            // Agrupar enfrentamientos por fase
+            const fases = {};
+            brackets.forEach(bracket => {
+                const fase = bracket.nombreFase || 'Fase';
+                if (!fases[fase]) {
+                    fases[fase] = [];
+                }
+                fases[fase].push(bracket);
+            });
+
+            console.log("Fases agrupadas:", fases);
+
+            // Orden de fases (ajusta según tus necesidades)
+            const ordenFases = ['Ronda 1', 'Ronda 2', 'Ronda 3', 'Octavos de Final', 'Octavos', 'Cuartos de Final', 'Cuartos', 'Semifinal', 'Final'];
+            const fasesOrdenadas = ordenFases.filter(fase => fases[fase]);
+
+            // Si no hay fases conocidas, usar todas las disponibles
+            if (fasesOrdenadas.length === 0) {
+                fasesOrdenadas.push(...Object.keys(fases));
+            }
+
+            const container = document.getElementById('bracketsContent');
+            container.innerHTML = `
+                <div class="bracket-tree">
+                    ${fasesOrdenadas.map(fase => `
+                        <div class="bracket-round">
+                            <div class="round-title">
+                                <i class="fas fa-trophy"></i> ${fase}
+                            </div>
+                            ${fases[fase].map(match => renderizarMatch(match)).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // ==================================================
+        // RENDERIZAR UN MATCH
+        // ==================================================
+        function renderizarMatch(match) {
+            const estado = match.estadoCombate || 'Pendiente';
+            const estadoClass = estado.toLowerCase().replace(' ', '-');
+
+            const comp1 = match.nombreCompetidor1 || 'TBD';
+            const comp2 = match.nombreCompetidor2 || 'TBD';
+            const robot1 = match.robotCompetidor1 || '';
+            const robot2 = match.robotCompetidor2 || '';
+
+            const ganador = match.nombreGanador;
+            const comp1IsWinner = ganador && ganador === comp1;
+            const comp2IsWinner = ganador && ganador === comp2;
+
+            const fecha = match.fechaHora ? formatearFecha(match.fechaHora) : '';
+
+            return `
+                <div class="bracket-match ${estadoClass}">
+                    <div class="match-header">
+                        <span class="match-id">#${match.idEnfrentamiento}</span>
+                        <span class="match-status ${estadoClass}">${estado}</span>
+                    </div>
+                    
+                    <div class="match-competitor ${comp1IsWinner ? 'winner' : (ganador ? 'loser' : '')} ${comp1 === 'TBD' ? 'tbd' : ''}">
+                        <div>
+                            <div class="competitor-name">
+                                ${comp1IsWinner ? '<i class="fas fa-crown"></i>' : '<i class="fas fa-robot"></i>'}
+                                ${comp1}
+                            </div>
+                            ${robot1 ? `<div class="robot-name">${robot1}</div>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="match-competitor ${comp2IsWinner ? 'winner' : (ganador ? 'loser' : '')} ${comp2 === 'TBD' ? 'tbd' : ''}">
+                        <div>
+                            <div class="competitor-name">
+                                ${comp2IsWinner ? '<i class="fas fa-crown"></i>' : '<i class="fas fa-robot"></i>'}
+                                ${comp2}
+                            </div>
+                            ${robot2 ? `<div class="robot-name">${robot2}</div>` : ''}
+                        </div>
+                    </div>
+                    
+                    ${fecha ? `<div class="match-date"><i class="far fa-calendar"></i> ${fecha}</div>` : ''}
+                </div>
+            `;
+        }
+
+        // ==================================================
+        // FORMATEAR FECHA
+        // ==================================================
+        function formatearFecha(fechaISO) {
+            const fecha = new Date(fechaISO);
+            const opciones = {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            return fecha.toLocaleDateString('es-ES', opciones);
+        }
+
+        // ==================================================
+        // UTILIDADES DE UI
+        // ==================================================
+        function mostrarLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function ocultarLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function mostrarEmptyState() {
+            document.getElementById('legendBox').style.display = 'none';
+            document.getElementById('bracketsContent').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-sitemap"></i>
+                    <h3>Selecciona una Categoría</h3>
+                    <p class="text-muted">Elige una categoría para visualizar sus brackets</p>
+                </div>
+            `;
+        }
+
+        function mostrarError(mensaje) {
+            document.getElementById('bracketsContent').innerHTML = `
+                <div class="alert-custom warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Error</strong>
+                        <div>${mensaje}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function mostrarMensaje(mensaje, tipo = 'info') {
+            document.getElementById('bracketsContent').innerHTML = `
+                <div class="alert-custom ${tipo}">
+                    <i class="fas fa-info-circle"></i>
+                    <div>${mensaje}</div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

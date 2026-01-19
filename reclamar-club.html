@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reclamar Club - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --primary-dark: #764ba2;
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding-top: var(--navbar-height);
+        }
+
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--primary-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-card {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: "\f132";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.08;
+            right: -3rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .hero-card h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-card p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .alert-info-custom {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .alert-info-custom i {
+            color: #2196f3;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control,
+        .form-textarea {
+            padding: 0.85rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .form-control:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            background: white;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .btn-group-custom {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-custom {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary-custom {
+            background: #6c757d;
+            color: white;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary-custom:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 2rem;
+            }
+
+            .hero-card h1 {
+                font-size: 2rem;
+            }
+
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .btn-group-custom {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+            <div class="navbar-actions">
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="usuarioNombre">Usuario</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Card -->
+        <div class="hero-card">
+            <h1><i class="fas fa-shield-alt"></i> ¡Reclama tu Club!</h1>
+            <p>Completa los datos para activar tu club en el sistema</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <div class="alert-info-custom">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>¿Qué sigue después?</strong>
+                    <p class="mb-0 mt-1">Tu club será enviado a validación. El administrador lo revisará y recibirás una
+                        notificación cuando sea aprobado. Al ser validado, recibirás automáticamente el rol de
+                        <strong>Representante</strong>.</p>
+                </div>
+            </div>
+
+            <form id="formReclamarClub">
+                <div class="mb-4">
+                    <label class="form-label">
+                        Nombre del Club *
+                        <i class="fas fa-info-circle text-muted" style="font-size: 0.85rem; cursor: help;"
+                            data-bs-toggle="tooltip" title="Este nombre se mostrará públicamente en el sistema"></i>
+                    </label>
+                    <input type="text" class="form-control" id="nombreClub" required maxlength="100"
+                        placeholder="Ej: Robotech Warriors" />
+                    <div class="char-counter">
+                        <span id="nombreCounter">0</span> / 100 caracteres
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">
+                        Descripción del Club (Opcional)
+                    </label>
+                    <textarea class="form-textarea" id="descripcionClub" maxlength="500"
+                        placeholder="Describe tu club, sus objetivos, logros o cualquier información relevante..."></textarea>
+                    <div class="char-counter">
+                        <span id="descripcionCounter">0</span> / 500 caracteres
+                    </div>
+                </div>
+
+                <div class="btn-group-custom">
+                    <button type="button" class="btn-custom btn-secondary-custom" onclick="cancelar()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn-custom btn-primary-custom">
+                        <i class="fas fa-check"></i> Reclamar Club
+                    </button>
+                </div>
+            </form>
+
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="loadingSpinner">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3">Enviando solicitud...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+
+    <script>
+        let clubId = null;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Obtener ID del club de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            clubId = urlParams.get('id');
+
+            // Si no hay ID en la URL, intentar obtenerlo del backend
+            if (!clubId || clubId === 'null' || clubId === 'undefined') {
+                try {
+                    const result = await fetchAPI('/api/clubes/sin-reclamar', 'GET');
+
+                    // Manejar doble anidamiento de data
+                    let clubData = null;
+
+                    if (result.success && result.data) {
+                        if (result.data.data) {
+                            clubData = result.data.data;
+                        } else if (result.data.idClub) {
+                            clubData = result.data;
+                        }
+                    }
+
+                    if (clubData && clubData.idClub) {
+                        clubId = clubData.idClub;
+
+                        if (!clubId || isNaN(clubId)) {
+                            mostrarAlerta('Error: ID de club no válido', 'error');
+                            setTimeout(() => window.location.href = 'index.html', 2000);
+                            return;
+                        }
+
+                        // Actualizar la URL sin recargar la página
+                        const newUrl = `${window.location.pathname}?id=${clubId}`;
+                        window.history.replaceState({}, '', newUrl);
+                    } else {
+                        mostrarAlerta('No tienes ningún club disponible para reclamar', 'error');
+                        setTimeout(() => window.location.href = 'index.html', 2000);
+                        return;
+                    }
+                } catch (error) {
+                    mostrarAlerta('No se pudo obtener el club. Intenta desde la notificación.', 'error');
+                    setTimeout(() => window.location.href = 'index.html', 2000);
+                    return;
+                }
+            }
+
+            // Cargar datos del usuario
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Usuario';
+
+            // Character counters
+            const nombreInput = document.getElementById('nombreClub');
+            const descripcionInput = document.getElementById('descripcionClub');
+
+            nombreInput.addEventListener('input', () => {
+                document.getElementById('nombreCounter').textContent = nombreInput.value.length;
+            });
+
+            descripcionInput.addEventListener('input', () => {
+                document.getElementById('descripcionCounter').textContent = descripcionInput.value.length;
+            });
+
+            // Form submit
+            document.getElementById('formReclamarClub').addEventListener('submit', reclamarClub);
+
+            // Tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+        });
+
+        async function reclamarClub(e) {
+            e.preventDefault();
+
+            const nombreClub = document.getElementById('nombreClub').value.trim();
+            const descripcion = document.getElementById('descripcionClub').value.trim();
+
+            if (!nombreClub) {
+                mostrarAlerta('El nombre del club es obligatorio', 'warning');
+                return;
+            }
+
+            // Validar clubId antes de enviar
+            if (!clubId || clubId === 'null' || clubId === 'undefined') {
+                mostrarAlerta('ID de club no válido', 'error');
+                return;
+            }
+
+            // Mostrar loading
+            document.getElementById('formReclamarClub').style.display = 'none';
+            document.getElementById('loadingSpinner').classList.add('active');
+
+            try {
+                const result = await fetchAPI(`/api/clubes/${clubId}/reclamar`, 'POST', {
+                    nombreClub,
+                    descripcion: descripcion || null
+                });
+
+                document.getElementById('loadingSpinner').classList.remove('active');
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        '¡Club Enviado!',
+                        'Tu club "' + nombreClub + '" ha sido enviado para validación.\n\n' +
+                        'Recibirás una notificación cuando el administrador lo apruebe.',
+                        'success',
+                        'Entendido'
+                    );
+
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+
+                } else {
+                    document.getElementById('formReclamarClub').style.display = 'block';
+
+                    const mensaje = result.message || 'No se pudo reclamar el club';
+
+                    await mostrarModalAlerta(
+                        'Error',
+                        mensaje,
+                        'error',
+                        'Cerrar'
+                    );
+                }
+
+            } catch (error) {
+                document.getElementById('loadingSpinner').classList.remove('active');
+                document.getElementById('formReclamarClub').style.display = 'block';
+
+                await mostrarModalAlerta(
+                    'Error de Conexión',
+                    'No se pudo conectar con el servidor. Inténtalo nuevamente.',
+                    'error',
+                    'Cerrar'
+                );
+            }
+        }
+
+        function cancelar() {
+            if (confirm('¿Estás seguro de cancelar? Los datos no se guardarán.')) {
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

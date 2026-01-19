@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Representante - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rep-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --rep-color: #4facfe;
+            --rep-dark: #00f2fe;
+            --sidebar-width: 280px;
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR MODERNA */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--rep-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--rep-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--rep-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--rep-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--rep-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        /* Dropdown de Notificaciones */
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(79, 172, 254, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(79, 172, 254, 0.05);
+            border-left: 3px solid #4facfe;
+        }
+
+        .notification-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notification-badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #4facfe;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .notifications-footer a:hover {
+            color: #00f2fe;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .empty-notifications i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* SIDEBAR MODERNA */
+        .sidebar-modern {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-header-modern {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header-modern h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu-modern {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern li {
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu-modern li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sidebar-menu-modern li a i {
+            width: 24px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu-modern li a:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+            color: var(--rep-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-modern li a.active {
+            background: var(--rep-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .sidebar-menu-modern li a.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content-modern {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--navbar-height);
+            padding: 2.5rem;
+            min-height: calc(100vh - var(--navbar-height));
+        }
+
+        /* HERO BANNER */
+        .hero-banner-rep {
+            background: var(--rep-gradient);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.35);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-banner-rep::before {
+            content: '\f508';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.08;
+            right: -5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(-50%) rotate(-15deg);
+            }
+
+            50% {
+                transform: translateY(-55%) rotate(-10deg);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-banner-rep h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-banner-rep p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+        }
+
+        .club-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .club-badge i {
+            font-size: 1.5rem;
+        }
+
+        /* KPI CARDS */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.25rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease both;
+            border: 2px solid transparent;
+        }
+
+        .kpi-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .kpi-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .kpi-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .kpi-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: var(--kpi-color);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: var(--kpi-color);
+        }
+
+        .kpi-card.cyan {
+            --kpi-color: #4facfe;
+        }
+
+        .kpi-card.green {
+            --kpi-color: #4caf50;
+        }
+
+        .kpi-card.orange {
+            --kpi-color: #ff9800;
+        }
+
+        .kpi-card.purple {
+            --kpi-color: #9c27b0;
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .kpi-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--kpi-color), var(--kpi-color));
+            opacity: 0.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: all 0.4s;
+        }
+
+        .kpi-card:hover .kpi-icon {
+            opacity: 1;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .kpi-card:hover .kpi-icon i {
+            color: white;
+        }
+
+        .kpi-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .kpi-label {
+            color: #6c757d;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* SECTION CARDS */
+        .section-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.6s ease both;
+        }
+
+        .section-card:nth-of-type(1) {
+            animation-delay: 0.5s;
+        }
+
+        .section-card:nth-of-type(2) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title .icon-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title .icon-circle i {
+            color: var(--rep-color);
+            font-size: 1.3rem;
+        }
+
+        /* ALERT ITEMS */
+        .alert-item {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+            border-left: 5px solid;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            animation: slideInRight 0.5s ease both;
+        }
+
+        .alert-item:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .alert-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .alert-item:hover {
+            background: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateX(8px);
+        }
+
+        .alert-item.warning {
+            border-left-color: #ffc107;
+        }
+
+        .alert-item.info {
+            border-left-color: #2196f3;
+        }
+
+        .alert-icon-box {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .alert-icon-box.warning {
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+        }
+
+        .alert-icon-box.info {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+            color: white;
+        }
+
+        .alert-content {
+            flex-grow: 1;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 1.05rem;
+        }
+
+        .alert-text {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* MIEMBRO ITEMS */
+        .miembro-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            animation: slideInRight 0.5s ease both;
+        }
+
+        .miembro-item:hover {
+            background: white;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.15);
+            transform: translateX(8px);
+        }
+
+        .miembro-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(79, 172, 254, 0.3);
+        }
+
+        .miembro-info {
+            flex-grow: 1;
+        }
+
+        .miembro-nombre {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .miembro-robot {
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .miembro-stats {
+            text-align: right;
+            font-size: 0.875rem;
+        }
+
+        .miembro-puntos {
+            font-weight: 600;
+            color: #4facfe;
+        }
+
+        /* BUTTONS */
+        .btn-action {
+            background: var(--rep-gradient);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+            color: white;
+        }
+
+        /* BADGE */
+        .badge-count {
+            background: var(--rep-gradient);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.35);
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            opacity: 0.2;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-modern.show {
+                transform: translateX(0);
+            }
+
+            .main-content-modern {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .hero-banner-rep {
+                padding: 2rem;
+            }
+
+            .hero-banner-rep h1 {
+                font-size: 2rem;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .notifications-dropdown {
+                width: 320px !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .notifications-dropdown {
+                width: 280px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Moderna -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-actions">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Usuario -->
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="user-name" id="usuarioNombre">Representante</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+                        style="min-width: 250px; border-radius: 16px; border: none; padding: 0.5rem;">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;"
+                                        id="usuarioNombreMenu">Representante</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="usuario-perfil.html"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="#"
+                                onclick="logout()"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar Sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Moderna -->
+    <aside class="sidebar-modern">
+        <div class="sidebar-header-modern">
+            <h5><i class="fas fa-user-tie"></i> Representante</h5>
+        </div>
+        <ul class="sidebar-menu-modern">
+            <li><a href="representante-dashboard.html" class="active"><i class="fas fa-home"></i>
+                    <span>Dashboard</span></a></li>
+            <li><a href="representante-club.html"><i class="fas fa-shield-alt"></i> <span>Mi Club</span></a></li>
+            <li><a href="representante-miembros.html"><i class="fas fa-users"></i> <span>Miembros</span></a></li>
+            <li><a href="representante-invitaciones.html"><i class="fas fa-envelope"></i> <span>Invitaciones</span></a>
+            </li>
+            <li><a href="representante-solicitudes.html"><i class="fas fa-inbox"></i> <span>Solicitudes</span></a></li>
+            <li><a href="representante-inscripciones.html"><i class="fas fa-clipboard-list"></i>
+                    <span>Inscripciones</span></a></li>
+            <li><a href="representante-inscripciones-pendientes.html"><i class="fas fa-clock"></i>
+                    <span>Pendientes</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content-modern">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner-rep">
+            <div class="hero-content">
+                <h1><i class="fas fa-user-tie"></i> Dashboard de Representante</h1>
+                <p>Gestiona tu club y lidera a tu equipo hacia la victoria</p>
+                <div class="club-badge" id="clubBadge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span id="nombreClubHero">Cargando...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPIs Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card cyan">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-value" id="kpiMiembros">0</div>
+                        <div class="kpi-label">Miembros Activos</div>
+                    </div>
+                    <div class="kpi-icon"><i class="fas fa-users"></i></div>
+                </div>
+            </div>
+
+            <div class="kpi-card green">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-value" id="kpiPuntos">0</div>
+                        <div class="kpi-label">Puntos Totales</div>
+                    </div>
+                    <div class="kpi-icon"><i class="fas fa-star"></i></div>
+                </div>
+            </div>
+
+            <div class="kpi-card orange">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-value" id="kpiRanking">#--</div>
+                        <div class="kpi-label">Ranking</div>
+                    </div>
+                    <div class="kpi-icon"><i class="fas fa-trophy"></i></div>
+                </div>
+            </div>
+
+            <div class="kpi-card purple">
+                <div class="kpi-header">
+                    <div>
+                        <div class="kpi-value" id="kpiVictorias">0</div>
+                        <div class="kpi-label">Victorias</div>
+                    </div>
+                    <div class="kpi-icon"><i class="fas fa-chart-line"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones Pendientes -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="icon-circle">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <span>Acciones Pendientes</span>
+                </div>
+                <span class="badge-count" id="badgeAcciones">0</span>
+            </div>
+            <div id="listaAcciones">
+                <div class="text-center py-3">
+                    <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Miembros del Club -->
+            <div class="col-lg-8 mb-4">
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="icon-circle">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span>Miembros del Club</span>
+                        </div>
+                        <a href="representante-miembros.html" class="btn btn-action">
+                            Ver Todos <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                    <div id="listaMiembros">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actividad -->
+            <div class="col-lg-4 mb-4">
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <div class="icon-circle">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <span>Actividad</span>
+                        </div>
+                    </div>
+                    <div id="listaActividad">
+                        <div class="text-center py-3">
+                            <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.REPRESENTANTE);
+
+        let datosClub = null;
+        let miembros = [];
+        let invitaciones = [];
+        let solicitudes = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            document.getElementById("usuarioNombre").textContent = usuario.nombreCompleto || "Representante";
+            document.getElementById("usuarioNombreMenu").textContent = usuario.nombreCompleto || "Representante";
+            document.getElementById("emailUsuarioNav").textContent = usuario.email || "";
+
+            cargarDashboard();
+        });
+
+        async function cargarDashboard() {
+            await Promise.all([
+                cargarClub(),
+                cargarMiembros(),
+                cargarInvitaciones(),
+                cargarSolicitudes(),
+            ]);
+
+            renderizarAcciones();
+            renderizarMiembros();
+            renderizarActividad();
+        }
+
+        async function cargarClub() {
+            try {
+                const result = await fetchAPI("/api/representante/mi-club", "GET");
+                if (result.success && result.data) {
+                    datosClub = result.data;
+                    actualizarKPIs();
+                }
+            } catch (error) {
+                console.error("Error al cargar club:", error);
+                document.getElementById("nombreClubHero").textContent = "Error al cargar club";
+            }
+        }
+
+        async function cargarMiembros() {
+            try {
+                const result = await fetchAPI("/api/representante/miembros", "GET");
+                if (result.success && result.data) {
+                    miembros = result.data;
+                }
+            } catch (error) {
+                console.error("Error al cargar miembros:", error);
+            }
+        }
+
+        async function cargarInvitaciones() {
+            try {
+                const result = await fetchAPI("/api/representante/invitaciones", "GET");
+                if (result.success && result.data) {
+                    invitaciones = result.data;
+                }
+            } catch (error) {
+                console.error("Error al cargar invitaciones:", error);
+            }
+        }
+
+        async function cargarSolicitudes() {
+            try {
+                const result = await fetchAPI("/api/representante/solicitudes", "GET");
+                if (result.success && result.data) {
+                    solicitudes = result.data;
+                }
+            } catch (error) {
+                console.error("Error al cargar solicitudes:", error);
+            }
+        }
+
+        function actualizarKPIs() {
+            if (!datosClub) return;
+
+            document.getElementById("nombreClubHero").textContent = datosClub.nombreClub || "Mi Club";
+            document.getElementById("kpiMiembros").textContent = datosClub.cantidadMiembros || 0;
+            document.getElementById("kpiPuntos").textContent = datosClub.puntosTotales || 0;
+
+            if (datosClub.posicionRanking) {
+                document.getElementById("kpiRanking").textContent = `#${datosClub.posicionRanking}`;
+            } else {
+                document.getElementById("kpiRanking").textContent = "--";
+            }
+
+            const totalVictorias = miembros.reduce((sum, m) => sum + (m.victorias || 0), 0);
+            document.getElementById("kpiVictorias").textContent = totalVictorias;
+        }
+
+        function renderizarAcciones() {
+            const contenedor = document.getElementById("listaAcciones");
+
+            const invitacionesPendientes = invitaciones.filter(inv => inv.estado === "PENDIENTE");
+            const solicitudesPendientes = solicitudes.filter(sol => sol.estado === "PENDIENTE");
+
+            const totalAcciones = invitacionesPendientes.length + solicitudesPendientes.length;
+            document.getElementById("badgeAcciones").textContent = totalAcciones;
+
+            if (totalAcciones === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p class="mb-0">No hay acciones pendientes</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+
+            if (invitacionesPendientes.length > 0) {
+                html += `
+                    <div class="alert-item warning">
+                        <div class="alert-icon-box warning">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">${invitacionesPendientes.length} Invitación(es) Enviada(s)</div>
+                            <div class="alert-text">Tienes invitaciones pendientes de respuesta</div>
+                        </div>
+                        <a href="representante-invitaciones.html" class="btn btn-action">Ver</a>
+                    </div>
+                `;
+            }
+
+            if (solicitudesPendientes.length > 0) {
+                html += `
+                    <div class="alert-item info">
+                        <div class="alert-icon-box info">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">${solicitudesPendientes.length} Solicitud(es) Nueva(s)</div>
+                            <div class="alert-text">Competidores quieren unirse a tu club</div>
+                        </div>
+                        <a href="representante-solicitudes.html" class="btn btn-action">Revisar</a>
+                    </div>
+                `;
+            }
+
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarMiembros() {
+            const contenedor = document.getElementById("listaMiembros");
+
+            if (miembros.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-users"></i>
+                        <p class="mb-0">No hay miembros en el club</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const miembrosRecientes = miembros.slice(0, 5);
+            let html = "";
+
+            miembrosRecientes.forEach(miembro => {
+                const inicial = miembro.nombreCompleto.charAt(0).toUpperCase();
+
+                html += `
+                    <div class="miembro-item">
+                        <div class="miembro-avatar">${inicial}</div>
+                        <div class="miembro-info">
+                            <div class="miembro-nombre">${escaparHTML(miembro.nombreCompleto)}</div>
+                            <div class="miembro-robot">
+                                <i class="fas fa-robot"></i>
+                                <span>${escaparHTML(miembro.nombreRobot || "Sin robot")}</span>
+                            </div>
+                        </div>
+                        <div class="miembro-stats">
+                            <div class="miembro-puntos">
+                                <i class="fas fa-star"></i> ${miembro.puntosTotales || 0} pts
+                            </div>
+                            <div class="text-muted" style="font-size:0.75rem;">
+                                ${miembro.victorias || 0}W - ${miembro.derrotas || 0}L
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarActividad() {
+            const contenedor = document.getElementById("listaActividad");
+
+            let actividades = [];
+
+            invitaciones.slice(0, 3).forEach(inv => {
+                actividades.push({
+                    tipo: "invitacion",
+                    icono: "envelope",
+                    color: "warning",
+                    texto: `Invitación a ${inv.nombreCompetidor}`,
+                    fecha: inv.fechaEnvio,
+                });
+            });
+
+            solicitudes.slice(0, 3).forEach(sol => {
+                actividades.push({
+                    tipo: "solicitud",
+                    icono: "inbox",
+                    color: "info",
+                    texto: `Solicitud de ${sol.nombreCompetidor}`,
+                    fecha: sol.fechaSolicitud,
+                });
+            });
+
+            actividades.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+            actividades = actividades.slice(0, 5);
+
+            if (actividades.length === 0) {
+                contenedor.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clock"></i>
+                        <p class="mb-0">Sin actividad reciente</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            actividades.forEach(act => {
+                html += `
+                    <div class="d-flex align-items-start gap-2 mb-3 pb-3 border-bottom">
+                        <i class="fas fa-${act.icono} text-${act.color} mt-1"></i>
+                        <div style="flex-grow:1;">
+                            <div style="font-size:0.875rem;font-weight:500;">${act.texto}</div>
+                            <div style="font-size:0.75rem;color:#6c757d;">${obtenerTiempoRelativo(act.fecha)}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

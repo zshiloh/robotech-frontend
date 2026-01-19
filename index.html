@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROBOTECH - Sistema de Gestión de Torneos de Robótica</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --primary-color: #667eea;
+      --secondary-color: #764ba2;
+      --dark-color: #2d3748;
+      --light-gray: #718096;
+      --border-color: #e2e8f0;
+      --navbar-height: 70px;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ============================================
+       NAVBAR MODERNA
+    ============================================ */
+    .navbar-modern {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      height: var(--navbar-height);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 2rem;
+    }
+
+    .navbar-brand-modern {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+    }
+
+    .navbar-brand-modern .logo-circle {
+      width: 45px;
+      height: 45px;
+      background: var(--primary-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .navbar-brand-modern .logo-circle i {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .navbar-brand-modern .brand-text {
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-nav-center {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link-modern {
+      color: var(--dark-color);
+      font-weight: 500;
+      padding: 0.75rem 1.25rem;
+      transition: all 0.3s;
+      position: relative;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .nav-link-modern:hover {
+      color: var(--primary-color);
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .nav-link-modern.active {
+      color: var(--primary-color);
+    }
+
+    .nav-link-modern.active::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 3px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .navbar-actions .dropdown {
+      position: relative;
+    }
+
+    .btn-outline-modern {
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s;
+      background: transparent;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-outline-modern:hover {
+      background: var(--primary-gradient);
+      border-color: transparent;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary-modern {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      border-radius: 50px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary-modern:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      color: white;
+    }
+
+    .notification-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .notification-btn:hover {
+      background: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .notification-btn:hover i {
+      color: white;
+    }
+
+    .notification-btn i {
+      color: #6c757d;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--primary-gradient);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: #f8f9fa;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .user-menu:hover {
+      background: var(--primary-color);
+    }
+
+    .user-menu:hover .user-name,
+    .user-menu:hover i {
+      color: white;
+    }
+
+    .user-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: var(--dark-color);
+      transition: all 0.3s;
+      white-space: nowrap;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ============================================
+       DROPDOWN MEJORADO
+    ============================================ */
+    .dropdown-menu {
+      min-width: 280px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      margin-top: 0.75rem !important;
+      padding: 0.5rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      pointer-events: none;
+    }
+
+    .dropdown-menu-end {
+      right: 0 !important;
+      left: auto !important;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .dropdown-menu .dropdown-item {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    .dropdown-menu .dropdown-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: var(--primary-color);
+      transform: translateX(5px);
+    }
+
+    .dropdown-menu .dropdown-item.text-danger {
+      color: #f56565 !important;
+    }
+
+    .dropdown-menu .dropdown-item.text-danger:hover {
+      background: rgba(245, 101, 101, 0.1);
+      color: #f56565 !important;
+    }
+
+    .notifications-dropdown {
+      width: 400px !important;
+      max-height: 500px;
+      overflow-y: auto;
+      right: 0 !important;
+      left: auto !important;
+      transform-origin: top right !important;
+    }
+
+    .notifications-header {
+      padding: 1rem;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notifications-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--dark-color);
+    }
+
+    .notification-item {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .notification-item:hover {
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    .notification-item.unread {
+      background: rgba(102, 126, 234, 0.05);
+      border-left: 3px solid var(--primary-color);
+    }
+
+    .notification-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 8px;
+      background: var(--primary-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      line-height: 1.3;
+    }
+
+    .notification-message {
+      font-size: 0.8rem;
+      color: var(--light-gray);
+      margin-bottom: 0.25rem;
+      line-height: 1.4;
+    }
+
+    .notification-time {
+      font-size: 0.7rem;
+      color: var(--light-gray);
+    }
+
+    .notification-badge-new {
+      background: var(--secondary-gradient);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .notifications-footer {
+      padding: 0.75rem 1rem;
+      text-align: center;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .notifications-footer a {
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .notifications-footer a:hover {
+      color: var(--secondary-color);
+    }
+
+    .empty-notifications {
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--light-gray);
+    }
+
+    .empty-notifications i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* ============================================
+       HERO SECTION
+    ============================================ */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: var(--primary-gradient);
+      position: relative;
+      overflow: hidden;
+      margin-top: var(--navbar-height);
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -250px;
+      right: -250px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      bottom: -150px;
+      left: -150px;
+      animation: float 8s ease-in-out infinite reverse;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(20px);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      animation: fadeInUp 0.8s ease;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      animation: fadeInUp 1s ease;
+    }
+
+    .hero-buttons {
+      animation: fadeInUp 1.2s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-image {
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* ============================================
+       FEATURES SECTION
+    ============================================ */
+    .features-section {
+      padding: 5rem 0;
+      background: #f8f9fa;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      text-align: center;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+      height: 100%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: #667eea;
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: var(--primary-gradient);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: rotateY(360deg);
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .feature-text {
+      color: #718096;
+      line-height: 1.6;
+    }
+
+    /* ============================================
+       CATEGORIES SECTION
+    ============================================ */
+    .categories-section {
+      padding: 5rem 0;
+    }
+
+    .category-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      height: 100%;
+      border: 3px solid transparent;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .category-pluma:hover {
+      border-color: #4facfe;
+    }
+
+    .category-medio:hover {
+      border-color: #f093fb;
+    }
+
+    .category-pesado:hover {
+      border-color: #f5576c;
+    }
+
+    .category-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .category-weight {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: white;
+    }
+
+    .weight-pluma {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .weight-medio {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .weight-pesado {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* ============================================
+       CTA SECTION
+    ============================================ */
+    .cta-section {
+      background: var(--primary-gradient);
+      padding: 5rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -200px;
+      left: -200px;
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      bottom: -150px;
+      right: -150px;
+    }
+
+    /* ============================================
+       FOOTER
+    ============================================ */
+    .footer {
+      background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+      color: white;
+      padding: 3rem 0 1rem;
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      margin-right: 10px;
+      transition: all 0.3s;
+      color: white;
+    }
+
+    .social-links a:hover {
+      background: var(--primary-gradient);
+      transform: translateY(-3px);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      padding-left: 5px;
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 991px) {
+      .navbar-modern {
+        padding: 0 1rem;
+      }
+
+      .navbar-nav-center {
+        margin: 1rem 0;
+        margin-left: 0;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .nav-link-modern {
+        text-align: center;
+        width: 100%;
+      }
+
+      .navbar-actions {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+
+      .notifications-dropdown {
+        width: 320px !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .feature-card,
+      .category-card {
+        margin-bottom: 1.5rem;
+      }
+
+      .notifications-dropdown {
+        width: 280px !important;
+      }
+
+      .navbar-brand-modern .brand-text {
+        font-size: 1.2rem;
+      }
+
+      .navbar-brand-modern .logo-circle {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Moderna -->
+  <nav class="navbar-modern">
+    <div class="container-fluid d-flex align-items-center h-100" style="gap: 0;">
+      <a href="index.html" class="navbar-brand-modern">
+        <div class="logo-circle">
+          <i class="fas fa-robot"></i>
+        </div>
+        <span class="brand-text">ROBOTECH</span>
+      </a>
+
+      <div class="navbar-nav-center d-none d-lg-flex ms-auto">
+        <a href="index.html" class="nav-link-modern active">Inicio</a>
+        <a href="clubes.html" class="nav-link-modern">Clubes</a>
+        <a href="torneos.html" class="nav-link-modern">Torneos</a>
+        <a href="rankings.html" class="nav-link-modern">Rankings</a>
+      </div>
+
+      <div class="navbar-actions" style="margin-left: 2rem;">
+        <!-- No Autenticado -->
+        <div id="navActionsGuest" style="display: flex; gap: 1rem;">
+          <a href="login.html" class="btn-outline-modern">
+            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+          </a>
+          <a href="registro.html" class="btn-primary-modern">
+            <i class="fas fa-user-plus me-2"></i>Registrarse
+          </a>
+        </div>
+
+        <!-- Autenticado -->
+        <div id="navActionsAuth" style="display: none; align-items: center; gap: 1rem;">
+          <!-- Notificaciones -->
+          <div class="dropdown">
+            <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown" data-bs-display="static"
+              aria-expanded="false">
+              <i class="fas fa-bell"></i>
+              <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+              <li class="dropdown-item-text text-center py-3">
+                <div class="spinner-border spinner-border-sm"></div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Usuario -->
+          <div class="dropdown">
+            <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+              <div class="user-avatar" id="avatarUsuarioNav">U</div>
+              <span class="user-name" id="nombreUsuarioNav">Usuario</span>
+              <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+            </div>
+            <ul class="dropdown-menu dropdown-menu-end shadow-lg">
+              <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <div class="user-avatar" style="width: 40px; height: 40px;" id="avatarUsuarioMenu">U</div>
+                  <div style="flex: 1; min-width: 0;">
+                    <div
+                      style="font-weight: 700; color: #2d3748; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                      id="nombreUsuarioMenu">Usuario</div>
+                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav">email@example.com</div>
+                  </div>
+                </div>
+              </li>
+              <li class="mt-2">
+                <a class="dropdown-item" href="#" onclick="irAMiDashboard(); return false;">
+                  <i class="fas fa-tachometer-alt"></i>
+                  <span>Mi Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="usuario-perfil.html">
+                  <i class="fas fa-user-edit"></i>
+                  <span>Mi Perfil</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                  <i class="fas fa-sign-out-alt"></i>
+                  <span>Cerrar Sesión</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 hero-content">
+          <h1 class="hero-title">Bienvenido a<br />ROBOTECH</h1>
+          <p class="hero-subtitle">
+            La plataforma líder para gestionar torneos de combate de robots profesionales
+          </p>
+          <div class="hero-buttons">
+            <a href="registro-club.html" class="btn btn-light btn-lg me-3">
+              <i class="fas fa-users me-2"></i>Registra tu Club
+            </a>
+            <a href="torneos.html" class="btn btn-outline-light btn-lg">
+              <i class="fas fa-trophy me-2"></i>Ver Torneos
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-6 hero-image">
+          <div class="text-center">
+            <i class="fas fa-robot" style="font-size: 20rem; opacity: 0.2; color: white;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold display-5 mb-3">¿Qué Ofrece ROBOTECH?</h2>
+        <p class="text-muted fs-5">Todo lo que necesitas para gestionar torneos profesionales</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h4 class="feature-title">Gestión de Clubes</h4>
+            <p class="feature-text">
+              Crea y administra tu club de robótica. Invita competidores y gestiona tu equipo.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-robot"></i>
+            </div>
+            <h4 class="feature-title">Registro de Robots</h4>
+            <p class="feature-text">
+              Registra las especificaciones técnicas de tus robots en diferentes categorías.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <h4 class="feature-title">Torneos</h4>
+            <p class="feature-text">
+              Participa en torneos oficiales con sistema automático de brackets.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h4 class="feature-title">Rankings</h4>
+            <p class="feature-text">
+              Sigue el ranking de competidores y clubes en tiempo real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Section - DINÁMICO -->
+  <section class="categories-section">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold display-5 mb-3">Categorías</h2>
+        <p class="text-muted fs-5">Compite en la categoría que mejor se adapte a tu robot</p>
+      </div>
+
+      <div class="row g-4" id="categoriasContainer">
+        <!-- Las categorías se cargarán dinámicamente aquí -->
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando categorías...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container text-center position-relative">
+      <h2 class="fw-bold display-4 mb-4">¿Listo para Comenzar?</h2>
+      <p class="fs-5 mb-4">Únete a la comunidad de robótica competitiva más grande</p>
+      <a href="registro-club.html" class="btn btn-light btn-lg px-5 py-3">
+        <i class="fas fa-rocket me-2"></i>Registra tu Club Ahora
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">
+            <i class="fas fa-robot me-2"></i>ROBOTECH
+          </h5>
+          <p class="text-white-50">
+            La plataforma completa para la gestión profesional de torneos de combate de robots.
+          </p>
+          <div class="social-links mt-3">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Enlaces Rápidos</h5>
+          <ul class="footer-links">
+            <li><a href="clubes.html"><i class="fas fa-angle-right me-2"></i>Clubes</a></li>
+            <li><a href="torneos.html"><i class="fas fa-angle-right me-2"></i>Torneos</a></li>
+            <li><a href="rankings.html"><i class="fas fa-angle-right me-2"></i>Rankings</a></li>
+            <li><a href="registro-club.html"><i class="fas fa-angle-right me-2"></i>Registrar Club</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 mb-4">
+          <h5 class="fw-bold mb-3">Contacto</h5>
+          <ul class="footer-links">
+            <li><i class="fas fa-envelope me-2"></i>info@robotech.com</li>
+            <li><i class="fas fa-phone me-2"></i>+51 999 999 999</li>
+            <li><i class="fas fa-map-marker-alt me-2"></i>Lima, Perú</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr class="my-4" style="opacity: 0.1" />
+
+      <div class="text-center text-white-50">
+        <p class="mb-0">&copy; 2025 ROBOTECH. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/notificaciones.js"></script>
+
+  <script>
+    function irAMiDashboard() {
+      redirectToDashboard();
+    }
+
+    function actualizarNavbar() {
+      const navActionsGuest = document.getElementById("navActionsGuest");
+      const navActionsAuth = document.getElementById("navActionsAuth");
+      const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
+      const nombreUsuarioMenu = document.getElementById("nombreUsuarioMenu");
+      const emailUsuarioNav = document.getElementById("emailUsuarioNav");
+      const avatarUsuarioNav = document.getElementById("avatarUsuarioNav");
+      const avatarUsuarioMenu = document.getElementById("avatarUsuarioMenu");
+
+      if (isAuthenticated()) {
+        navActionsGuest.style.display = "none";
+        navActionsAuth.style.display = "flex";
+
+        const usuario = getCurrentUser();
+        if (usuario) {
+          const nombreCompleto = usuario.nombreCompleto || "Usuario";
+          const email = usuario.email || "";
+          const iniciales = nombreCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+          nombreUsuarioNav.textContent = nombreCompleto;
+          nombreUsuarioMenu.textContent = nombreCompleto;
+          emailUsuarioNav.textContent = email;
+          avatarUsuarioNav.textContent = iniciales;
+          avatarUsuarioMenu.textContent = iniciales;
+        }
+      } else {
+        navActionsGuest.style.display = "flex";
+        navActionsAuth.style.display = "none";
+      }
+    }
+
+    // ================================
+    // CARGAR CATEGORÍAS DINÁMICAMENTE
+    // ================================
+    async function cargarCategorias() {
+      const container = document.getElementById('categoriasContainer');
+
+      try {
+        const result = await fetchAPI('/api/public/categorias-peso/activas', 'GET');
+
+        if (result.success && result.data && result.data.length > 0) {
+          renderizarCategorias(result.data);
+        } else {
+          container.innerHTML = `
+            <div class="col-12 text-center py-5">
+              <i class="fas fa-inbox" style="font-size: 4rem; color: #cbd5e0;"></i>
+              <p class="text-muted mt-3">No hay categorías disponibles en este momento</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error al cargar categorías:', error);
+        container.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #f56565;"></i>
+            <p class="text-danger mt-3">Error al cargar categorías</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderizarCategorias(categorias) {
+      const container = document.getElementById('categoriasContainer');
+
+      // Colores predefinidos que rotan
+      const colores = [
+        { class: 'category-pluma', weight: 'weight-pluma' },
+        { class: 'category-medio', weight: 'weight-medio' },
+        { class: 'category-pesado', weight: 'weight-pesado' }
+      ];
+
+      let html = '';
+
+      categorias.forEach((categoria, index) => {
+        const color = colores[index % colores.length];
+        const nombre = categoria.nombre || categoria.nombreCategoriaPeso || 'Sin nombre';
+        const pesoMin = categoria.pesoMinimo || 0;
+        const pesoMax = categoria.pesoMaximo || 0;
+        const descripcion = categoria.descripcion || 'Categoría de competencia';
+
+        html += `
+          <div class="col-md-4">
+            <div class="category-card ${color.class}">
+              <h3 class="category-title">${escaparHTML(nombre)}</h3>
+              <span class="category-weight ${color.weight}">${pesoMin}g - ${pesoMax}g</span>
+              <p class="mt-3 text-muted">
+                ${escaparHTML(descripcion)}
+              </p>
+              ${categoria.dimensionMaxima ? `
+                <div class="mt-3">
+                  <small class="text-muted">
+                    <i class="fas fa-ruler-combined me-2"></i>Dimensión máxima: ${categoria.dimensionMaxima} cm
+                  </small>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    // ================================
+    // INICIALIZACIÓN
+    // ================================
+    document.addEventListener("DOMContentLoaded", () => {
+      actualizarNavbar();
+      cargarCategorias();
+
+      // Las notificaciones se inician automáticamente en notificaciones.js
+      // NO necesitamos llamar nada aquí
+    });
+  </script>
+</body>
+
+</html>

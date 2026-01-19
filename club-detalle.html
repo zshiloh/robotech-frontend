@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detalle del Club - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+        .navbar-public {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #667eea !important;
+        }
+
+        .navbar-public .nav-link {
+            color: #2d3748;
+            font-weight: 500;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .navbar-public .nav-link:hover {
+            color: #667eea;
+        }
+
+        .btn-outline-primary-custom {
+            color: #667eea;
+            border-color: #667eea;
+            font-weight: 600;
+            padding: 8px 20px;
+        }
+
+        .btn-outline-primary-custom:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 8px 20px;
+        }
+
+        .club-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+            margin-top: 70px;
+        }
+
+        .club-logo-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .club-logo-placeholder-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-size: 64px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .club-info-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: -50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item i {
+            font-size: 1.5rem;
+            color: #667eea;
+            width: 40px;
+        }
+
+        .info-label {
+            color: #718096;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            color: #2d3748;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .badge-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .badge-activo {
+            background: #48bb78;
+            color: white;
+        }
+
+        .badge-inactivo {
+            background: #fc8181;
+            color: white;
+        }
+
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .historial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-box i {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-box-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-box-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .table-custom {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-custom thead {
+            background: #667eea;
+            color: white;
+        }
+
+        .table-custom th {
+            font-weight: 600;
+            padding: 15px;
+            border: none;
+        }
+
+        .table-custom td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+
+        .table-custom tbody tr {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.3s;
+        }
+
+        .table-custom tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge-activo-miembro {
+            background: #48bb78;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-inactivo-miembro {
+            background: #cbd5e0;
+            color: #2d3748;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Público -->
+    <nav class="navbar navbar-expand-lg navbar-public fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-robot"></i> ROBOTECH
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarPublic">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarPublic">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="clubes.html">Clubes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="torneos.html">Torneos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="rankings.html">Rankings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-outline-primary-custom ms-3" href="login.html">Iniciar Sesión</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary-custom ms-2" href="registro.html">Registrarse</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header del Club -->
+    <div class="club-header">
+        <div class="container text-center">
+            <div id="clubLogoContainer"></div>
+            <h1 class="mb-2" id="clubNombre">Cargando...</h1>
+            <p class="lead mb-3" id="clubDescripcion"></p>
+            <div id="clubEstadoBadge"></div>
+        </div>
+    </div>
+
+    <!-- Información del Club -->
+    <div class="container">
+        <div class="club-info-card">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <div class="info-label">Competidores Activos</div>
+                            <div class="info-value" id="competidoresActivos">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <div class="info-label">Acepta Solicitudes</div>
+                            <div class="info-value" id="aceptaSolicitudes">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-back" onclick="window.location.href='clubes.html'">
+                    <i class="fas fa-arrow-left"></i> Volver a Clubes
+                </button>
+                <button class="btn btn-primary-custom ms-2" id="btnSolicitar" style="display: none"
+                    onclick="solicitarUnirse()">
+                    <i class="fas fa-paper-plane"></i> Solicitar Unirse
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtro de Categoría -->
+    <div class="container mt-5">
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <label class="form-label fw-bold">
+                        <i class="fas fa-filter"></i> Filtrar Historial por Categoría
+                    </label>
+                    <select class="form-select" id="categoriaSelect" onchange="cargarHistorial()">
+                        <option value="">Selecciona una categoría...</option>
+                    </select>
+                </div>
+                <div class="col-md-4 text-end">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i> Selecciona una categoría para
+                        ver el historial
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial -->
+    <div class="container">
+        <div id="loadingSpinner" class="loading-spinner" style="display: none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Cargando historial...</p>
+        </div>
+
+        <div id="historialContainer" style="display: none">
+            <div class="historial-card">
+                <h3 class="mb-4">
+                    <i class="fas fa-history"></i> Historial en
+                    <span id="categoriaNombre"></span>
+                </h3>
+
+                <!-- Estadísticas -->
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <i class="fas fa-trophy"></i>
+                        <div class="stat-box-value" id="puntosHistoricos">0</div>
+                        <div class="stat-box-label">Puntos Históricos</div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fas fa-users"></i>
+                        <div class="stat-box-value" id="competidoresHistoricos">0</div>
+                        <div class="stat-box-label">Competidores</div>
+                    </div>
+                </div>
+
+                <!-- Tabla de Miembros -->
+                <h4 class="mb-3"><i class="fas fa-list"></i> Miembros Históricos</h4>
+                <div class="table-responsive">
+                    <table class="table table-custom">
+                        <thead>
+                            <tr>
+                                <th>Competidor</th>
+                                <th>Robot</th>
+                                <th>Puntos Aportados</th>
+                                <th>Período</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="miembrosTableBody">
+                            <!-- Se llenará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="emptyState" class="empty-state">
+            <i class="fas fa-inbox"></i>
+            <h4>Selecciona una categoría</h4>
+            <p>
+                Elige una categoría del menú superior para ver el historial del club
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script>
+        let clubId = null;
+        let clubData = null;
+        let categorias = [];
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Obtener ID del club de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            clubId = urlParams.get("id");
+
+            if (!clubId) {
+                alert("Club no especificado");
+                window.location.href = "clubes.html";
+                return;
+            }
+
+            cargarDatosClub();
+            cargarCategorias();
+        });
+
+        async function cargarDatosClub() {
+            try {
+                // Cargar información básica del club
+                const result = await fetchAPI(
+                    `/api/public/clubes?search=&ordenar=nombre`,
+                    "GET"
+                );
+
+                if (result.success && result.data) {
+                    clubData = result.data.find((c) => c.idClub == clubId);
+
+                    if (!clubData) {
+                        alert("Club no encontrado");
+                        window.location.href = "clubes.html";
+                        return;
+                    }
+
+                    renderizarClub();
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarError("Error al cargar el club");
+            }
+        }
+
+        function renderizarClub() {
+            // Logo
+            const logoContainer = document.getElementById("clubLogoContainer");
+            if (clubData.logoUrl) {
+                logoContainer.innerHTML = `<img src="${clubData.logoUrl}" alt="${clubData.nombreClub}" class="club-logo-large">`;
+            } else {
+                logoContainer.innerHTML = `<div class="club-logo-placeholder-large">${clubData.nombreClub.charAt(
+                    0
+                )}</div>`;
+            }
+
+            // Información básica
+            document.getElementById("clubNombre").textContent = clubData.nombreClub;
+            document.getElementById("clubDescripcion").textContent =
+                clubData.descripcion || "Sin descripción";
+            document.getElementById("competidoresActivos").textContent =
+                clubData.competidoresActivos;
+            document.getElementById("aceptaSolicitudes").textContent =
+                clubData.aceptaSolicitudes ? "Sí" : "No";
+
+            // Badge de estado
+            const estadoBadge = document.getElementById("clubEstadoBadge");
+            if (clubData.estado === "ACTIVO" || clubData.estado === "VALIDADO") {
+                estadoBadge.innerHTML =
+                    '<span class="badge-status badge-activo"><i class="fas fa-check-circle"></i> Activo</span>';
+            } else {
+                estadoBadge.innerHTML =
+                    '<span class="badge-status badge-inactivo"><i class="fas fa-times-circle"></i> Inactivo</span>';
+            }
+
+            // Botón solicitar (si acepta solicitudes y está autenticado)
+            if (clubData.aceptaSolicitudes && localStorage.getItem("token")) {
+                document.getElementById("btnSolicitar").style.display =
+                    "inline-block";
+            }
+        }
+
+        async function cargarCategorias() {
+            try {
+                // Cargar todas las categorías de peso disponibles
+                const result = await fetchAPI("/api/public/categorias-peso", "GET");
+
+                if (result.success && result.data) {
+                    categorias = result.data;
+
+                    const select = document.getElementById("categoriaSelect");
+                    select.innerHTML =
+                        '<option value="">Selecciona una categoría...</option>';
+
+                    categorias.forEach((cat) => {
+                        const option = document.createElement("option");
+                        option.value = cat.idCategoriaPeso;
+                        option.textContent = `${cat.nombreCategoria} (${cat.pesoMinimo}g - ${cat.pesoMaximo}g)`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        async function cargarHistorial() {
+            const categoriaId = document.getElementById("categoriaSelect").value;
+
+            if (!categoriaId) {
+                document.getElementById("historialContainer").style.display = "none";
+                document.getElementById("emptyState").style.display = "block";
+                return;
+            }
+
+            mostrarLoading(true);
+
+            try {
+                const result = await fetchAPI(
+                    `/api/public/clubes/${clubId}/historial?categoriaId=${categoriaId}`,
+                    "GET"
+                );
+
+                if (result.success && result.data) {
+                    renderizarHistorial(result.data);
+                } else {
+                    mostrarError("No hay historial para esta categoría");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarError("Error al cargar historial");
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+
+        function renderizarHistorial(data) {
+            document.getElementById("emptyState").style.display = "none";
+            document.getElementById("historialContainer").style.display = "block";
+
+            // Nombre de categoría
+            const catSeleccionada = categorias.find(
+                (c) =>
+                    c.idCategoriaPeso ==
+                    document.getElementById("categoriaSelect").value
+            );
+            document.getElementById("categoriaNombre").textContent = catSeleccionada
+                ? catSeleccionada.nombreCategoria
+                : "esta categoría";
+
+            // Estadísticas
+            document.getElementById("puntosHistoricos").textContent =
+                data.puntosHistoricos || 0;
+            document.getElementById("competidoresHistoricos").textContent =
+                data.miembrosHistoricos ? data.miembrosHistoricos.length : 0;
+
+            // Tabla de miembros
+            const tbody = document.getElementById("miembrosTableBody");
+
+            if (!data.miembrosHistoricos || data.miembrosHistoricos.length === 0) {
+                tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">
+              <i class="fas fa-inbox fa-2x mb-2"></i><br>
+              No hay miembros registrados en esta categoría
+            </td>
+          </tr>
+        `;
+                return;
+            }
+
+            tbody.innerHTML = data.miembrosHistoricos
+                .map(
+                    (miembro) => `
+        <tr>
+          <td><strong>${miembro.nombreCompetidor}</strong></td>
+          <td>${miembro.nombreRobot}</td>
+          <td><span class="badge bg-primary">${miembro.puntosAportados
+                        } pts</span></td>
+          <td>
+            <small class="text-muted">
+              ${formatearFecha(miembro.fechaInicio)} - ${miembro.fechaFin ? formatearFecha(miembro.fechaFin) : "Actualidad"
+                        }
+            </small>
+          </td>
+          <td>
+            ${miembro.estado === "ACTIVO"
+                            ? '<span class="badge-activo-miembro">Activo</span>'
+                            : '<span class="badge-inactivo-miembro">Inactivo</span>'
+                        }
+          </td>
+        </tr>
+      `
+                )
+                .join("");
+        }
+
+        function formatearFecha(fechaStr) {
+            if (!fechaStr) return "";
+            const fecha = new Date(fechaStr);
+            return fecha.toLocaleDateString("es-PE", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+            });
+        }
+
+        async function solicitarUnirse() {
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                alert("Debes iniciar sesión para solicitar unirte");
+                window.location.href = "login.html";
+                return;
+            }
+
+            if (
+                !confirm(
+                    `¿Deseas enviar una solicitud para unirte a ${clubData.nombreClub}?`
+                )
+            ) {
+                return;
+            }
+
+            try {
+                const result = await fetchAPI(
+                    `/api/competidor/clubes/${clubId}/solicitar`,
+                    "POST"
+                );
+
+                if (result.success) {
+                    alert("✓ Solicitud enviada exitosamente");
+                } else {
+                    alert("✗ " + (result.message || "Error al enviar solicitud"));
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("✗ Error de conexión");
+            }
+        }
+
+        function mostrarLoading(show) {
+            document.getElementById("loadingSpinner").style.display = show
+                ? "block"
+                : "none";
+            document.getElementById("historialContainer").style.display = show
+                ? "none"
+                : "block";
+        }
+
+        function mostrarError(mensaje) {
+            alert("✗ " + mensaje);
+        }
+    </script>
+</body>
+
+</html>

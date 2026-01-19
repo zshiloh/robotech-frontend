@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripciones a Torneos - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para inscripciones */
+        .inscripciones-hero {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .inscripciones-hero::before {
+            content: '\f091';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .nav-tabs-inscripciones {
+            border-bottom: 3px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs-inscripciones .nav-link {
+            border: none;
+            color: #6c757d;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-tabs-inscripciones .nav-link:hover {
+            color: #f5576c;
+            background-color: rgba(245, 87, 108, 0.05);
+        }
+
+        .nav-tabs-inscripciones .nav-link.active {
+            color: #f5576c;
+            background-color: transparent;
+            border-bottom: 4px solid #f5576c;
+        }
+
+        .nav-tabs-inscripciones .nav-link .badge {
+            margin-left: 0.5rem;
+        }
+
+        .torneo-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .torneo-card:hover {
+            border-color: #f5576c;
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .torneo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .torneo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .torneo-titulo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .torneo-icono {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .badge-estado-torneo {
+            padding: 0.5rem 1.25rem;
+            font-size: 0.875rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .torneo-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #f5576c;
+        }
+
+        .info-item i {
+            font-size: 1.2rem;
+            color: #f5576c;
+        }
+
+        .info-item-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            display: block;
+        }
+
+        .info-item-value {
+            font-weight: 600;
+            color: #212529;
+            display: block;
+        }
+
+        .categorias-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .categoria-badge {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-inscritos {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-inscritos-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+            transition: width 0.3s ease;
+        }
+
+        .inscritos-texto {
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-inscribirse {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+        }
+
+        .btn-inscribirse:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+            color: white;
+        }
+
+        .btn-inscribirse:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .inscripcion-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #28a745;
+            transition: all 0.3s ease;
+        }
+
+        .inscripcion-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            transform: translateX(5px);
+        }
+
+        .inscripcion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .inscripcion-titulo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .inscripcion-categoria {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .inscripcion-fecha {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .alert-validacion {
+            border-left: 4px solid;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .alert-validacion i {
+            font-size: 1.5rem;
+            margin-top: 0.25rem;
+        }
+
+        .alert-validacion.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+
+        .alert-validacion.warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .alert-validacion.success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-summary-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-summary-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-summary-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="competidor-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <!-- Notificaciones -->
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        style="width: 400px; max-height: 500px; overflow-y: auto;" id="notificacionesDropdownMenu"
+                        aria-labelledby="notificacionesDropdown">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de Usuario -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="competidor-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-robot"></i> Competidor</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="competidor-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="competidor-robot.html"><i class="fas fa-robot"></i> Mi Robot</a></li>
+            <li><a href="competidor-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a></li>
+            <li><a href="competidor-solicitudes.html"><i class="fas fa-paper-plane"></i> Mis Solicitudes</a></li>
+            <li><a href="competidor-inscripciones.html" class="active"><i class="fas fa-trophy"></i> Inscripciones</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <!-- Hero Section -->
+            <div class="inscripciones-hero">
+                <h1 class="mb-2"><i class="fas fa-trophy"></i> Inscripciones a Torneos</h1>
+                <p class="mb-3">Inscríbete en torneos y compite con tu robot</p>
+
+                <div class="stats-summary">
+                    <div class="stat-summary-box">
+                        <span class="stat-summary-value" id="statDisponibles">0</span>
+                        <span class="stat-summary-label">Disponibles</span>
+                    </div>
+                    <div class="stat-summary-box">
+                        <span class="stat-summary-value" id="statMisInscripciones">0</span>
+                        <span class="stat-summary-label">Mis Inscripciones</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs nav-tabs-inscripciones" id="inscripcionesTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="disponibles-tab" data-bs-toggle="tab"
+                        data-bs-target="#disponibles" type="button" role="tab">
+                        <i class="fas fa-list"></i> Torneos Disponibles
+                        <span class="badge bg-primary" id="badgeDisponibles">0</span>
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="mis-inscripciones-tab" data-bs-toggle="tab"
+                        data-bs-target="#mis-inscripciones" type="button" role="tab">
+                        <i class="fas fa-check-circle"></i> Mis Inscripciones
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="inscripcionesTabContent">
+
+                <!-- Tab: Torneos Disponibles -->
+                <div class="tab-pane fade show active" id="disponibles" role="tabpanel">
+                    <div id="listaDisponibles">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Mis Inscripciones -->
+                <div class="tab-pane fade" id="mis-inscripciones" role="tabpanel">
+                    <div id="listaMisInscripciones">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.COMPETIDOR);
+
+        let torneosDisponibles = [];
+        let misInscripciones = [];
+        let miRobot = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Competidor';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            inicializar();
+        });
+
+        // =====================================
+        // INICIALIZAR
+        // =====================================
+        async function inicializar() {
+            await Promise.all([
+                cargarRobot(),
+                cargarTorneosDisponibles(),
+                cargarMisInscripciones()
+            ]);
+        }
+
+        // =====================================
+        // CARGAR ROBOT
+        // =====================================
+        async function cargarRobot() {
+            try {
+                const result = await fetchAPI('/api/competidor/robot', 'GET');
+
+                if (result.success && result.data) {
+                    miRobot = result.data;
+                    console.log('✅ Robot cargado:', miRobot);
+                }
+            } catch (error) {
+                console.error('Error al cargar robot:', error);
+            }
+        }
+
+        // =====================================
+        // CARGAR TORNEOS DISPONIBLES
+        // =====================================
+        async function cargarTorneosDisponibles() {
+            try {
+                console.log('🏆 Cargando torneos disponibles...');
+
+                const result = await fetchAPI('/api/public/torneos', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    // Filtrar solo torneos en estado "CONFIGURACION" (disponibles para inscripción)
+                    torneosDisponibles = result.data.filter(t => t.estado === 'CONFIGURACION');
+                    console.log('✅ Torneos disponibles:', torneosDisponibles.length);
+
+                    actualizarEstadisticas();
+                    renderizarTorneosDisponibles();
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar torneos:', error);
+                mostrarErrorDisponibles();
+            }
+        }
+
+        // =====================================
+        // CARGAR MIS INSCRIPCIONES
+        // =====================================
+        async function cargarMisInscripciones() {
+            try {
+                console.log('📋 Cargando mis inscripciones...');
+
+                const result = await fetchAPI('/api/competidor/inscripciones', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    misInscripciones = result.data;
+                    console.log('✅ Inscripciones cargadas:', misInscripciones.length);
+
+                    actualizarEstadisticas();
+                    renderizarMisInscripciones();
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar inscripciones:', error);
+                mostrarErrorInscripciones();
+            }
+        }
+
+        // =====================================
+        // ACTUALIZAR ESTADÍSTICAS
+        // =====================================
+        function actualizarEstadisticas() {
+            document.getElementById('statDisponibles').textContent = torneosDisponibles.length;
+            document.getElementById('statMisInscripciones').textContent = misInscripciones.length;
+            document.getElementById('badgeDisponibles').textContent = torneosDisponibles.length;
+        }
+
+        // =====================================
+        // RENDERIZAR TORNEOS DISPONIBLES
+        // =====================================
+        function renderizarTorneosDisponibles() {
+            const contenedor = document.getElementById('listaDisponibles');
+
+            if (torneosDisponibles.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-trophy empty-state-icon text-warning"></i>
+            <h4>No hay torneos disponibles</h4>
+            <p>Actualmente no hay torneos abiertos para inscripciones</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = '';
+
+            // Verificar validaciones del robot
+            const validaciones = validarRobot();
+
+            // Mostrar alertas de validación si hay problemas
+            if (!validaciones.tieneEspecificaciones || !validaciones.tieneClub) {
+                html += generarAlertaValidacion(validaciones);
+            }
+
+            torneosDisponibles.forEach(torneo => {
+                const porcentajeInscritos = torneo.maximoParticipantes > 0
+                    ? (torneo.participantesActuales / torneo.maximoParticipantes * 100).toFixed(0)
+                    : 0;
+
+                const estaLleno = torneo.participantesActuales >= torneo.maximoParticipantes;
+                const puedeInscribirse = validaciones.puedeInscribirse && !estaLleno;
+
+                html += `
+          <div class="torneo-card">
+            
+            <!-- Header -->
+            <div class="torneo-header">
+              <div class="torneo-titulo">
+                <div class="torneo-icono">
+                  🏆
+                </div>
+                <div>
+                  ${escaparHTML(torneo.nombreTorneo)}
+                  <div style="font-size: 0.875rem; font-weight: 400; color: #6c757d;">
+                    ${escaparHTML(torneo.descripcion || '')}
+                  </div>
+                </div>
+              </div>
+              <span class="badge badge-estado-torneo bg-success">
+                <i class="fas fa-circle-check"></i> Abierto
+              </span>
+            </div>
+
+            <!-- Grid de Información -->
+            <div class="torneo-info-grid">
+              <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                  <span class="info-item-label">Inicio</span>
+                  <span class="info-item-value">${formatearFechaCorta(torneo.fechaInicio)}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-calendar-check"></i>
+                <div>
+                  <span class="info-item-label">Fin</span>
+                  <span class="info-item-value">${formatearFechaCorta(torneo.fechaFin)}</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                  <span class="info-item-label">Ubicación</span>
+                  <span class="info-item-value">${escaparHTML(torneo.ubicacion)}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Categorías -->
+            <div class="mb-3">
+              <small class="text-muted d-block mb-2"><i class="fas fa-tags"></i> Categorías disponibles:</small>
+              <div class="categorias-lista">
+                ${torneo.categorias?.map(cat => `
+                  <span class="categoria-badge">
+                    <i class="fas fa-weight"></i> ${escaparHTML(cat)}
+                  </span>
+                `).join('') || '<span class="text-muted">No especificadas</span>'}
+              </div>
+            </div>
+
+            <!-- Progress de Inscritos -->
+            <div>
+              <div class="progress-inscritos">
+                <div class="progress-inscritos-bar" style="width: ${porcentajeInscritos}%"></div>
+              </div>
+              <div class="inscritos-texto">
+                <span>
+                  <i class="fas fa-users"></i> 
+                  ${torneo.participantesActuales} inscritos
+                </span>
+                <span>
+                  ${estaLleno
+                        ? '<strong class="text-danger">Cupo lleno</strong>'
+                        : `${torneo.maximoParticipantes - torneo.participantesActuales} cupos disponibles`
+                    }
+                </span>
+              </div>
+            </div>
+
+            <!-- Botón de Inscripción -->
+            <div class="text-end mt-3">
+              <button class="btn btn-inscribirse" 
+                      onclick="inscribirse(${torneo.idTorneo})"
+                      ${!puedeInscribirse ? 'disabled' : ''}>
+                <i class="fas fa-${puedeInscribirse ? 'trophy' : 'lock'}"></i>
+                ${puedeInscribirse ? 'Inscribirme' : estaLleno ? 'Cupo Lleno' : 'No Disponible'}
+              </button>
+            </div>
+
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // RENDERIZAR MIS INSCRIPCIONES
+        // =====================================
+        function renderizarMisInscripciones() {
+            const contenedor = document.getElementById('listaMisInscripciones');
+
+            if (misInscripciones.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-clipboard-list empty-state-icon text-info"></i>
+            <h4>No tienes inscripciones</h4>
+            <p>Inscríbete en un torneo para empezar a competir</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = '';
+
+            misInscripciones.forEach(inscripcion => {
+                html += `
+          <div class="inscripcion-card">
+            
+            <div class="inscripcion-header">
+              <div class="inscripcion-titulo">
+                <i class="fas fa-trophy text-warning"></i>
+                ${escaparHTML(inscripcion.nombreTorneo)}
+              </div>
+              <div class="inscripcion-categoria">
+                <i class="fas fa-weight"></i> ${escaparHTML(inscripcion.nombreCategoria)}
+              </div>
+            </div>
+
+            <div class="inscripcion-fecha">
+              <i class="fas fa-calendar-check me-2"></i>
+              Inscrito el ${formatearFechaCompleta(inscripcion.fechaInscripcion)}
+            </div>
+
+            <div class="d-flex gap-3 text-muted small">
+              <div>
+                <i class="fas fa-calendar-alt me-1"></i>
+                ${formatearFechaCorta(inscripcion.fechaInicioTorneo)} - ${formatearFechaCorta(inscripcion.fechaFinTorneo)}
+              </div>
+              <div>
+                <i class="fas fa-map-marker-alt me-1"></i>
+                ${escaparHTML(inscripcion.ubicacion)}
+              </div>
+            </div>
+
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // VALIDAR ROBOT
+        // =====================================
+        function validarRobot() {
+            const validaciones = {
+                tieneEspecificaciones: false,
+                tieneClub: false,
+                puedeInscribirse: false,
+                mensajes: []
+            };
+
+            if (!miRobot) {
+                validaciones.mensajes.push('No tienes un robot creado');
+                return validaciones;
+            }
+
+            // Verificar especificaciones
+            if (!miRobot.nombreRobot || !miRobot.peso || !miRobot.nombreCategoriaPeso) {
+                validaciones.mensajes.push('Tu robot no tiene especificaciones completas. Ve a "Mi Robot" para completarlas.');
+            } else {
+                validaciones.tieneEspecificaciones = true;
+            }
+
+            // Verificar club
+            if (!miRobot.nombreClub) {
+                validaciones.mensajes.push('Debes pertenecer a un club para inscribirte en torneos.');
+            } else {
+                validaciones.tieneClub = true;
+            }
+
+            validaciones.puedeInscribirse = validaciones.tieneEspecificaciones && validaciones.tieneClub;
+
+            return validaciones;
+        }
+
+        // =====================================
+        // GENERAR ALERTA DE VALIDACIÓN
+        // =====================================
+        function generarAlertaValidacion(validaciones) {
+            let tipo = 'error';
+            let icono = 'exclamation-triangle';
+
+            let html = `
+        <div class="alert-validacion ${tipo}">
+          <i class="fas fa-${icono}"></i>
+          <div>
+            <strong>No puedes inscribirte en torneos</strong><br>
+            <ul class="mb-0 mt-2">
+              ${validaciones.mensajes.map(msg => `<li>${msg}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+
+            return html;
+        }
+
+        // =====================================
+        // INSCRIBIRSE
+        // =====================================
+        async function inscribirse(idTorneo) {
+            const torneo = torneosDisponibles.find(t => t.idTorneo === idTorneo);
+
+            if (!torneo) return;
+
+            // Validar nuevamente
+            const validaciones = validarRobot();
+            if (!validaciones.puedeInscribirse) {
+                mostrarAlerta('No cumples con los requisitos para inscribirte', 'warning');
+                return;
+            }
+
+            // Si el torneo tiene múltiples categorías, mostrar modal de selección
+            if (torneo.categorias && torneo.categorias.length > 1) {
+                mostrarModalSeleccionCategoria(torneo);
+                return;
+            }
+
+            // Si solo hay una categoría, inscribir directamente
+            const idCategoria = torneo.categorias && torneo.categorias.length === 1
+                ? obtenerIdCategoria(torneo.categorias[0])
+                : miRobot.idCategoriaPeso;
+
+            confirmarInscripcion(idTorneo, idCategoria);
+        }
+
+        // =====================================
+        // CONFIRMAR INSCRIPCIÓN
+        // =====================================
+        async function confirmarInscripcion(idTorneo, idCategoria) {
+            const torneo = torneosDisponibles.find(t => t.idTorneo === idTorneo);
+
+            const confirmado = confirmar(
+                `¿Deseas inscribirte en "${torneo.nombreTorneo}"?\n\n` +
+                `Robot: ${miRobot.nombreRobot}\n` +
+                `Club: ${miRobot.nombreClub}\n` +
+                `Categoría: ${miRobot.nombreCategoriaPeso}`
+            );
+
+            if (!confirmado) return;
+
+            mostrarLoading();
+
+            try {
+                const datos = {
+                    idCategoriaPeso: idCategoria
+                };
+
+                const result = await fetchAPI(`/api/competidor/inscripciones/${idTorneo}`, 'POST', datos);
+
+                ocultarLoading();
+
+                if (result.success) {
+                    mostrarAlerta('¡Inscripción exitosa! Ahora estás registrado en el torneo.', 'success');
+
+                    // Recargar datos
+                    await cargarTorneosDisponibles();
+                    await cargarMisInscripciones();
+                } else {
+                    mostrarAlerta(result.data?.message || 'Error al inscribirte en el torneo', 'error');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al inscribirte', 'error');
+            }
+        }
+
+        // =====================================
+        // MODAL SELECCIÓN DE CATEGORÍA
+        // =====================================
+        function mostrarModalSeleccionCategoria(torneo) {
+            // Implementación futura: mostrar modal con lista de categorías
+            // Por ahora, usar la categoría del robot
+            confirmarInscripcion(torneo.idTorneo, miRobot.idCategoriaPeso);
+        }
+
+        // =====================================
+        // OBTENER ID DE CATEGORÍA
+        // =====================================
+        function obtenerIdCategoria(nombreCategoria) {
+            // Mapeo simple - idealmente esto vendría del backend
+            const mapeo = {
+                'Peso Ligero': 1,
+                'Peso Medio': 2,
+                'Peso Pesado': 3
+            };
+            return mapeo[nombreCategoria] || miRobot.idCategoriaPeso;
+        }
+
+        // =====================================
+        // ERRORS
+        // =====================================
+        function mostrarErrorDisponibles() {
+            document.getElementById('listaDisponibles').innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i>
+          Error al cargar torneos disponibles.
+        </div>
+      `;
+        }
+
+        function mostrarErrorInscripciones() {
+            document.getElementById('listaMisInscripciones').innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i>
+          Error al cargar tus inscripciones.
+        </div>
+      `;
+        }
+    </script>
+</body>
+
+</html>

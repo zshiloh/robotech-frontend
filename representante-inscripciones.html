@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripciones en Torneos - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rep-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --rep-color: #4facfe;
+            --rep-dark: #00f2fe;
+            --sidebar-width: 280px;
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR MODERNA */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--rep-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--rep-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--rep-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--rep-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--rep-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        /* Dropdown de Notificaciones */
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(79, 172, 254, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(79, 172, 254, 0.05);
+            border-left: 3px solid #4facfe;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notification-badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #4facfe;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .notifications-footer a:hover {
+            color: #00f2fe;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .empty-notifications i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* SIDEBAR MODERNA */
+        .sidebar-modern {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-header-modern {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header-modern h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu-modern {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern li {
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu-modern li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sidebar-menu-modern li a i {
+            width: 24px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu-modern li a:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+            color: var(--rep-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-modern li a.active {
+            background: var(--rep-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .sidebar-menu-modern li a.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content-modern {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--navbar-height);
+            padding: 2.5rem;
+            min-height: calc(100vh - var(--navbar-height));
+        }
+
+        /* HERO BANNER */
+        .hero-banner-insc {
+            background: var(--rep-gradient);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.35);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-banner-insc::before {
+            content: '\f328';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.08;
+            right: -5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-banner-insc h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-banner-insc p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+        }
+
+        /* TABS */
+        .nav-tabs-modern {
+            border-bottom: 3px solid #f0f0f0;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 16px 16px 0 0;
+            padding: 0.5rem 0.5rem 0;
+        }
+
+        .nav-tabs-modern .nav-link {
+            border: none;
+            color: #6c757d;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border-radius: 12px 12px 0 0;
+            margin: 0 0.25rem;
+        }
+
+        .nav-tabs-modern .nav-link:hover {
+            color: #4facfe;
+            background-color: rgba(79, 172, 254, 0.05);
+        }
+
+        .nav-tabs-modern .nav-link.active {
+            color: #4facfe;
+            background-color: transparent;
+            border-bottom: 4px solid #4facfe;
+        }
+
+        .badge-tab {
+            background: var(--rep-gradient);
+            color: white;
+            padding: 0.3rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        /* TORNEO CARDS */
+        .torneo-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-left: 6px solid #4facfe;
+        }
+
+        .torneo-card:hover {
+            border-color: #4facfe;
+            box-shadow: 0 12px 35px rgba(79, 172, 254, 0.25);
+            transform: translateY(-8px);
+        }
+
+        .torneo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .torneo-icon-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .torneo-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .torneo-main-info {
+            flex: 1;
+        }
+
+        .torneo-titulo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .torneo-descripcion {
+            font-size: 1rem;
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .torneo-meta {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #495057;
+        }
+
+        .meta-item i {
+            color: #4facfe;
+            font-size: 1.1rem;
+        }
+
+        .badge-estado-torneo {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        /* CATEGORIAS SECTION */
+        .categorias-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .categorias-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .categorias-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .categorias-title i {
+            color: #4facfe;
+            font-size: 1.4rem;
+        }
+
+        .btn-ver-categorias {
+            background: var(--rep-gradient);
+            color: white;
+            border: none;
+            padding: 0.65rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-ver-categorias:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(79, 172, 254, 0.4);
+            color: white;
+        }
+
+        .categoria-item {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .categoria-item:hover {
+            background: #e3f2fd;
+            border-color: #4facfe;
+            transform: translateX(5px);
+        }
+
+        .categoria-header-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .categoria-nombre-item {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #2d3748;
+        }
+
+        .categoria-info-grid {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .categoria-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .categoria-stat i {
+            color: #4facfe;
+        }
+
+        .btn-inscribir-categoria {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-inscribir-categoria:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(72, 187, 120, 0.4);
+            color: white;
+        }
+
+        /* SELECTOR DE MIEMBROS */
+        .miembros-selector {
+            margin-top: 1.5rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 16px;
+            border: 3px solid #4facfe;
+        }
+
+        .miembros-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .miembros-title i {
+            color: #4facfe;
+            font-size: 1.3rem;
+        }
+
+        .miembro-checkbox {
+            padding: 1.25rem;
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .miembro-checkbox:hover {
+            border-color: #4facfe;
+            background: #f8f9fa;
+            transform: translateX(5px);
+        }
+
+        .miembro-checkbox.selected {
+            border-color: #4facfe;
+            background: #e3f2fd;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.2);
+        }
+
+        .miembro-checkbox input[type="checkbox"] {
+            margin-right: 1rem;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: #4facfe;
+        }
+
+        .miembro-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 0;
+            width: 100%;
+        }
+
+        .miembro-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-right: 1.25rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .miembro-info {
+            flex: 1;
+        }
+
+        .miembro-nombre {
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .miembro-robot {
+            font-size: 0.9rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* RESUMEN INSCRIPCION */
+        .inscripcion-resumen {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #4facfe;
+            border-radius: 16px;
+            padding: 1.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .inscripcion-resumen-title {
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .inscripcion-resumen-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(25, 118, 210, 0.2);
+            font-size: 1rem;
+        }
+
+        .inscripcion-resumen-item:last-child {
+            border-bottom: none;
+        }
+
+        .btn-confirmar-inscripcion {
+            background: var(--rep-gradient);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-confirmar-inscripcion:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+            color: white;
+        }
+
+        .btn-confirmar-inscripcion:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state i {
+            font-size: 7rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.2;
+            color: #4facfe;
+        }
+
+        .empty-state h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.75rem;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+        /* LOADING */
+        .loading-container {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .loading-container .spinner-border {
+            width: 3.5rem;
+            height: 3.5rem;
+            color: #4facfe;
+        }
+
+        .loading-container p {
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                transform: translateX(-100%);
+            }
+
+            .main-content-modern {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .hero-banner-insc {
+                padding: 2rem;
+            }
+
+            .hero-banner-insc h1 {
+                font-size: 2rem;
+            }
+
+            .torneo-icon-wrapper {
+                min-width: 100%;
+            }
+
+            .notifications-dropdown {
+                width: 320px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Moderna -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-actions">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Usuario -->
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="user-name" id="usuarioNombre">Representante</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;"
+                                        id="usuarioNombreMenu">Representante</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item" href="representante-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i> Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Moderna -->
+    <aside class="sidebar-modern">
+        <div class="sidebar-header-modern">
+            <h5><i class="fas fa-user-tie"></i> Representante</h5>
+        </div>
+        <ul class="sidebar-menu-modern">
+            <li><a href="representante-dashboard.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="representante-club.html"><i class="fas fa-shield-alt"></i> <span>Mi Club</span></a></li>
+            <li><a href="representante-miembros.html"><i class="fas fa-users"></i> <span>Miembros</span></a></li>
+            <li><a href="representante-invitaciones.html"><i class="fas fa-envelope"></i>
+                    <span>Invitaciones</span></a></li>
+            <li><a href="representante-solicitudes.html"><i class="fas fa-inbox"></i> <span>Solicitudes</span></a></li>
+            <li><a href="representante-inscripciones.html" class="active"><i class="fas fa-clipboard-list"></i>
+                    <span>Inscripciones</span></a></li>
+            <li><a href="representante-inscripciones-pendientes.html"><i class="fas fa-clock"></i>
+                    <span>Pendientes</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content-modern">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner-insc">
+            <div class="hero-content">
+                <h1><i class="fas fa-clipboard-list"></i> Inscripciones en Torneos</h1>
+                <p>Inscribe a tu club en los torneos disponibles</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs-modern" id="inscripcionesTabs">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabDisponibles" type="button">
+                    <i class="fas fa-trophy"></i> Torneos Disponibles
+                    <span class="badge-tab" id="badgeDisponibles">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabMisInscripciones" type="button">
+                    <i class="fas fa-list-check"></i> Mis Inscripciones
+                    <span class="badge-tab" id="badgeMisInscripciones">0</span>
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Torneos Disponibles -->
+            <div class="tab-pane fade show active" id="tabDisponibles">
+                <div id="torneosDisponiblesContent">
+                    <div class="loading-container">
+                        <div class="spinner-border"></div>
+                        <p>Cargando torneos disponibles...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mis Inscripciones -->
+            <div class="tab-pane fade" id="tabMisInscripciones">
+                <div id="misInscripcionesContent">
+                    <div class="loading-container">
+                        <div class="spinner-border"></div>
+                        <p>Cargando inscripciones...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.REPRESENTANTE);
+
+        let miClub = null;
+        let miembrosDisponibles = [];
+        let torneosDisponibles = [];
+        let misInscripciones = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            document.getElementById("usuarioNombre").textContent = usuario.nombreCompleto || "Representante";
+            document.getElementById("usuarioNombreMenu").textContent = usuario.nombreCompleto || "Representante";
+            document.getElementById("emailUsuarioNav").textContent = usuario.email || "";
+            cargarDatos();
+        });
+
+        async function cargarDatos() {
+            await cargarMiClub();
+            await cargarMiembrosDisponibles();
+            await cargarTorneosDisponibles();
+            await cargarMisInscripciones();
+        }
+
+        // ===============================================
+        // CARGAR MI CLUB
+        // ===============================================
+        async function cargarMiClub() {
+            try {
+                const result = await fetchAPI("/api/representante/mi-club", "GET");
+                if (result.success && result.data) {
+                    miClub = result.data;
+                    console.log("✅ Club cargado:", miClub);
+                } else {
+                    mostrarModalAlerta("Error", "No tienes un club asignado", "error");
+                }
+            } catch (error) {
+                console.error("❌ Error al cargar club:", error);
+            }
+        }
+
+        // ===============================================
+        // CARGAR MIEMBROS DISPONIBLES
+        // ===============================================
+        async function cargarMiembrosDisponibles() {
+            try {
+                console.log("🔍 Cargando miembros del club...");
+
+                const result = await fetchAPI("/api/representante/mi-club", "GET");
+
+                console.log("📦 Respuesta completa de mi-club:", result);
+
+                if (result.success && result.data) {
+                    console.log("📊 Estructura del club:", {
+                        nombreClub: result.data.nombreClub,
+                        cantidadMiembros: result.data.cantidadMiembros,
+                        tieneMiembros: result.data.miembros ? 'SÍ' : 'NO',
+                        tipoMiembros: result.data.miembros ? typeof result.data.miembros : 'N/A',
+                        esArray: result.data.miembros ? Array.isArray(result.data.miembros) : false
+                    });
+
+                    // Verificar diferentes posibles estructuras de respuesta
+                    if (result.data.miembros && Array.isArray(result.data.miembros)) {
+                        // Caso 1: Viene como result.data.miembros
+                        miembrosDisponibles = result.data.miembros;
+                        console.log("✅ Miembros encontrados en result.data.miembros");
+                    } else if (result.data.competidores && Array.isArray(result.data.competidores)) {
+                        // Caso 2: Viene como result.data.competidores
+                        miembrosDisponibles = result.data.competidores;
+                        console.log("✅ Miembros encontrados en result.data.competidores");
+                    } else {
+                        // Caso 3: El club está en result.data pero sin lista de miembros
+                        console.warn("⚠️ El endpoint mi-club no devuelve la lista de miembros");
+                        console.log("💡 Intentando obtener miembros de otra forma...");
+
+                        // Guardar el club al menos
+                        miClub = result.data;
+                        miembrosDisponibles = [];
+                    }
+
+                    console.log("📋 Total de miembros disponibles:", miembrosDisponibles.length);
+
+                    if (miembrosDisponibles.length > 0) {
+                        console.log("👥 Lista de miembros:");
+                        miembrosDisponibles.forEach((m, i) => {
+                            console.log(`  ${i + 1}. ${m.nombreCompleto || m.nombre} (ID: ${m.idUsuario})`);
+                        });
+                    } else {
+                        console.warn("⚠️ No se encontraron miembros para inscribir");
+                        console.log("💡 Verifica que tu ClubResponse incluya la lista de miembros");
+                    }
+                } else {
+                    console.error("❌ No se pudo obtener información del club");
+                }
+
+            } catch (error) {
+                console.error("❌ Error al cargar miembros:", error);
+                miembrosDisponibles = [];
+            }
+        }
+
+        // ===============================================
+        // CARGAR TORNEOS DISPONIBLES (CON MEJOR DEBUG)
+        // ===============================================
+        async function cargarTorneosDisponibles() {
+            try {
+                console.log("🔍 Cargando torneos...");
+
+                const result = await fetchAPI("/api/public/torneos", "GET");
+
+                console.log("📦 Respuesta completa del backend:", result);
+
+                if (result.success && result.data) {
+                    console.log("📊 Total de torneos recibidos:", result.data.length);
+
+                    // Mostrar TODOS los estados que vienen
+                    result.data.forEach((t, index) => {
+                        console.log(`Torneo ${index + 1}:`, {
+                            nombre: t.nombreTorneo,
+                            estado: t.estado,
+                            estadoDescripcion: t.estadoDescripcion,
+                            estadoId: t.estadoId || t.idEstado,
+                            fechaInicio: t.fechaInicio,
+                            fechaFin: t.fechaFin
+                        });
+                    });
+
+                    // FILTRAR TORNEOS EN CONFIGURACIÓN (CON MÚLTIPLES MÉTODOS)
+                    torneosDisponibles = result.data.filter(t => {
+                        const estado = (t.estadoDescripcion || t.estado || '').toLowerCase();
+                        const estadoId = t.estadoId || t.idEstado;
+
+                        // Buscar "configuracion" en cualquiera de las variantes
+                        const esConfiguracion = estado.includes('configuracion') ||
+                            estado.includes('configuración') ||
+                            estadoId === 8; // ID 8 = EN CONFIGURACIÓN
+
+                        if (esConfiguracion) {
+                            console.log(`✅ Torneo EN CONFIGURACIÓN: "${t.nombreTorneo}"`);
+                        }
+
+                        return esConfiguracion;
+                    });
+
+                    console.log("🎯 Torneos disponibles (EN CONFIGURACIÓN):", torneosDisponibles.length);
+
+                    document.getElementById("badgeDisponibles").textContent = torneosDisponibles.length;
+
+                    renderizarTorneosDisponibles();
+                } else {
+                    throw new Error("No se pudieron cargar los torneos");
+                }
+            } catch (error) {
+                console.error("❌ Error al cargar torneos:", error);
+                mostrarErrorDisponibles(error.message);
+            }
+        }
+
+        // ===============================================
+        // RENDERIZAR TORNEOS DISPONIBLES
+        // ===============================================
+        function renderizarTorneosDisponibles() {
+            const container = document.getElementById("torneosDisponiblesContent");
+
+            if (torneosDisponibles.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-trophy"></i>
+                        <h3>No hay torneos disponibles</h3>
+                        <p>Los torneos en configuración aparecerán aquí cuando estén abiertos para inscripciones</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            torneosDisponibles.forEach((torneo) => {
+                html += `
+                    <div class="torneo-card">
+                        <div class="torneo-header">
+                            <div class="torneo-icon-wrapper">
+                                <div class="torneo-icon">🏆</div>
+                                <div class="torneo-main-info">
+                                    <div class="torneo-titulo">${escaparHTML(torneo.nombreTorneo || "Torneo")}</div>
+                                    ${torneo.descripcion ? `<div class="torneo-descripcion">${escaparHTML(torneo.descripcion)}</div>` : ""}
+                                    <div class="torneo-meta">
+                                        <div class="meta-item">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>${torneo.fechaInicio ? formatearFechaCorta(torneo.fechaInicio) : "-"} al ${torneo.fechaFin ? formatearFechaCorta(torneo.fechaFin) : "-"}</span>
+                                        </div>
+                                        <div class="meta-item">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            <span>${escaparHTML(torneo.nombreSede || "N/A")}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="badge badge-estado-torneo bg-success">
+                                <i class="fas fa-circle-check"></i> Abierto
+                            </span>
+                        </div>
+                        <div class="categorias-section" id="categorias-${torneo.idTorneo}">
+                            <div class="categorias-header">
+                                <div class="categorias-title">
+                                    <i class="fas fa-list"></i>
+                                    <span>Categorías Disponibles</span>
+                                </div>
+                                <button class="btn-ver-categorias" onclick="cargarCategorias(${torneo.idTorneo})">
+                                    <i class="fas fa-eye"></i> Ver Categorías
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        // ===============================================
+        // CARGAR CATEGORÍAS DE UN TORNEO
+        // ===============================================
+        async function cargarCategorias(torneoId) {
+            const container = document.getElementById(`categorias-${torneoId}`);
+            container.innerHTML = `
+                <div class="categorias-header">
+                    <div class="categorias-title">
+                        <i class="fas fa-list"></i>
+                        <span>Categorías Disponibles</span>
+                    </div>
+                </div>
+                <div class="text-center py-3">
+                    <div class="spinner-border spinner-border-sm" style="color: #4facfe;"></div>
+                    <p class="mt-2 text-muted">Cargando categorías...</p>
+                </div>
+            `;
+
+            try {
+                const result = await fetchAPI(`/api/public/torneos/${torneoId}/categorias`, "GET");
+                if (result.success && result.data) {
+                    renderizarCategorias(torneoId, result.data);
+                } else {
+                    container.innerHTML = `
+                        <div class="categorias-header">
+                            <div class="categorias-title">
+                                <i class="fas fa-list"></i>
+                                <span>Categorías Disponibles</span>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> No se pudieron cargar las categorías
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error("❌ Error al cargar categorías:", error);
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-times-circle"></i> Error de conexión
+                    </div>
+                `;
+            }
+        }
+
+        // ===============================================
+        // RENDERIZAR CATEGORÍAS
+        // ===============================================
+        function renderizarCategorias(torneoId, categorias) {
+            const container = document.getElementById(`categorias-${torneoId}`);
+
+            if (categorias.length === 0) {
+                container.innerHTML = `
+                    <div class="categorias-header">
+                        <div class="categorias-title">
+                            <i class="fas fa-list"></i>
+                            <span>Categorías Disponibles</span>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Este torneo aún no tiene categorías disponibles
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="categorias-header">
+                    <div class="categorias-title">
+                        <i class="fas fa-list"></i>
+                        <span>Categorías Disponibles</span>
+                    </div>
+                </div>
+            `;
+
+            categorias.forEach((cat) => {
+                const inscritos = cat.inscritosActuales || 0;
+                const cupoMax = cat.cupoMaximo || 0;
+                const cupoMin = cat.cupoMinimo || 2;
+
+                html += `
+                    <div class="categoria-item">
+                        <div class="categoria-header-item">
+                            <div class="categoria-nombre-item">${escaparHTML(cat.nombreCategoria || "Categoría")}</div>
+                            <button class="btn-inscribir-categoria" onclick="mostrarFormularioInscripcion(${torneoId}, ${cat.idCategoria}, '${escaparHTML(cat.nombreCategoria)}')">
+                                <i class="fas fa-clipboard-check"></i> Inscribir
+                            </button>
+                        </div>
+                        <div class="categoria-info-grid">
+                            <div class="categoria-stat">
+                                <i class="fas fa-weight-hanging"></i>
+                                <span>${cat.nombreCategoriaPeso || "Libre"}</span>
+                            </div>
+                            <div class="categoria-stat">
+                                <i class="fas fa-users"></i>
+                                <span>${inscritos}/${cupoMax} inscritos</span>
+                            </div>
+                            <div class="categoria-stat">
+                                <i class="fas fa-trophy"></i>
+                                <span>Mínimo: ${cupoMin}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ===============================================
+        // MOSTRAR FORMULARIO DE INSCRIPCIÓN
+        // ===============================================
+        function mostrarFormularioInscripcion(torneoId, categoriaId, nombreCategoria) {
+            const torneo = torneosDisponibles.find((t) => t.idTorneo === torneoId);
+            if (!torneo) {
+                mostrarModalAlerta("Error", "Torneo no encontrado", "error");
+                return;
+            }
+
+            if (miembrosDisponibles.length === 0) {
+                mostrarModalAlerta("Sin Miembros", "No tienes miembros disponibles en tu club", "warning");
+                return;
+            }
+
+            const container = document.getElementById(`categorias-${torneoId}`);
+            const formularioExistente = container.querySelector('.miembros-selector');
+            if (formularioExistente) formularioExistente.remove();
+
+            const html = `
+                <div class="miembros-selector">
+                    <div class="miembros-title">
+                        <i class="fas fa-users"></i>
+                        <span>Selecciona los competidores para ${nombreCategoria}</span>
+                    </div>
+                    ${renderizarMiembrosCheckbox(categoriaId)}
+                    <div class="inscripcion-resumen">
+                        <div class="inscripcion-resumen-title">
+                            <i class="fas fa-clipboard-check"></i> Resumen de Inscripción
+                        </div>
+                        <div class="inscripcion-resumen-item">
+                            <span>Torneo:</span>
+                            <strong>${escaparHTML(torneo.nombreTorneo)}</strong>
+                        </div>
+                        <div class="inscripcion-resumen-item">
+                            <span>Categoría:</span>
+                            <strong>${nombreCategoria}</strong>
+                        </div>
+                        <div class="inscripcion-resumen-item">
+                            <span>Seleccionados:</span>
+                            <strong id="count-${categoriaId}">0</strong>
+                        </div>
+                    </div>
+                    <button class="btn-confirmar-inscripcion" onclick="inscribirClub(${torneoId}, ${categoriaId})" id="btn-inscribir-${categoriaId}" disabled>
+                        <i class="fas fa-check-circle"></i> Confirmar Inscripción
+                    </button>
+                </div>
+            `;
+            container.innerHTML += html;
+        }
+
+        // ===============================================
+        // RENDERIZAR MIEMBROS COMO CHECKBOXES
+        // ===============================================
+        function renderizarMiembrosCheckbox(categoriaId) {
+            let html = "";
+            miembrosDisponibles.forEach((miembro) => {
+                const initials = miembro.nombreCompleto
+                    ? miembro.nombreCompleto.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase()
+                    : "??";
+
+                // Obtener nombre del robot desde apodoPersonal o buscar en los datos del miembro
+                const nombreRobot = miembro.apodoPersonal || miembro.nombreRobot || "Sin robot asignado";
+
+                html += `
+                    <div class="miembro-checkbox" id="check-${miembro.idUsuario}-${categoriaId}">
+                        <label class="miembro-label">
+                            <input type="checkbox" onchange="actualizarContador(${categoriaId})" data-categoria="${categoriaId}" data-miembro="${miembro.idUsuario}">
+                            <div class="miembro-avatar">${initials}</div>
+                            <div class="miembro-info">
+                                <div class="miembro-nombre">${escaparHTML(miembro.nombreCompleto || "Miembro")}</div>
+                                <div class="miembro-robot">
+                                    <i class="fas fa-robot"></i>
+                                    <span>${escaparHTML(nombreRobot)}</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        // ===============================================
+        // ACTUALIZAR CONTADOR DE SELECCIONADOS
+        // ===============================================
+        function actualizarContador(categoriaId) {
+            const checkboxes = document.querySelectorAll(`input[data-categoria="${categoriaId}"]:checked`);
+            const count = checkboxes.length;
+
+            const countEl = document.getElementById(`count-${categoriaId}`);
+            if (countEl) countEl.textContent = count;
+
+            const btn = document.getElementById(`btn-inscribir-${categoriaId}`);
+            if (btn) btn.disabled = count === 0;
+
+            document.querySelectorAll(`input[data-categoria="${categoriaId}"]`).forEach((cb) => {
+                const div = document.getElementById(`check-${cb.dataset.miembro}-${categoriaId}`);
+                if (div) {
+                    if (cb.checked) {
+                        div.classList.add("selected");
+                    } else {
+                        div.classList.remove("selected");
+                    }
+                }
+            });
+        }
+
+        // ===============================================
+        // INSCRIBIR CLUB EN CATEGORÍA
+        // ===============================================
+        async function inscribirClub(torneoId, categoriaId) {
+            const checkboxes = document.querySelectorAll(`input[data-categoria="${categoriaId}"]:checked`);
+
+            if (checkboxes.length === 0) {
+                mostrarModalAlerta("Error", "Selecciona al menos un competidor", "warning");
+                return;
+            }
+
+            const competidoresIds = Array.from(checkboxes).map((cb) => parseInt(cb.dataset.miembro));
+
+            const confirmado = await confirmarModal(
+                "Confirmar Inscripción",
+                `¿Inscribir ${competidoresIds.length} competidor(es) en esta categoría?`,
+                "Sí, Inscribir",
+                "Cancelar"
+            );
+
+            if (!confirmado) return;
+
+            mostrarLoading();
+
+            try {
+                const request = {
+                    idTorneo: torneoId,
+                    categorias: [{
+                        idCategoria: categoriaId,
+                        idsCompetidores: competidoresIds
+                    }]
+                };
+
+                console.log("📤 Enviando inscripción:", request);
+
+                const result = await fetchAPI("/api/representante/torneo/inscribir", "POST", request);
+
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        "¡Inscripción Exitosa!",
+                        "La inscripción se realizó correctamente.",
+                        "success"
+                    );
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    await mostrarModalAlerta(
+                        "Error",
+                        result.message || "Error al realizar la inscripción",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error("❌ Error:", error);
+                await mostrarModalAlerta("Error de Conexión", "No se pudo conectar con el servidor", "error");
+            }
+        }
+
+        // ===============================================
+        // CARGAR MIS INSCRIPCIONES (PRÓXIMAMENTE)
+        // ===============================================
+        async function cargarMisInscripciones() {
+            const container = document.getElementById("misInscripcionesContent");
+            setTimeout(() => {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-list-check"></i>
+                        <h3>Próximamente</h3>
+                        <p>Aquí verás tus inscripciones realizadas</p>
+                    </div>
+                `;
+                document.getElementById("badgeMisInscripciones").textContent = "0";
+            }, 500);
+        }
+
+        // ===============================================
+        // MOSTRAR ERROR
+        // ===============================================
+        function mostrarErrorDisponibles(mensaje) {
+            document.getElementById("torneosDisponiblesContent").innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Error:</strong> ${escaparHTML(mensaje)}
+                </div>
+            `;
+        }
+    </script>
+</body>
+
+</html>

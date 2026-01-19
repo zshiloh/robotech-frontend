@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Robot - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para esta página */
+        .robot-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .robot-icon-large {
+            font-size: 5rem;
+            opacity: 0.2;
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            border-color: #667eea;
+        }
+
+        .stat-card .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar-animated {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            animation: progress-bar-stripes 1s linear infinite;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+            border-color: #dee2e6;
+        }
+
+        .robot-preview {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .robot-preview h4 {
+            color: #495057;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .validation-feedback {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .validation-feedback.valid {
+            color: #198754;
+        }
+
+        .validation-feedback.invalid {
+            color: #dc3545;
+        }
+
+        .badge-status {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .info-tooltip {
+            cursor: help;
+            color: #667eea;
+            margin-left: 0.25rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="competidor-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <!-- Notificaciones -->
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        style="width: 400px; max-height: 500px; overflow-y: auto;" id="notificacionesDropdownMenu"
+                        aria-labelledby="notificacionesDropdown">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de Usuario -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="competidor-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-robot"></i> Competidor</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="competidor-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="competidor-robot.html" class="active"><i class="fas fa-robot"></i> Mi Robot</a></li>
+            <li><a href="competidor-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a></li>
+            <li><a href="competidor-solicitudes.html"><i class="fas fa-paper-plane"></i> Mis Solicitudes</a></li>
+            <li><a href="competidor-inscripciones.html"><i class="fas fa-trophy"></i> Inscripciones</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <!-- Hero Section -->
+            <div class="robot-hero position-relative">
+                <i class="fas fa-robot robot-icon-large"></i>
+                <h1 class="mb-2"><i class="fas fa-robot"></i> Mi Robot</h1>
+                <p class="mb-3">Configura y gestiona las especificaciones técnicas de tu robot</p>
+
+                <!-- Progress Bar -->
+                <div class="progress" style="height: 8px; background: rgba(255,255,255,0.2);">
+                    <div class="progress-bar progress-bar-animated" role="progressbar" id="progressCompletitud"
+                        style="width: 0%"></div>
+                </div>
+                <small class="text-white-50 mt-1 d-block" id="textCompletitud">Cargando...</small>
+            </div>
+
+            <!-- Contenedor Principal -->
+            <div id="contenedorPrincipal">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Cargando información del robot...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.COMPETIDOR);
+
+        let datosRobot = null;
+        let categoriasPeso = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Competidor';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            inicializar();
+        });
+
+        // =====================================
+        // INICIALIZAR
+        // =====================================
+        async function inicializar() {
+            await Promise.all([
+                cargarRobot(),
+                cargarCategoriasPeso()
+            ]);
+        }
+
+        // =====================================
+        // CARGAR DATOS DEL ROBOT
+        // =====================================
+        async function cargarRobot() {
+            try {
+                console.log('🤖 Cargando datos del robot...');
+
+                const result = await fetchAPI('/api/competidor/robot', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    datosRobot = result.data;
+                    console.log('✅ Robot cargado:', datosRobot);
+
+                    // Determinar si tiene especificaciones completas
+                    if (datosRobot.nombreRobot && datosRobot.nombreRobot.trim() !== '') {
+                        mostrarVistaConEspecificaciones();
+                    } else {
+                        mostrarVistaSinEspecificaciones();
+                    }
+                } else {
+                    throw new Error('No se pudo cargar el robot');
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar robot:', error);
+                mostrarError('Error al cargar información del robot');
+            }
+        }
+
+        // =====================================
+        // CARGAR CATEGORÍAS DE PESO
+        // =====================================
+        async function cargarCategoriasPeso() {
+            try {
+                const result = await fetchAPI('/api/public/categorias-peso', 'GET');
+
+                if (result.success && result.data) {
+                    categoriasPeso = result.data;
+                    console.log('✅ Categorías cargadas:', categoriasPeso.length);
+                }
+            } catch (error) {
+                console.error('Error al cargar categorías:', error);
+            }
+        }
+
+        // =====================================
+        // VISTA: SIN ESPECIFICACIONES
+        // =====================================
+        function mostrarVistaSinEspecificaciones() {
+            actualizarProgress(0);
+
+            const contenedor = document.getElementById('contenedorPrincipal');
+
+            contenedor.innerHTML = `
+        <!-- Empty State -->
+        <div class="empty-state">
+          <i class="fas fa-robot"></i>
+          <h3>¡Crea tu Robot!</h3>
+          <p class="text-muted mb-4">Aún no has configurado las especificaciones de tu robot.<br>
+          Completa el formulario para poder participar en torneos.</p>
+          <button class="btn btn-gradient btn-lg" onclick="mostrarFormulario()">
+            <i class="fas fa-plus"></i> Crear Especificaciones
+          </button>
+        </div>
+      `;
+        }
+
+        // =====================================
+        // VISTA: CON ESPECIFICACIONES
+        // =====================================
+        function mostrarVistaConEspecificaciones() {
+            // Calcular completitud
+            let completitud = 0;
+            if (datosRobot.nombreRobot) completitud += 25;
+            if (datosRobot.peso) completitud += 25;
+            if (datosRobot.dimensiones) completitud += 25;
+            if (datosRobot.nombreCategoriaPeso) completitud += 25;
+
+            actualizarProgress(completitud);
+
+            const contenedor = document.getElementById('contenedorPrincipal');
+
+            const nombreClub = datosRobot.nombreClub || 'Sin club';
+            const estado = datosRobot.estado || 'Activo';
+            const estadoClass = estado === 'Activo' ? 'success' : estado === 'Inactivo' ? 'danger' : 'warning';
+
+            contenedor.innerHTML = `
+        <div class="row g-4 mb-4">
+          
+          <!-- Estadísticas -->
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon text-success">
+                <i class="fas fa-trophy"></i>
+              </div>
+              <div class="stat-value">${datosRobot.victorias || 0}</div>
+              <div class="stat-label">Victorias</div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon text-danger">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <div class="stat-value">${datosRobot.derrotas || 0}</div>
+              <div class="stat-label">Derrotas</div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon text-warning">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="stat-value">${datosRobot.puntosTotales || 0}</div>
+              <div class="stat-label">Puntos Totales</div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="stat-card">
+              <div class="stat-icon text-info">
+                <i class="fas fa-percentage"></i>
+              </div>
+              <div class="stat-value">${calcularWinRate()}%</div>
+              <div class="stat-label">Win Rate</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Especificaciones Técnicas -->
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-cog"></i> Especificaciones Técnicas</h5>
+            <div>
+              <span class="badge bg-${estadoClass} badge-status me-2">${estado}</span>
+              <button class="btn btn-primary btn-sm" onclick="mostrarFormulario()">
+                <i class="fas fa-edit"></i> Editar
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              
+              <div class="col-md-6 mb-3">
+                <label class="text-muted small">Nombre del Robot</label>
+                <div class="fw-bold fs-5 text-primary">
+                  <i class="fas fa-robot me-2"></i>${escaparHTML(datosRobot.nombreRobot)}
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="text-muted small">Club</label>
+                <div class="fw-bold">
+                  <i class="fas fa-users me-2 text-success"></i>${escaparHTML(nombreClub)}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="text-muted small">Peso</label>
+                <div class="fw-bold">
+                  <i class="fas fa-weight-hanging me-2 text-warning"></i>${datosRobot.peso}g
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="text-muted small">Dimensiones</label>
+                <div class="fw-bold">
+                  <i class="fas fa-ruler-combined me-2 text-info"></i>${escaparHTML(datosRobot.dimensiones || 'No especificado')}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-3">
+                <label class="text-muted small">Categoría de Peso</label>
+                <div class="fw-bold">
+                  <i class="fas fa-tag me-2 text-primary"></i>${escaparHTML(datosRobot.nombreCategoriaPeso || 'No especificado')}
+                </div>
+              </div>
+
+              ${datosRobot.descripcion ? `
+              <div class="col-12 mb-3">
+                <label class="text-muted small">Descripción</label>
+                <div class="text-muted">
+                  ${escaparHTML(datosRobot.descripcion)}
+                </div>
+              </div>
+              ` : ''}
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Historial de Combates -->
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-history"></i> Historial Reciente</h5>
+          </div>
+          <div class="card-body">
+            <div class="text-center text-muted py-3">
+              <i class="fas fa-info-circle"></i>
+              El historial de combates estará disponible próximamente
+            </div>
+          </div>
+        </div>
+      `;
+        }
+
+        // =====================================
+        // MOSTRAR FORMULARIO
+        // =====================================
+        function mostrarFormulario() {
+            const esEdicion = datosRobot && datosRobot.nombreRobot;
+
+            const contenedor = document.getElementById('contenedorPrincipal');
+
+            // Generar options de categorías
+            let optionsCategorias = '<option value="">-- Selecciona una categoría --</option>';
+            categoriasPeso.forEach(cat => {
+                const selected = datosRobot && datosRobot.idCategoriaPeso === cat.idCategoriaPeso ? 'selected' : '';
+                optionsCategorias += `<option value="${cat.idCategoriaPeso}" ${selected}>${escaparHTML(cat.nombreCategoria)} (${cat.pesoMinimo}-${cat.pesoMaximo}g)</option>`;
+            });
+
+            contenedor.innerHTML = `
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="fas fa-${esEdicion ? 'edit' : 'plus'}"></i> 
+              ${esEdicion ? 'Editar' : 'Crear'} Especificaciones
+            </h5>
+          </div>
+          <div class="card-body">
+            
+            <form id="formRobot" onsubmit="guardarRobot(event)">
+              
+              <div class="row">
+                
+                <!-- Nombre del Robot -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">
+                    Nombre del Robot <span class="text-danger">*</span>
+                    <i class="fas fa-question-circle info-tooltip" 
+                       data-bs-toggle="tooltip" 
+                       title="Nombre único para tu robot (2-100 caracteres)"></i>
+                  </label>
+                  <input type="text" 
+                         class="form-control" 
+                         id="nombreRobot" 
+                         placeholder="Ej: Thunder Bot" 
+                         value="${datosRobot?.nombreRobot || ''}"
+                         minlength="2"
+                         maxlength="100"
+                         required
+                         oninput="validarNombre()">
+                  <div id="feedbackNombre" class="validation-feedback"></div>
+                </div>
+
+                <!-- Peso -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">
+                    Peso <span class="text-danger">*</span>
+                    <i class="fas fa-question-circle info-tooltip" 
+                       data-bs-toggle="tooltip" 
+                       title="Peso en gramos (1-5000g)"></i>
+                  </label>
+                  <div class="input-group">
+                    <input type="number" 
+                           class="form-control" 
+                           id="peso" 
+                           placeholder="2500" 
+                           value="${datosRobot?.peso || ''}"
+                           min="1"
+                           max="5000"
+                           required
+                           oninput="validarPeso()">
+                    <span class="input-group-text">gramos</span>
+                  </div>
+                  <div id="feedbackPeso" class="validation-feedback"></div>
+                </div>
+
+                <!-- Dimensiones -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">
+                    Dimensiones <span class="text-danger">*</span>
+                    <i class="fas fa-question-circle info-tooltip" 
+                       data-bs-toggle="tooltip" 
+                       title="Formato: LargoxAnchoxAlto (Ej: 30x25x15)"></i>
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-ruler-combined"></i></span>
+                    <input type="text" 
+                           class="form-control" 
+                           id="dimensiones" 
+                           placeholder="30x25x15" 
+                           value="${datosRobot?.dimensiones || ''}"
+                           pattern="^\\d+x\\d+x\\d+$"
+                           required
+                           oninput="validarDimensiones()">
+                    <span class="input-group-text">cm</span>
+                  </div>
+                  <div id="feedbackDimensiones" class="validation-feedback"></div>
+                </div>
+
+                <!-- Categoría de Peso -->
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">
+                    Categoría de Peso <span class="text-danger">*</span>
+                    <i class="fas fa-question-circle info-tooltip" 
+                       data-bs-toggle="tooltip" 
+                       title="Selecciona la categoría según el peso de tu robot"></i>
+                  </label>
+                  <select class="form-select" id="idCategoriaPeso" required onchange="validarCategoria()">
+                    ${optionsCategorias}
+                  </select>
+                  <div id="feedbackCategoria" class="validation-feedback"></div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="col-12 mb-3">
+                  <label class="form-label">
+                    Descripción (Opcional)
+                    <i class="fas fa-question-circle info-tooltip" 
+                       data-bs-toggle="tooltip" 
+                       title="Describe las características especiales de tu robot (máx 500 caracteres)"></i>
+                  </label>
+                  <textarea class="form-control" 
+                            id="descripcion" 
+                            rows="3" 
+                            maxlength="500"
+                            placeholder="Describe tu robot, sus características especiales, estrategia de combate, etc."
+                            oninput="actualizarContador()">${datosRobot?.descripcion || ''}</textarea>
+                  <div class="form-text text-end">
+                    <span id="contadorCaracteres">0</span>/500 caracteres
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Botones -->
+              <div class="d-flex gap-2 justify-content-end">
+                <button type="button" class="btn btn-secondary" onclick="cancelarFormulario()">
+                  <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button type="submit" class="btn btn-gradient">
+                  <i class="fas fa-save"></i> ${esEdicion ? 'Actualizar' : 'Crear'} Especificaciones
+                </button>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      `;
+
+            // Inicializar tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Actualizar contador si hay descripción
+            actualizarContador();
+        }
+
+        // =====================================
+        // VALIDACIONES EN TIEMPO REAL
+        // =====================================
+        function validarNombre() {
+            const input = document.getElementById('nombreRobot');
+            const feedback = document.getElementById('feedbackNombre');
+            const valor = input.value.trim();
+
+            if (valor.length === 0) {
+                feedback.textContent = '';
+                feedback.className = 'validation-feedback';
+            } else if (valor.length < 2) {
+                feedback.textContent = '❌ Mínimo 2 caracteres';
+                feedback.className = 'validation-feedback invalid';
+            } else if (valor.length > 100) {
+                feedback.textContent = '❌ Máximo 100 caracteres';
+                feedback.className = 'validation-feedback invalid';
+            } else {
+                feedback.textContent = '✓ Nombre válido';
+                feedback.className = 'validation-feedback valid';
+            }
+        }
+
+        function validarPeso() {
+            const input = document.getElementById('peso');
+            const feedback = document.getElementById('feedbackPeso');
+            const valor = parseInt(input.value);
+
+            if (isNaN(valor)) {
+                feedback.textContent = '';
+                feedback.className = 'validation-feedback';
+            } else if (valor < 1) {
+                feedback.textContent = '❌ Peso mínimo: 1 gramo';
+                feedback.className = 'validation-feedback invalid';
+            } else if (valor > 5000) {
+                feedback.textContent = '❌ Peso máximo: 5000 gramos';
+                feedback.className = 'validation-feedback invalid';
+            } else {
+                // Sugerir categoría según peso
+                const categoriaSugerida = categoriasPeso.find(cat =>
+                    valor >= cat.pesoMinimo && valor <= cat.pesoMaximo
+                );
+
+                if (categoriaSugerida) {
+                    feedback.textContent = `✓ Peso válido. Categoría sugerida: ${categoriaSugerida.nombreCategoria}`;
+                    feedback.className = 'validation-feedback valid';
+                } else {
+                    feedback.textContent = '✓ Peso válido';
+                    feedback.className = 'validation-feedback valid';
+                }
+            }
+        }
+
+        function validarDimensiones() {
+            const input = document.getElementById('dimensiones');
+            const feedback = document.getElementById('feedbackDimensiones');
+            const valor = input.value.trim();
+
+            const patron = /^\d+x\d+x\d+$/;
+
+            if (valor.length === 0) {
+                feedback.textContent = '';
+                feedback.className = 'validation-feedback';
+            } else if (!patron.test(valor)) {
+                feedback.textContent = '❌ Formato inválido. Usa: LxWxH (Ej: 30x25x15)';
+                feedback.className = 'validation-feedback invalid';
+            } else {
+                const [largo, ancho, alto] = valor.split('x').map(Number);
+                feedback.textContent = `✓ Dimensiones válidas: ${largo}cm × ${ancho}cm × ${alto}cm`;
+                feedback.className = 'validation-feedback valid';
+            }
+        }
+
+        function validarCategoria() {
+            const select = document.getElementById('idCategoriaPeso');
+            const feedback = document.getElementById('feedbackCategoria');
+            const peso = parseInt(document.getElementById('peso').value);
+
+            if (!select.value) {
+                feedback.textContent = '';
+                feedback.className = 'validation-feedback';
+                return;
+            }
+
+            const categoriaSeleccionada = categoriasPeso.find(cat =>
+                cat.idCategoriaPeso === parseInt(select.value)
+            );
+
+            if (!categoriaSeleccionada) {
+                feedback.textContent = '';
+                feedback.className = 'validation-feedback';
+                return;
+            }
+
+            if (isNaN(peso)) {
+                feedback.textContent = `✓ Categoría: ${categoriaSeleccionada.nombreCategoria} (${categoriaSeleccionada.pesoMinimo}-${categoriaSeleccionada.pesoMaximo}g)`;
+                feedback.className = 'validation-feedback valid';
+                return;
+            }
+
+            // Verificar si el peso coincide con la categoría
+            if (peso >= categoriaSeleccionada.pesoMinimo && peso <= categoriaSeleccionada.pesoMaximo) {
+                feedback.textContent = `✓ ¡Perfecto! Tu robot encaja en esta categoría`;
+                feedback.className = 'validation-feedback valid';
+            } else {
+                feedback.textContent = `⚠️ Tu robot pesa ${peso}g, pero esta categoría es ${categoriaSeleccionada.pesoMinimo}-${categoriaSeleccionada.pesoMaximo}g`;
+                feedback.className = 'validation-feedback invalid';
+            }
+        }
+
+        function actualizarContador() {
+            const textarea = document.getElementById('descripcion');
+            const contador = document.getElementById('contadorCaracteres');
+            if (textarea && contador) {
+                contador.textContent = textarea.value.length;
+            }
+        }
+
+        // =====================================
+        // GUARDAR ROBOT
+        // =====================================
+        async function guardarRobot(event) {
+            event.preventDefault();
+
+            const nombreRobot = document.getElementById('nombreRobot').value.trim();
+            const peso = parseInt(document.getElementById('peso').value);
+            const dimensiones = document.getElementById('dimensiones').value.trim();
+            const idCategoriaPeso = parseInt(document.getElementById('idCategoriaPeso').value);
+            const descripcion = document.getElementById('descripcion').value.trim();
+
+            // Validaciones finales
+            if (nombreRobot.length < 2 || nombreRobot.length > 100) {
+                mostrarAlerta('El nombre debe tener entre 2 y 100 caracteres', 'warning');
+                return;
+            }
+
+            if (peso < 1 || peso > 5000) {
+                mostrarAlerta('El peso debe estar entre 1 y 5000 gramos', 'warning');
+                return;
+            }
+
+            const patronDimensiones = /^\d+x\d+x\d+$/;
+            if (!patronDimensiones.test(dimensiones)) {
+                mostrarAlerta('Las dimensiones deben tener el formato LxWxH (Ej: 30x25x15)', 'warning');
+                return;
+            }
+
+            if (!idCategoriaPeso) {
+                mostrarAlerta('Debes seleccionar una categoría de peso', 'warning');
+                return;
+            }
+
+            // Verificar que peso coincida con categoría
+            const categoria = categoriasPeso.find(cat => cat.idCategoriaPeso === idCategoriaPeso);
+            if (categoria && (peso < categoria.pesoMinimo || peso > categoria.pesoMaximo)) {
+                if (!confirmar(`⚠️ Tu robot pesa ${peso}g pero la categoría ${categoria.nombreCategoria} es para ${categoria.pesoMinimo}-${categoria.pesoMaximo}g. ¿Deseas continuar de todos modos?`)) {
+                    return;
+                }
+            }
+
+            const datos = {
+                nombreRobot,
+                peso,
+                dimensiones,
+                idCategoriaPeso,
+                descripcion: descripcion || null
+            };
+
+            const esEdicion = datosRobot && datosRobot.nombreRobot;
+            const endpoint = '/api/competidor/robot/especificaciones';
+            const metodo = esEdicion ? 'PUT' : 'POST';
+
+            mostrarLoading();
+
+            try {
+                const result = await fetchAPI(endpoint, metodo, datos);
+
+                ocultarLoading();
+
+                if (result.success) {
+                    mostrarAlerta(esEdicion ? 'Especificaciones actualizadas exitosamente' : 'Robot creado exitosamente', 'success');
+
+                    // Recargar datos
+                    await cargarRobot();
+                } else {
+                    mostrarAlerta(result.data?.message || 'Error al guardar especificaciones', 'error');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al guardar especificaciones', 'error');
+            }
+        }
+
+        // =====================================
+        // CANCELAR FORMULARIO
+        // =====================================
+        function cancelarFormulario() {
+            if (datosRobot && datosRobot.nombreRobot) {
+                mostrarVistaConEspecificaciones();
+            } else {
+                mostrarVistaSinEspecificaciones();
+            }
+        }
+
+        // =====================================
+        // HELPERS
+        // =====================================
+        function actualizarProgress(porcentaje) {
+            const progressBar = document.getElementById('progressCompletitud');
+            const textCompletitud = document.getElementById('textCompletitud');
+
+            progressBar.style.width = porcentaje + '%';
+            textCompletitud.textContent = `Completitud: ${porcentaje}%`;
+        }
+
+        function calcularWinRate() {
+            const victorias = datosRobot?.victorias || 0;
+            const derrotas = datosRobot?.derrotas || 0;
+            const total = victorias + derrotas;
+
+            if (total === 0) return 0;
+
+            return Math.round((victorias / total) * 100);
+        }
+
+        function mostrarError(mensaje) {
+            const contenedor = document.getElementById('contenedorPrincipal');
+            contenedor.innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i>
+          <strong>Error:</strong> ${mensaje}
+        </div>
+      `;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Invitaciones - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --rep-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --rep-color: #4facfe;
+            --rep-dark: #00f2fe;
+            --sidebar-width: 280px;
+            --navbar-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR MODERNA */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--rep-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--rep-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--rep-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--rep-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--rep-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1), rgba(0, 242, 254, 0.1));
+        }
+
+        .dropdown-item.text-danger:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        /* Dropdown de Notificaciones */
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(79, 172, 254, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(79, 172, 254, 0.05);
+            border-left: 3px solid #4facfe;
+        }
+
+        .notification-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notification-badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #4facfe;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .notifications-footer a:hover {
+            color: #00f2fe;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .empty-notifications i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        /* SIDEBAR MODERNA */
+        .sidebar-modern {
+            position: fixed;
+            top: var(--navbar-height);
+            left: 0;
+            height: calc(100vh - var(--navbar-height));
+            width: var(--sidebar-width);
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-header-modern {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header-modern h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-menu-modern {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern li {
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu-modern li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .sidebar-menu-modern li a i {
+            width: 24px;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu-modern li a:hover {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+            color: var(--rep-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-modern li a.active {
+            background: var(--rep-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+        }
+
+        .sidebar-menu-modern li a.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: white;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content-modern {
+            margin-left: var(--sidebar-width);
+            margin-top: var(--navbar-height);
+            padding: 2.5rem;
+            min-height: calc(100vh - var(--navbar-height));
+        }
+
+        /* HERO BANNER */
+        .hero-banner-inv {
+            background: var(--rep-gradient);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 20px 60px rgba(79, 172, 254, 0.35);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-banner-inv::before {
+            content: '\f0e0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 18rem;
+            opacity: 0.08;
+            right: -5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(-50%) rotate(-15deg);
+            }
+
+            50% {
+                transform: translateY(-55%) rotate(-10deg);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-banner-inv h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-banner-inv p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+        }
+
+        .btn-nueva-invitacion {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-nueva-invitacion:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        /* FORMULARIO */
+        .form-invitacion-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            border: 3px solid var(--rep-color);
+            animation: fadeInScale 0.4s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .form-invitacion-card.hidden {
+            display: none;
+        }
+
+        .mensaje-info-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .mensaje-info-card i {
+            color: #1976d2;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        /* TABS */
+        .nav-tabs-modern {
+            border-bottom: 3px solid #dee2e6;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs-modern .nav-link {
+            border: none;
+            color: #6c757d;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-tabs-modern .nav-link:hover {
+            color: var(--rep-color);
+            background-color: rgba(79, 172, 254, 0.05);
+        }
+
+        .nav-tabs-modern .nav-link.active {
+            color: var(--rep-color);
+            background-color: transparent;
+            border-bottom: 4px solid var(--rep-color);
+        }
+
+        .nav-tabs-modern .nav-link .badge {
+            margin-left: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* CARDS DE INVITACIONES */
+        .invitacion-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease both;
+            border: 2px solid transparent;
+        }
+
+        .invitacion-card:hover {
+            border-color: var(--rep-color);
+            box-shadow: 0 10px 40px rgba(79, 172, 254, 0.2);
+            transform: translateY(-5px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .invitacion-card.pendiente {
+            border-left: 5px solid #ffc107;
+        }
+
+        .invitacion-card.aceptada {
+            border-left: 5px solid #28a745;
+        }
+
+        .invitacion-card.rechazada {
+            border-left: 5px solid #dc3545;
+        }
+
+        .invitado-header {
+            display: flex;
+            align-items: start;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .invitado-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: var(--rep-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .invitado-info {
+            flex-grow: 1;
+        }
+
+        .invitado-nombre {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .invitado-email {
+            font-size: 0.95rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .invitacion-fecha {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge-estado-inv {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            border-radius: 25px;
+            font-weight: 700;
+        }
+
+        .btn-cancelar-inv {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancelar-inv:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            opacity: 0.2;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                transform: translateX(-100%);
+            }
+
+            .sidebar-modern.show {
+                transform: translateX(0);
+            }
+
+            .main-content-modern {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .hero-banner-inv {
+                padding: 2rem;
+            }
+
+            .hero-banner-inv h1 {
+                font-size: 2rem;
+            }
+
+            .notifications-dropdown {
+                width: 320px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar Moderna -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-actions">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Usuario -->
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="user-name" id="usuarioNombre">Representante</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+                        style="min-width: 250px; border-radius: 16px; border: none; padding: 0.5rem;">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user-tie"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;"
+                                        id="usuarioNombreMenu">Representante</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item d-flex align-items-center gap-2" href="usuario-perfil.html"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-user-edit"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="#"
+                                onclick="logout()"
+                                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar Sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Moderna -->
+    <aside class="sidebar-modern">
+        <div class="sidebar-header-modern">
+            <h5><i class="fas fa-user-tie"></i> Representante</h5>
+        </div>
+        <ul class="sidebar-menu-modern">
+            <li><a href="representante-dashboard.html"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+            <li><a href="representante-club.html"><i class="fas fa-shield-alt"></i> <span>Mi Club</span></a></li>
+            <li><a href="representante-miembros.html"><i class="fas fa-users"></i> <span>Miembros</span></a></li>
+            <li><a href="representante-invitaciones.html" class="active"><i class="fas fa-envelope"></i>
+                    <span>Invitaciones</span></a></li>
+            <li><a href="representante-solicitudes.html"><i class="fas fa-inbox"></i> <span>Solicitudes</span></a></li>
+            <li><a href="representante-inscripciones.html"><i class="fas fa-clipboard-list"></i>
+                    <span>Inscripciones</span></a></li>
+            <li><a href="representante-inscripciones-pendientes.html"><i class="fas fa-clock"></i>
+                    <span>Pendientes</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content-modern">
+
+        <!-- Hero Banner -->
+        <div class="hero-banner-inv">
+            <div class="hero-content d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h1><i class="fas fa-envelope-open-text"></i> Gestionar Invitaciones</h1>
+                    <p>Invita nuevos competidores a unirse a tu club</p>
+                </div>
+                <button class="btn btn-nueva-invitacion" onclick="toggleFormularioInvitacion()">
+                    <i class="fas fa-plus me-2"></i>Enviar Nueva Invitación
+                </button>
+            </div>
+        </div>
+
+        <!-- Formulario de Nueva Invitación -->
+        <div class="form-invitacion-card hidden" id="formInvitacionCard">
+            <h4 class="mb-3"><i class="fas fa-paper-plane"></i> Nueva Invitación</h4>
+
+            <div class="mensaje-info-card">
+                <i class="fas fa-info-circle"></i>
+                <strong>¿Cómo funciona?</strong><br>
+                Ingresa el email del competidor que deseas invitar. Si el usuario existe en el sistema,
+                recibirá una notificación con tu invitación.
+            </div>
+
+            <form id="formEnviarInvitacion" onsubmit="enviarInvitacion(event)">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Email del Competidor <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control form-control-lg" id="emailInvitado"
+                        placeholder="competidor@ejemplo.com" required>
+                    <div class="form-text">
+                        <i class="fas fa-lightbulb"></i>
+                        El usuario debe estar registrado en ROBOTECH
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn btn-secondary" onclick="toggleFormularioInvitacion()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Enviar Invitación
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Tabs -->
+        <ul class="nav nav-tabs nav-tabs-modern" id="invitacionesTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pendientes-tab" data-bs-toggle="tab" data-bs-target="#pendientes"
+                    type="button" role="tab">
+                    <i class="fas fa-clock"></i> Pendientes
+                    <span class="badge bg-warning text-dark" id="badgePendientes">0</span>
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="aceptadas-tab" data-bs-toggle="tab" data-bs-target="#aceptadas"
+                    type="button" role="tab">
+                    <i class="fas fa-check-circle"></i> Aceptadas
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rechazadas-tab" data-bs-toggle="tab" data-bs-target="#rechazadas"
+                    type="button" role="tab">
+                    <i class="fas fa-times-circle"></i> Rechazadas
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="invitacionesTabContent">
+
+            <!-- Tab: Pendientes -->
+            <div class="tab-pane fade show active" id="pendientes" role="tabpanel">
+                <div id="listaPendientes">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Aceptadas -->
+            <div class="tab-pane fade" id="aceptadas" role="tabpanel">
+                <div id="listaAceptadas">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Rechazadas -->
+            <div class="tab-pane fade" id="rechazadas" role="tabpanel">
+                <div id="listaRechazadas">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.REPRESENTANTE);
+
+        let invitaciones = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Representante';
+            document.getElementById('usuarioNombreMenu').textContent = usuario.nombreCompleto || 'Representante';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            cargarInvitaciones();
+        });
+
+        // =====================================
+        // TOGGLE FORMULARIO
+        // =====================================
+        function toggleFormularioInvitacion() {
+            const form = document.getElementById('formInvitacionCard');
+            form.classList.toggle('hidden');
+
+            if (!form.classList.contains('hidden')) {
+                document.getElementById('emailInvitado').focus();
+            } else {
+                document.getElementById('formEnviarInvitacion').reset();
+            }
+        }
+
+        // =====================================
+        // CARGAR INVITACIONES
+        // =====================================
+        async function cargarInvitaciones() {
+            try {
+                console.log('📨 Cargando invitaciones...');
+
+                const result = await fetchAPI('/api/representante/invitaciones', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    invitaciones = result.data;
+                    console.log('✅ Invitaciones cargadas:', invitaciones.length);
+                    console.log('📋 Invitaciones:', invitaciones);
+
+                    // Separar por estado (usando descripción del backend)
+                    const pendientes = invitaciones.filter(inv =>
+                        inv.estado === 'PENDIENTE' ||
+                        inv.estado === 'Pendiente' ||
+                        inv.estado?.toUpperCase() === 'PENDIENTE'
+                    );
+
+                    const aceptadas = invitaciones.filter(inv =>
+                        inv.estado === 'ACEPTADA' ||
+                        inv.estado === 'Aceptada' ||
+                        inv.estado?.toUpperCase() === 'ACEPTADA'
+                    );
+
+                    const rechazadas = invitaciones.filter(inv =>
+                        inv.estado === 'RECHAZADA' ||
+                        inv.estado === 'Rechazada' ||
+                        inv.estado?.toUpperCase() === 'RECHAZADA'
+                    );
+
+                    console.log('📊 Pendientes:', pendientes.length, '| Aceptadas:', aceptadas.length, '| Rechazadas:', rechazadas.length);
+
+                    // Actualizar badge
+                    document.getElementById('badgePendientes').textContent = pendientes.length;
+
+                    // Renderizar cada lista
+                    renderizarInvitaciones('pendientes', pendientes);
+                    renderizarInvitaciones('aceptadas', aceptadas);
+                    renderizarInvitaciones('rechazadas', rechazadas);
+
+                } else {
+                    throw new Error(result.message || 'No se pudieron cargar las invitaciones');
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar invitaciones:', error);
+
+                // Mostrar error detallado
+                const errorMsg = error.message || error.toString();
+                console.error('Detalle del error:', errorMsg);
+
+                mostrarError(errorMsg);
+            }
+        }
+
+        // =====================================
+        // RENDERIZAR INVITACIONES
+        // =====================================
+        function renderizarInvitaciones(tipo, lista) {
+            const contenedorId = tipo === 'pendientes' ? 'listaPendientes' :
+                tipo === 'aceptadas' ? 'listaAceptadas' : 'listaRechazadas';
+
+            const contenedor = document.getElementById(contenedorId);
+
+            if (lista.length === 0) {
+                contenedor.innerHTML = obtenerEmptyState(tipo);
+                return;
+            }
+
+            let html = '';
+
+            lista.forEach(invitacion => {
+                // Obtener nombre del email si no existe nombreCompetidor
+                const emailDestinatario = invitacion.emailDestinatario || '';
+                const nombreDestinatario = emailDestinatario.split('@')[0] || 'Usuario';
+                const inicial = nombreDestinatario.charAt(0).toUpperCase();
+                const tiempoRelativo = obtenerTiempoRelativo(invitacion.fechaEnvio);
+                const claseEstado = tipo === 'pendientes' ? 'pendiente' :
+                    tipo === 'aceptadas' ? 'aceptada' : 'rechazada';
+
+                html += `
+          <div class="invitacion-card ${claseEstado}" id="invitacion-${invitacion.idInvitacion}">
+            
+            <div class="invitado-header">
+              <div class="invitado-avatar">
+                ${inicial}
+              </div>
+              <div class="invitado-info">
+                <div class="invitado-nombre">
+                  ${escaparHTML(nombreDestinatario)}
+                </div>
+                <div class="invitado-email">
+                  <i class="fas fa-envelope"></i>
+                  ${escaparHTML(emailDestinatario)}
+                </div>
+              </div>
+              <span class="badge badge-estado-inv bg-${obtenerColorBadge(tipo)}">
+                ${invitacion.estado}
+              </span>
+            </div>
+
+            <div class="invitacion-fecha">
+              <i class="fas fa-calendar-alt"></i>
+              Enviada ${tiempoRelativo}
+              ${invitacion.fechaRespuesta ? `
+                <span class="ms-3">
+                  <i class="fas fa-reply"></i>
+                  Respondida ${formatearFechaCorta(invitacion.fechaRespuesta)}
+                </span>
+              ` : ''}
+            </div>
+
+            ${tipo === 'pendientes' ? `
+              <div class="text-end mt-3">
+                <button class="btn btn-cancelar-inv" onclick="cancelarInvitacion(${invitacion.idInvitacion})">
+                  <i class="fas fa-times"></i> Cancelar Invitación
+                </button>
+              </div>
+            ` : ''}
+            
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // ENVIAR INVITACIÓN
+        // =====================================
+        async function enviarInvitacion(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('emailInvitado').value.trim();
+
+            if (!email) {
+                await mostrarModalAlerta('Advertencia', 'Debes ingresar un email', 'warning');
+                return;
+            }
+
+            const datos = {
+                emailDestinatario: email
+            };
+
+            mostrarLoading();
+
+            try {
+                const result = await fetchAPI('/api/representante/invitaciones', 'POST', datos);
+
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        '¡Invitación Enviada!',
+                        'La invitación ha sido enviada exitosamente. El competidor recibirá una notificación.',
+                        'success'
+                    );
+
+                    // Ocultar formulario
+                    toggleFormularioInvitacion();
+
+                    // Recargar invitaciones
+                    await cargarInvitaciones();
+                } else {
+                    await mostrarModalAlerta(
+                        'Error',
+                        result.message || 'Error al enviar invitación',
+                        'error'
+                    );
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error:', error);
+                await mostrarModalAlerta(
+                    'Error de Conexión',
+                    'No se pudo conectar con el servidor. Por favor, intenta nuevamente.',
+                    'error'
+                );
+            }
+        }
+
+        // =====================================
+        // ✅ CANCELAR INVITACIÓN (CON MODAL)
+        // =====================================
+        async function cancelarInvitacion(idInvitacion) {
+            const invitacion = invitaciones.find(inv => inv.idInvitacion === idInvitacion);
+
+            if (!invitacion) return;
+
+            const emailDestinatario = invitacion.emailDestinatario || 'este usuario';
+
+            // ✅ CAMBIO: Usar mostrarModalAlerta en vez de confirm()
+            const continuar = await mostrarModalConfirmacion(
+                '¿Cancelar Invitación?',
+                `¿Deseas cancelar la invitación enviada a "${emailDestinatario}"?\n\nEsta acción no se puede deshacer.`,
+                'warning'
+            );
+
+            if (!continuar) return;
+
+            const card = document.getElementById(`invitacion-${idInvitacion}`);
+            card.style.opacity = '0.5';
+            card.style.pointerEvents = 'none';
+
+            try {
+                const result = await fetchAPI(`/api/representante/invitaciones/${idInvitacion}/cancelar`, 'PUT');
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        'Invitación Cancelada',
+                        'La invitación ha sido cancelada correctamente.',
+                        'info'
+                    );
+
+                    // Recargar invitaciones
+                    setTimeout(() => {
+                        cargarInvitaciones();
+                    }, 600);
+
+                } else {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    await mostrarModalAlerta(
+                        'Error',
+                        result.message || 'Error al cancelar invitación',
+                        'error'
+                    );
+                }
+            } catch (error) {
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                console.error('Error:', error);
+                await mostrarModalAlerta(
+                    'Error de Conexión',
+                    'No se pudo conectar con el servidor.',
+                    'error'
+                );
+            }
+        }
+
+        // =====================================
+        // ✅ MODAL DE CONFIRMACIÓN
+        // =====================================
+        function mostrarModalConfirmacion(titulo, mensaje, tipo = 'warning') {
+            return new Promise((resolve) => {
+                const config = {
+                    warning: {
+                        icono: 'fa-exclamation-triangle',
+                        color: '#ff9800',
+                        gradient: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)'
+                    },
+                    error: {
+                        icono: 'fa-times-circle',
+                        color: '#f44336',
+                        gradient: 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)'
+                    },
+                    info: {
+                        icono: 'fa-info-circle',
+                        color: '#2196f3',
+                        gradient: 'linear-gradient(135deg, #2196f3 0%, #1976d2 100%)'
+                    }
+                };
+
+                const conf = config[tipo] || config.warning;
+                const modalId = 'modalConfirmacion_' + Date.now();
+
+                const mensajeHTML = mensaje.replace(/\n/g, '<br>');
+
+                const modalHTML = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1" data-bs-backdrop="static">
+                        <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+                            <div class="modal-content" style="border-radius: 16px; border: none;">
+                                <div class="modal-header" style="background: ${conf.gradient}; color: white; border-radius: 16px 16px 0 0; padding: 1.5rem 2rem;">
+                                    <h5 class="modal-title">
+                                        <i class="fas ${conf.icono} me-2"></i>${titulo}
+                                    </h5>
+                                </div>
+                                <div class="modal-body" style="padding: 2rem; font-size: 1rem; line-height: 1.6;">
+                                    ${mensajeHTML}
+                                </div>
+                                <div class="modal-footer" style="border: none; padding: 1rem 2rem;">
+                                    <button type="button" class="btn btn-secondary" data-accion="cancelar" style="padding: 0.6rem 1.5rem;">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </button>
+                                    <button type="button" class="btn btn-danger" data-accion="aceptar" style="padding: 0.6rem 1.5rem; background: ${conf.color}; border-color: ${conf.color};">
+                                        <i class="fas fa-check me-2"></i>Aceptar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                const modalElement = document.getElementById(modalId);
+                const modal = new bootstrap.Modal(modalElement);
+
+                // Manejar botones
+                modalElement.querySelectorAll('[data-accion]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const accion = btn.dataset.accion;
+                        modal.hide();
+                        resolve(accion === 'aceptar');
+                    });
+                });
+
+                // Limpiar modal cuando se cierre
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    modalElement.remove();
+                });
+
+                modal.show();
+            });
+        }
+
+        // =====================================
+        // EMPTY STATES
+        // =====================================
+        function obtenerEmptyState(tipo) {
+            const estados = {
+                pendientes: {
+                    icon: 'fa-inbox',
+                    color: 'text-warning',
+                    titulo: 'No hay invitaciones pendientes',
+                    mensaje: 'Las invitaciones que envíes aparecerán aquí'
+                },
+                aceptadas: {
+                    icon: 'fa-check-circle',
+                    color: 'text-success',
+                    titulo: 'No hay invitaciones aceptadas',
+                    mensaje: 'Cuando un competidor acepte tu invitación, aparecerá aquí'
+                },
+                rechazadas: {
+                    icon: 'fa-times-circle',
+                    color: 'text-danger',
+                    titulo: 'No hay invitaciones rechazadas',
+                    mensaje: 'Las invitaciones rechazadas aparecerán aquí'
+                }
+            };
+
+            const estado = estados[tipo];
+
+            return `
+        <div class="empty-state">
+          <i class="fas ${estado.icon} ${estado.color}"></i>
+          <h4>${estado.titulo}</h4>
+          <p class="text-muted">${estado.mensaje}</p>
+        </div>
+      `;
+        }
+
+        // =====================================
+        // HELPERS
+        // =====================================
+        function obtenerColorBadge(tipo) {
+            const colores = {
+                pendientes: 'warning',
+                aceptadas: 'success',
+                rechazadas: 'danger'
+            };
+            return colores[tipo] || 'secondary';
+        }
+
+        function mostrarError(errorMsg = 'Error al cargar invitaciones. Por favor, recarga la página.') {
+            ['listaPendientes', 'listaAceptadas', 'listaRechazadas'].forEach(id => {
+                document.getElementById(id).innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Error:</strong> ${escaparHTML(errorMsg)}
+            <br><small>Revisa la consola para más detalles.</small>
+          </div>
+        `;
+            });
+        }
+    </script>
+</body>
+
+</html>

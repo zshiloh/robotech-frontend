@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brackets del Torneo - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        .brackets-hero {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(255, 152, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brackets-hero::before {
+            content: "\f542";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .selector-categoria {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ff9800;
+        }
+
+        .selector-categoria label {
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .selector-categoria select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .selector-categoria select:focus {
+            outline: none;
+            border-color: #ff9800;
+            box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
+        }
+
+        .brackets-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .bracket-tree {
+            display: flex;
+            gap: 3rem;
+            padding: 2rem 0;
+            min-width: max-content;
+        }
+
+        .bracket-round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            min-width: 280px;
+        }
+
+        .round-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #ff9800;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-radius: 10px;
+            text-transform: uppercase;
+        }
+
+        .bracket-match {
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bracket-match:hover {
+            border-color: #ff9800;
+            box-shadow: 0 6px 20px rgba(255, 152, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .bracket-match.finalizado {
+            border-color: #4caf50;
+            background: linear-gradient(135deg, #f1f8f4 0%, #e8f5e9 100%);
+        }
+
+        .bracket-match.en-curso {
+            border-color: #2196f3;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .bracket-match.pendiente {
+            border-color: #ffa726;
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        }
+
+        .match-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-bottom-left-radius: 10px;
+        }
+
+        .match-badge.finalizado {
+            background: #4caf50;
+            color: white;
+        }
+
+        .match-badge.en-curso {
+            background: #2196f3;
+            color: white;
+        }
+
+        .match-badge.pendiente {
+            background: #ffa726;
+            color: white;
+        }
+
+        .participant {
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .participant:last-child {
+            border-bottom: none;
+        }
+
+        .participant.ganador {
+            background: linear-gradient(90deg, #fff9e6 0%, transparent 100%);
+            font-weight: 700;
+        }
+
+        .participant.ganador .participant-nombre {
+            color: #ff9800;
+        }
+
+        .participant-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .participant-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .participant.ganador .participant-icon {
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.6);
+            transform: scale(1.1);
+        }
+
+        .participant-details {
+            flex: 1;
+        }
+
+        .participant-nombre {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .participant-club {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .participant-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff9800;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        .vs-connector {
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: 700;
+            color: #9e9e9e;
+            font-size: 0.9rem;
+            background: #f5f5f5;
+        }
+
+        .match-info {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-top: 2px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .match-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+        }
+
+        .match-info-item i {
+            color: #ff9800;
+        }
+
+        .connector-line {
+            position: absolute;
+            width: 30px;
+            height: 2px;
+            background: #bdbdbd;
+            right: -30px;
+            top: 50%;
+            z-index: -1;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state i {
+            font-size: 6rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+            color: #ff9800;
+        }
+
+        .legend-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .legend-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #212529;
+        }
+
+        .legend-items {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .legend-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 3px solid;
+        }
+
+        .legend-box.pendiente {
+            border-color: #ffa726;
+            background: #fff3e0;
+        }
+
+        .legend-box.en-curso {
+            border-color: #2196f3;
+            background: #e3f2fd;
+        }
+
+        .legend-box.finalizado {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(156, 39, 176, 0.4);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="organizador-dashboard.html"><img
+                    src="assets/images/logo.png" alt="ROBOTECH Logo"
+                    onerror="this.style.display='none'" /><span>ROBOTECH</span></a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown"><i class="fas fa-bell fa-lg"></i><span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none">0</span></a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 400px" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown"><i class="fas fa-user-circle"></i>
+                        <span id="usuarioNombre"></span></a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">
+                                email@ejemplo.com
+                            </h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="organizador-dashboard.html"><i
+                                    class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html"><i class="fas fa-user-edit me-2"></i>Mi
+                                Perfil</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                    class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-user-tie"></i> Organizador</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="organizador-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="organizador-torneos.html"><i class="fas fa-trophy"></i> Mis Torneos</a>
+            </li>
+            <li>
+                <a href="organizador-combates.html"><i class="fas fa-fist-raised"></i> Combates</a>
+            </li>
+        </ul>
+    </div>
+    <div class="main-content" style="margin-top: 60px">
+        <div class="container-fluid">
+            <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <button class="btn btn-outline-secondary" onclick="volverDetalle()">
+                    <i class="fas fa-arrow-left"></i> Volver al Detalle</button><button class="btn btn-export"
+                    onclick="exportarBrackets()">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+            </div>
+            <div class="brackets-hero">
+                <h1 class="mb-2">
+                    <i class="fas fa-sitemap"></i> Brackets del Torneo
+                </h1>
+                <p class="mb-0" style="font-size: 1.1rem; opacity: 0.95" id="torneoNombreHero">
+                    Visualización de llaves de eliminación
+                </p>
+            </div>
+            <div class="selector-categoria">
+                <label for="selectCategoria"><i class="fas fa-filter"></i> Selecciona una Categoría:</label><select
+                    id="selectCategoria" class="form-select-custom" onchange="cargarBrackets()">
+                    <option value="">Cargando categorías...</option>
+                </select>
+            </div>
+            <div class="legend-container">
+                <div class="legend-title">
+                    <i class="fas fa-info-circle"></i> Leyenda de Estados
+                </div>
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <div class="legend-box pendiente"></div>
+                        <span>Pendiente</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box en-curso"></div>
+                        <span>En Curso</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-box finalizado"></div>
+                        <span>Finalizado</span>
+                    </div>
+                </div>
+            </div>
+            <div id="bracketsContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-warning" style="width: 3rem; height: 3rem"></div>
+                    <p class="mt-3 text-muted">
+                        Selecciona una categoría para ver los brackets
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+    <script>
+        protectPage(NOMBRES_ROLES.ORGANIZADOR);
+        let torneoId,
+            categorias = [],
+            combatesActuales = [];
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            document.getElementById("usuarioNombre").textContent =
+                usuario.nombreCompleto || "Organizador";
+            document.getElementById("emailUsuarioNav").textContent =
+                usuario.email || "";
+            const params = new URLSearchParams(window.location.search);
+            torneoId = params.get("torneoId");
+            if (!torneoId) {
+                mostrarAlerta("ID de torneo no proporcionado", "error");
+                window.location.href = "organizador-torneos.html";
+                return;
+            }
+            cargarTorneo();
+            cargarCategorias();
+        });
+        async function cargarTorneo() {
+            try {
+                const result = await fetchAPI(
+                    `/api/public/torneos/${torneoId}`,
+                    "GET"
+                );
+                if (result.success && result.data) {
+                    document.getElementById("torneoNombreHero").textContent =
+                        result.data.nombreTorneo || "Torneo";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        async function cargarCategorias() {
+            try {
+                const result = await fetchAPI(
+                    `/api/organizador/torneos/${torneoId}/categorias`,
+                    "GET"
+                );
+                if (result.success && result.data) {
+                    categorias = result.data;
+                    const select = document.getElementById("selectCategoria");
+                    select.innerHTML =
+                        '<option value="">-- Selecciona una categoría --</option>';
+                    categorias.forEach((cat) => {
+                        select.innerHTML += `<option value="${cat.idCategoria
+                            }">${escaparHTML(cat.nombreCategoria || "Categoría")} (${cat.inscritosActuales || 0
+                            } inscritos)</option>`;
+                    });
+                    if (categorias.length === 1) {
+                        select.value = categorias[0].idCategoria;
+                        cargarBrackets();
+                    }
+                } else {
+                    document.getElementById("selectCategoria").innerHTML =
+                        '<option value="">Error al cargar categorías</option>';
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        async function cargarBrackets() {
+            const categoriaId = document.getElementById("selectCategoria").value;
+            if (!categoriaId) {
+                document.getElementById("bracketsContent").innerHTML =
+                    '<div class="empty-state"><i class="fas fa-sitemap"></i><h3>Selecciona una Categoría</h3><p class="text-muted">Elige una categoría para visualizar sus brackets</p></div>';
+                return;
+            }
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(
+                    `/api/organizador/brackets/${categoriaId}`,
+                    "GET"
+                );
+                ocultarLoading();
+                if (result && Array.isArray(result)) {
+                    combatesActuales = result;
+                    renderizarBrackets(result);
+                } else {
+                    document.getElementById("bracketsContent").innerHTML =
+                        '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> Error al cargar brackets</div>';
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error("Error:", error);
+                document.getElementById("bracketsContent").innerHTML =
+                    '<div class="alert alert-danger"><i class="fas fa-times-circle"></i> Error de conexión</div>';
+            }
+        }
+        function renderizarBrackets(combates) {
+            const container = document.getElementById("bracketsContent");
+            if (combates.length === 0) {
+                container.innerHTML =
+                    '<div class="empty-state"><i class="fas fa-info-circle"></i><h3>No hay brackets generados</h3><p class="text-muted">Los brackets se generarán cuando se inicie el torneo</p></div>';
+                return;
+            }
+            const rondas = organizarPorRondas(combates);
+            let html = '<div class="brackets-container"><div class="bracket-tree">';
+            const nombresRondas = { 1: "Cuartos", 2: "Semifinales", 3: "Final" };
+            Object.keys(rondas)
+                .sort((a, b) => b - a)
+                .forEach((ronda) => {
+                    const nombre = nombresRondas[ronda] || `Ronda ${ronda}`;
+                    html += `<div class="bracket-round"><div class="round-title">${nombre}</div>`;
+                    rondas[ronda].forEach((combate) => {
+                        html += renderizarCombate(combate);
+                    });
+                    html += "</div>";
+                });
+            html += "</div></div>";
+            container.innerHTML = html;
+        }
+        function organizarPorRondas(combates) {
+            const rondas = {};
+            combates.forEach((c) => {
+                const ronda = c.ronda || 1;
+                if (!rondas[ronda]) rondas[ronda] = [];
+                rondas[ronda].push(c);
+            });
+            return rondas;
+        }
+        function renderizarCombate(combate) {
+            const estado = combate.estado || "PENDIENTE";
+            const estadoClass = estado.toLowerCase().replace("_", "-");
+            const robot1 = combate.robot1 || {
+                nombreRobot: "TBD",
+                nombreClub: "--",
+            };
+            const robot2 = combate.robot2 || {
+                nombreRobot: "TBD",
+                nombreClub: "--",
+            };
+            const ganadorId = combate.idGanador;
+            const esGanador1 = ganadorId && ganadorId === combate.idRobot1;
+            const esGanador2 = ganadorId && ganadorId === combate.idRobot2;
+            let html = `<div class="bracket-match ${estadoClass}"><div class="match-badge ${estadoClass}">${obtenerTextoEstado(
+                estado
+            )}</div>`;
+            html += `<div class="participant ${esGanador1 ? "ganador" : ""
+                }"><div class="participant-info"><div class="participant-icon">🤖</div><div class="participant-details"><div class="participant-nombre">${escaparHTML(
+                    robot1.nombreRobot || "Robot 1"
+                )}</div><div class="participant-club">${escaparHTML(
+                    robot1.nombreClub || "Club"
+                )}</div></div></div>${combate.puntosRobot1 !== null && combate.puntosRobot1 !== undefined
+                    ? `<div class="participant-score">${combate.puntosRobot1}</div>`
+                    : ""
+                }</div>`;
+            html += `<div class="vs-connector">VS</div>`;
+            html += `<div class="participant ${esGanador2 ? "ganador" : ""
+                }"><div class="participant-info"><div class="participant-icon">🤖</div><div class="participant-details"><div class="participant-nombre">${escaparHTML(
+                    robot2.nombreRobot || "Robot 2"
+                )}</div><div class="participant-club">${escaparHTML(
+                    robot2.nombreClub || "Club"
+                )}</div></div></div>${combate.puntosRobot2 !== null && combate.puntosRobot2 !== undefined
+                    ? `<div class="participant-score">${combate.puntosRobot2}</div>`
+                    : ""
+                }</div>`;
+            if (combate.fechaHora || combate.numeroEnfrentamiento) {
+                html += `<div class="match-info">`;
+                if (combate.numeroEnfrentamiento) {
+                    html += `<div class="match-info-item"><i class="fas fa-hashtag"></i> Combate ${combate.numeroEnfrentamiento}</div>`;
+                }
+                if (combate.fechaHora) {
+                    html += `<div class="match-info-item"><i class="fas fa-clock"></i> ${formatearFechaCompleta(
+                        combate.fechaHora
+                    )}</div>`;
+                }
+                html += `</div>`;
+            }
+            html += "</div>";
+            return html;
+        }
+        function obtenerTextoEstado(estado) {
+            return (
+                {
+                    PENDIENTE: "Pendiente",
+                    EN_CURSO: "En Curso",
+                    FINALIZADO: "Finalizado",
+                }[estado] || estado
+            );
+        }
+        function volverDetalle() {
+            window.location.href = `organizador-torneo-detalle.html?id=${torneoId}`;
+        }
+        function exportarBrackets() {
+            mostrarAlerta("Función de exportación próximamente", "info");
+        }
+    </script>
+</body>
+
+</html>

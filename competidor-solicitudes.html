@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Solicitudes - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para solicitudes */
+        .solicitudes-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solicitudes-hero::before {
+            content: '\f1d8';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.1;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .nav-pills-custom {
+            background: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .nav-pills-custom .nav-link {
+            border-radius: 8px;
+            color: #6c757d;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-pills-custom .nav-link:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-pills-custom .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .solicitud-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #f0f0f0;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .solicitud-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .solicitud-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .solicitud-card.pendiente::before {
+            background: linear-gradient(180deg, #ffc107 0%, #ff9800 100%);
+        }
+
+        .solicitud-card.aceptada::before {
+            background: linear-gradient(180deg, #28a745 0%, #20c997 100%);
+        }
+
+        .solicitud-card.rechazada::before {
+            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .club-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .club-avatar-solicitud {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .club-nombre-solicitud {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+            flex-grow: 1;
+        }
+
+        .badge-estado-solicitud {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .timeline-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 0.75rem;
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+            border-radius: 8px;
+        }
+
+        .timeline-status i {
+            font-size: 1.2rem;
+        }
+
+        .timeline-status.pendiente {
+            background: linear-gradient(90deg, rgba(255, 193, 7, 0.1) 0%, transparent 100%);
+            color: #856404;
+        }
+
+        .timeline-status.aceptada {
+            background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, transparent 100%);
+            color: #155724;
+        }
+
+        .timeline-status.rechazada {
+            background: linear-gradient(90deg, rgba(220, 53, 69, 0.1) 0%, transparent 100%);
+            color: #721c24;
+        }
+
+        .mensaje-solicitud {
+            background: #f8f9fa;
+            border-left: 3px solid #667eea;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-style: italic;
+            color: #495057;
+        }
+
+        .solicitud-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+            flex-wrap: wrap;
+        }
+
+        .solicitud-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-cancelar {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancelar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h4 {
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #adb5bd;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-nueva-solicitud {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-nueva-solicitud:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-box-value {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-box-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .action-canceled {
+            animation: fadeOut 0.6s ease;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="competidor-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <!-- Notificaciones -->
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        style="width: 400px; max-height: 500px; overflow-y: auto;" id="notificacionesDropdownMenu"
+                        aria-labelledby="notificacionesDropdown">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de Usuario -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="competidor-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-robot"></i> Competidor</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="competidor-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="competidor-robot.html"><i class="fas fa-robot"></i> Mi Robot</a></li>
+            <li><a href="competidor-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a></li>
+            <li><a href="competidor-solicitudes.html" class="active"><i class="fas fa-paper-plane"></i> Mis
+                    Solicitudes</a></li>
+            <li><a href="competidor-inscripciones.html"><i class="fas fa-trophy"></i> Inscripciones</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <!-- Hero Section -->
+            <div class="solicitudes-hero">
+                <h1 class="mb-2"><i class="fas fa-paper-plane"></i> Mis Solicitudes</h1>
+                <p class="mb-3">Gestiona las solicitudes que has enviado a diferentes clubes</p>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-box-value" id="statTotal">0</span>
+                        <span class="stat-box-label">Total</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-box-value" id="statPendientes">0</span>
+                        <span class="stat-box-label">Pendientes</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-box-value" id="statAceptadas">0</span>
+                        <span class="stat-box-label">Aceptadas</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-box-value" id="statRechazadas">0</span>
+                        <span class="stat-box-label">Rechazadas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pills Navigation -->
+            <ul class="nav nav-pills nav-pills-custom justify-content-center" id="solicitudesPills" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="todas-pill" data-bs-toggle="pill" data-bs-target="#todas"
+                        type="button" role="tab">
+                        <i class="fas fa-list"></i> Todas
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pendientes-pill" data-bs-toggle="pill" data-bs-target="#pendientes"
+                        type="button" role="tab">
+                        <i class="fas fa-clock"></i> Pendientes
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="aceptadas-pill" data-bs-toggle="pill" data-bs-target="#aceptadas"
+                        type="button" role="tab">
+                        <i class="fas fa-check-circle"></i> Aceptadas
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="rechazadas-pill" data-bs-toggle="pill" data-bs-target="#rechazadas"
+                        type="button" role="tab">
+                        <i class="fas fa-times-circle"></i> Rechazadas
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content" id="solicitudesTabContent">
+
+                <!-- Tab: Todas -->
+                <div class="tab-pane fade show active" id="todas" role="tabpanel">
+                    <div id="listaTodas">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Pendientes -->
+                <div class="tab-pane fade" id="pendientes" role="tabpanel">
+                    <div id="listaPendientes">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-warning" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Aceptadas -->
+                <div class="tab-pane fade" id="aceptadas" role="tabpanel">
+                    <div id="listaAceptadas">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-success" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Rechazadas -->
+                <div class="tab-pane fade" id="rechazadas" role="tabpanel">
+                    <div id="listaRechazadas">
+                        <div class="text-center py-5">
+                            <div class="spinner-border text-danger" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.COMPETIDOR);
+
+        let solicitudes = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Competidor';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            cargarSolicitudes();
+        });
+
+        // =====================================
+        // CARGAR SOLICITUDES
+        // =====================================
+        async function cargarSolicitudes() {
+            try {
+                console.log('📤 Cargando solicitudes...');
+
+                const result = await fetchAPI('/api/competidor/solicitudes', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    solicitudes = result.data;
+                    console.log('✅ Solicitudes cargadas:', solicitudes.length);
+
+                    // Separar por estado
+                    const pendientes = solicitudes.filter(sol => sol.estado === 'PENDIENTE');
+                    const aceptadas = solicitudes.filter(sol => sol.estado === 'ACEPTADA');
+                    const rechazadas = solicitudes.filter(sol => sol.estado === 'RECHAZADA');
+
+                    // Actualizar estadísticas
+                    actualizarEstadisticas(solicitudes.length, pendientes.length, aceptadas.length, rechazadas.length);
+
+                    // Renderizar cada lista
+                    renderizarSolicitudes('todas', solicitudes);
+                    renderizarSolicitudes('pendientes', pendientes);
+                    renderizarSolicitudes('aceptadas', aceptadas);
+                    renderizarSolicitudes('rechazadas', rechazadas);
+
+                } else {
+                    throw new Error('No se pudieron cargar las solicitudes');
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar solicitudes:', error);
+                mostrarError();
+            }
+        }
+
+        // =====================================
+        // ACTUALIZAR ESTADÍSTICAS
+        // =====================================
+        function actualizarEstadisticas(total, pendientes, aceptadas, rechazadas) {
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statPendientes').textContent = pendientes;
+            document.getElementById('statAceptadas').textContent = aceptadas;
+            document.getElementById('statRechazadas').textContent = rechazadas;
+        }
+
+        // =====================================
+        // RENDERIZAR SOLICITUDES
+        // =====================================
+        function renderizarSolicitudes(tipo, lista) {
+            const contenedorId = tipo === 'todas' ? 'listaTodas' :
+                tipo === 'pendientes' ? 'listaPendientes' :
+                    tipo === 'aceptadas' ? 'listaAceptadas' : 'listaRechazadas';
+
+            const contenedor = document.getElementById(contenedorId);
+
+            if (lista.length === 0) {
+                contenedor.innerHTML = obtenerEmptyState(tipo);
+                return;
+            }
+
+            let html = '';
+
+            lista.forEach(solicitud => {
+                const inicial = solicitud.nombreClub.charAt(0).toUpperCase();
+                const tiempoRelativo = obtenerTiempoRelativo(solicitud.fechaSolicitud);
+                const claseEstado = solicitud.estado.toLowerCase();
+
+                html += `
+          <div class="solicitud-card ${claseEstado}" id="solicitud-${solicitud.idSolicitud}">
+            
+            <!-- Header -->
+            <div class="club-header">
+              <div class="club-avatar-solicitud">
+                ${inicial}
+              </div>
+              <div class="club-nombre-solicitud">
+                <i class="fas fa-users text-primary me-2"></i>${escaparHTML(solicitud.nombreClub)}
+              </div>
+              <span class="badge badge-estado-solicitud bg-${obtenerColorEstado(claseEstado)}">
+                ${obtenerTextoEstado(solicitud.estado)}
+              </span>
+            </div>
+
+            <!-- Timeline Status -->
+            <div class="timeline-status ${claseEstado}">
+              <i class="fas fa-${obtenerIconoEstado(claseEstado)}"></i>
+              <span>${obtenerMensajeEstado(solicitud.estado)}</span>
+            </div>
+
+            <!-- Mensaje (si existe) -->
+            ${solicitud.mensajeOpcional ? `
+              <div class="mensaje-solicitud">
+                <i class="fas fa-quote-left me-2"></i>
+                ${escaparHTML(solicitud.mensajeOpcional)}
+              </div>
+            ` : ''}
+
+            <!-- Meta Info -->
+            <div class="solicitud-meta">
+              <div class="solicitud-meta-item">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Enviada ${tiempoRelativo}</span>
+              </div>
+              ${solicitud.fechaRespuesta ? `
+                <div class="solicitud-meta-item">
+                  <i class="fas fa-reply"></i>
+                  <span>Respondida ${formatearFechaCorta(solicitud.fechaRespuesta)}</span>
+                </div>
+              ` : ''}
+            </div>
+
+            <!-- Acciones (solo para pendientes) -->
+            ${solicitud.estado === 'PENDIENTE' ? `
+              <div class="text-end mt-3">
+                <button class="btn btn-cancelar" onclick="cancelarSolicitud(${solicitud.idSolicitud})">
+                  <i class="fas fa-times"></i> Cancelar Solicitud
+                </button>
+              </div>
+            ` : ''}
+            
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // CANCELAR SOLICITUD
+        // =====================================
+        async function cancelarSolicitud(idSolicitud) {
+            const solicitud = solicitudes.find(sol => sol.idSolicitud === idSolicitud);
+
+            if (!solicitud) return;
+
+            const confirmado = confirmar(
+                `¿Deseas cancelar tu solicitud al club "${solicitud.nombreClub}"?\n\n` +
+                `Esta acción no se puede deshacer.`
+            );
+
+            if (!confirmado) return;
+
+            const card = document.getElementById(`solicitud-${idSolicitud}`);
+            card.style.opacity = '0.5';
+            card.style.pointerEvents = 'none';
+
+            try {
+                const result = await fetchAPI(`/api/competidor/solicitudes/${idSolicitud}/cancelar`, 'PUT');
+
+                if (result.success) {
+                    // Animación de salida
+                    card.classList.add('action-canceled');
+
+                    mostrarAlerta('Solicitud cancelada correctamente', 'info');
+
+                    // Recargar solicitudes después de 600ms
+                    setTimeout(() => {
+                        cargarSolicitudes();
+                    }, 600);
+
+                } else {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    mostrarAlerta(result.data?.message || 'Error al cancelar solicitud', 'error');
+                }
+            } catch (error) {
+                card.style.opacity = '1';
+                card.style.pointerEvents = 'auto';
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al cancelar solicitud', 'error');
+            }
+        }
+
+        // =====================================
+        // EMPTY STATES
+        // =====================================
+        function obtenerEmptyState(tipo) {
+            const estados = {
+                todas: {
+                    icon: 'fa-paper-plane',
+                    color: 'text-primary',
+                    titulo: 'No has enviado ninguna solicitud',
+                    mensaje: 'Cuando envíes una solicitud a un club, aparecerá aquí',
+                    boton: true
+                },
+                pendientes: {
+                    icon: 'fa-clock',
+                    color: 'text-warning',
+                    titulo: 'No tienes solicitudes pendientes',
+                    mensaje: 'Las solicitudes que envíes y estén en espera aparecerán aquí',
+                    boton: false
+                },
+                aceptadas: {
+                    icon: 'fa-check-circle',
+                    color: 'text-success',
+                    titulo: 'No tienes solicitudes aceptadas',
+                    mensaje: 'Las solicitudes que sean aceptadas aparecerán aquí',
+                    boton: false
+                },
+                rechazadas: {
+                    icon: 'fa-times-circle',
+                    color: 'text-danger',
+                    titulo: 'No tienes solicitudes rechazadas',
+                    mensaje: 'Las solicitudes que sean rechazadas aparecerán aquí',
+                    boton: false
+                }
+            };
+
+            const estado = estados[tipo];
+
+            return `
+        <div class="empty-state">
+          <i class="fas ${estado.icon} empty-state-icon ${estado.color}"></i>
+          <h4>${estado.titulo}</h4>
+          <p>${estado.mensaje}</p>
+          ${estado.boton ? `
+            <button class="btn btn-nueva-solicitud" onclick="alert('Próximamente: Buscar clubes y enviar solicitudes')">
+              <i class="fas fa-plus"></i> Buscar Clubes
+            </button>
+          ` : ''}
+        </div>
+      `;
+        }
+
+        // =====================================
+        // HELPERS
+        // =====================================
+        function obtenerColorEstado(estado) {
+            const colores = {
+                pendiente: 'warning',
+                aceptada: 'success',
+                rechazada: 'danger'
+            };
+            return colores[estado] || 'secondary';
+        }
+
+        function obtenerTextoEstado(estado) {
+            const textos = {
+                PENDIENTE: 'Pendiente',
+                ACEPTADA: 'Aceptada',
+                RECHAZADA: 'Rechazada'
+            };
+            return textos[estado] || estado;
+        }
+
+        function obtenerIconoEstado(estado) {
+            const iconos = {
+                pendiente: 'clock',
+                aceptada: 'check-circle',
+                rechazada: 'times-circle'
+            };
+            return iconos[estado] || 'question-circle';
+        }
+
+        function obtenerMensajeEstado(estado) {
+            const mensajes = {
+                PENDIENTE: 'En espera de respuesta del club',
+                ACEPTADA: '¡Felicidades! Tu solicitud fue aceptada',
+                RECHAZADA: 'Tu solicitud fue rechazada por el club'
+            };
+            return mensajes[estado] || 'Estado desconocido';
+        }
+
+        function mostrarError() {
+            ['listaTodas', 'listaPendientes', 'listaAceptadas', 'listaRechazadas'].forEach(id => {
+                document.getElementById(id).innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i>
+            Error al cargar solicitudes. Por favor, recarga la página.
+          </div>
+        `;
+            });
+        }
+    </script>
+</body>
+
+</html>

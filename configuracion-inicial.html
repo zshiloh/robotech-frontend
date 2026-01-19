@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración Inicial - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #667eea;
+            --warning-color: #ffc107;
+            --success-color: #48bb78;
+            --danger-color: #f56565;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 650px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .logo-icon i {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .brand-name {
+            font-size: 2rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        /* Alert */
+        .alert-warning-custom {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 4px solid var(--warning-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .alert-warning-custom i {
+            font-size: 1.5rem;
+            color: var(--warning-color);
+        }
+
+        /* Section Headers */
+        .section-header {
+            background: #f8f9fa;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .section-header i {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+
+        /* Form */
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-control:disabled {
+            background: #f8f9fa;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .strength-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: #e2e8f0;
+            margin-top: 0.5rem;
+        }
+
+        .strength-fill {
+            height: 100%;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .strength-weak {
+            background: var(--danger-color);
+            width: 33%;
+        }
+
+        .strength-medium {
+            background: var(--warning-color);
+            width: 66%;
+        }
+
+        .strength-strong {
+            background: var(--success-color);
+            width: 100%;
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .password-requirements li {
+            margin-bottom: 0.5rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .password-requirements li.valid {
+            color: var(--success-color);
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 0.875rem 2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h1 class="brand-name">ROBOTECH</h1>
+                <h2 class="page-title">Configuración Inicial</h2>
+            </div>
+
+            <div class="alert-warning-custom">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Configuración obligatoria</strong>
+                    <p class="mb-0">Por seguridad y para personalizar tu cuenta, completa la siguiente información.</p>
+                </div>
+            </div>
+
+            <form id="formConfiguracion">
+                <!-- SECCIÓN 1: CONTRASEÑA -->
+                <div class="section-header">
+                    <i class="fas fa-lock"></i>
+                    <span>1. Nueva Contraseña</span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-key"></i>
+                        Nueva Contraseña *
+                    </label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="passwordNueva" required
+                            placeholder="Mínimo 8 caracteres">
+                        <button class="btn btn-outline-secondary" type="button"
+                            onclick="togglePassword('passwordNueva', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="strength-bar">
+                        <div class="strength-fill" id="strengthBar"></div>
+                    </div>
+                    <div class="password-strength">
+                        <span id="strengthText">Seguridad: </span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-check-double"></i>
+                        Confirmar Contraseña *
+                    </label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="confirmarPassword" required
+                            placeholder="Repite tu contraseña">
+                        <button class="btn btn-outline-secondary" type="button"
+                            onclick="togglePassword('confirmarPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="password-requirements">
+                    <strong>La contraseña debe cumplir:</strong>
+                    <ul>
+                        <li id="req-length"><i class="fas fa-circle"></i> Al menos 8 caracteres</li>
+                        <li id="req-uppercase"><i class="fas fa-circle"></i> Una letra mayúscula</li>
+                        <li id="req-lowercase"><i class="fas fa-circle"></i> Una letra minúscula</li>
+                        <li id="req-number"><i class="fas fa-circle"></i> Un número</li>
+                        <li id="req-special"><i class="fas fa-circle"></i> Un carácter especial (!@#$%^&*)</li>
+                    </ul>
+                </div>
+
+                <!-- SECCIÓN 2: PERFIL -->
+                <div class="section-header">
+                    <i class="fas fa-user-circle"></i>
+                    <span>2. Información Personal</span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-envelope"></i>
+                        Email (no editable)
+                    </label>
+                    <input type="email" class="form-control" id="email" disabled>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Nombre Completo (opcional)
+                    </label>
+                    <input type="text" class="form-control" id="nombreCompleto" placeholder="Tu nombre completo">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Si no lo llenas, aparecerás como "Usuario Nuevo". Este nombre aparecerá en tu perfil público.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-phone"></i>
+                        Teléfono *
+                    </label>
+                    <input type="tel" class="form-control" id="telefono" required placeholder="+51 999 999 999">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Obligatorio y único. Solo para contacto, no se usará para notificaciones.
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Apodo Personal (opcional)
+                    </label>
+                    <input type="text" class="form-control" id="apodoPersonal" placeholder="Tu apodo en el sistema">
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Será único y visible para otros usuarios.
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary-custom mt-3" id="btnGuardar">
+                    <i class="fas fa-check me-2"></i>Guardar y Continuar
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script>
+        // Fallback si constants.js no carga
+        if (typeof API_URL === 'undefined') {
+            const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? 'http://localhost:8080/api'
+                : 'https://tu-dominio.com/api';  // Cambiar cuando subas a producción
+        }
+
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Cargar email
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+            document.getElementById('email').value = usuario.email || '';
+        });
+
+        // Validar fortaleza
+        document.getElementById('passwordNueva').addEventListener('input', function () {
+            const password = this.value;
+            const strengthBar = document.getElementById('strengthBar');
+            const strengthText = document.getElementById('strengthText');
+
+            const hasLength = password.length >= 8;
+            const hasUppercase = /[A-Z]/.test(password);
+            const hasLowercase = /[a-z]/.test(password);
+            const hasNumber = /[0-9]/.test(password);
+            const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+            document.getElementById('req-length').classList.toggle('valid', hasLength);
+            document.getElementById('req-uppercase').classList.toggle('valid', hasUppercase);
+            document.getElementById('req-lowercase').classList.toggle('valid', hasLowercase);
+            document.getElementById('req-number').classList.toggle('valid', hasNumber);
+            document.getElementById('req-special').classList.toggle('valid', hasSpecial);
+
+            const validCount = [hasLength, hasUppercase, hasLowercase, hasNumber, hasSpecial].filter(Boolean).length;
+
+            strengthBar.className = 'strength-fill';
+            if (validCount <= 2) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.innerHTML = 'Seguridad: <strong style="color: #f56565;">Débil</strong>';
+            } else if (validCount <= 4) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.innerHTML = 'Seguridad: <strong style="color: #ffc107;">Media</strong>';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                strengthText.innerHTML = 'Seguridad: <strong style="color: #48bb78;">Fuerte</strong>';
+            }
+        });
+
+        document.getElementById('formConfiguracion').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const passwordNueva = document.getElementById('passwordNueva').value;
+            const confirmarPassword = document.getElementById('confirmarPassword').value;
+            const nombreCompleto = document.getElementById('nombreCompleto').value.trim();
+            let telefono = document.getElementById('telefono').value.trim();
+            const apodoPersonal = document.getElementById('apodoPersonal').value.trim();
+
+            // Limpiar espacios y guiones del teléfono
+            telefono = telefono.replace(/[\s-]/g, '');  // Quitar espacios y guiones
+
+            // Validar teléfono (OBLIGATORIO)
+            if (!telefono) {
+                alert('El teléfono es obligatorio para contacto.\n\nNo se usará para notificaciones.');
+                document.getElementById('telefono').focus();
+                return;
+            }
+
+            // Validar contraseñas
+            if (passwordNueva !== confirmarPassword) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+
+            if (passwordNueva.length < 8 ||
+                !/[A-Z]/.test(passwordNueva) ||
+                !/[a-z]/.test(passwordNueva) ||
+                !/[0-9]/.test(passwordNueva) ||
+                !/[!@#$%^&*(),.?":{}|<>]/.test(passwordNueva)) {
+                alert('La contraseña no cumple con todos los requisitos de seguridad');
+                return;
+            }
+
+            const btnGuardar = document.getElementById('btnGuardar');
+            btnGuardar.disabled = true;
+            btnGuardar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Guardando...';
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/usuario/configuracion-inicial`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        passwordNueva,
+                        confirmarPassword,
+                        nombreCompleto: nombreCompleto || null,  // Enviar null si está vacío
+                        telefono,  // Ya limpio sin espacios
+                        apodoPersonal: apodoPersonal || null
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Actualizar localStorage
+                    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+                    usuario.nombreCompleto = nombreCompleto || 'Usuario Nuevo';
+                    usuario.telefono = telefono;
+                    usuario.apodoPersonal = apodoPersonal;
+                    localStorage.setItem('usuario', JSON.stringify(usuario));
+
+                    alert('¡Configuración completada! Redirigiendo...');
+
+                    setTimeout(() => {
+                        const roles = JSON.parse(localStorage.getItem('roles') || '[]');
+                        if (roles.includes('Administrador')) {
+                            window.location.href = 'admin-dashboard.html';
+                        } else if (roles.includes('Organizador')) {
+                            window.location.href = 'organizador-dashboard.html';
+                        } else if (roles.includes('Jurado')) {
+                            window.location.href = 'jurado-dashboard.html';
+                        } else if (roles.includes('Representante')) {
+                            window.location.href = 'representante-dashboard.html';
+                        } else if (roles.includes('Competidor')) {
+                            window.location.href = 'competidor-dashboard.html';
+                        } else {
+                            window.location.href = 'usuario-dashboard.html';
+                        }
+                    }, 1500);
+                } else {
+                    alert(result.message || 'Error al guardar configuración');
+                    btnGuardar.disabled = false;
+                    btnGuardar.innerHTML = '<i class="fas fa-check me-2"></i>Guardar y Continuar';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de conexión con el servidor');
+                btnGuardar.disabled = false;
+                btnGuardar.innerHTML = '<i class="fas fa-check me-2"></i>Guardar y Continuar';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Club - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+        .editar-hero {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(25, 118, 210, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .editar-hero::before {
+            content: "\f044";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #212529;
+            margin: 0;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .form-label-custom {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label-custom i {
+            color: #1976d2;
+            font-size: 1rem;
+        }
+
+        .form-control-custom {
+            padding: 0.875rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control-custom:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-control-custom.is-invalid {
+            border-color: #dc3545;
+            background-image: none;
+        }
+
+        .form-control-custom.is-valid {
+            border-color: #28a745;
+            background-image: none;
+        }
+
+        .textarea-custom {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .input-hint {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+        }
+
+        .input-hint i {
+            margin-top: 0.15rem;
+            flex-shrink: 0;
+        }
+
+        .char-counter {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            text-align: right;
+        }
+
+        .char-counter.warning {
+            color: #ff9800;
+        }
+
+        .char-counter.danger {
+            color: #f44336;
+        }
+
+        .logo-preview-container {
+            margin-top: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #dee2e6;
+            text-align: center;
+        }
+
+        .logo-preview {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-placeholder {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: #757575;
+            font-size: 3rem;
+        }
+
+        .logo-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .btn-cambiar-logo {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cambiar-logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+            color: white;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 5px solid #2196f3;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card-title {
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-card-title i {
+            font-size: 1.1rem;
+        }
+
+        .info-card-content {
+            color: #495057;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-card-content ul {
+            margin-bottom: 0;
+            padding-left: 1.5rem;
+        }
+
+        .info-card-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-mini {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-mini-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+
+        .stat-mini-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-mini-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1976d2;
+        }
+
+        .acciones-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 2rem;
+            border-top: 2px solid #f0f0f0;
+            flex-wrap: wrap;
+        }
+
+        .btn-accion-footer {
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-guardar {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(76, 175, 80, 0.5);
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: #e0e0e0;
+            color: #495057;
+        }
+
+        .btn-cancelar:hover {
+            background: #d0d0d0;
+            color: #212529;
+        }
+
+        .validation-feedback {
+            display: none;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .validation-feedback.invalid {
+            display: block;
+            color: #dc3545;
+        }
+
+        .validation-feedback.valid {
+            display: block;
+            color: #28a745;
+        }
+
+        .alert-cambios {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            border-radius: 10px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .alert-cambios.show {
+            display: block;
+        }
+
+        .alert-cambios-title {
+            font-weight: 700;
+            color: #e65100;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading-spinner .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="representante-dashboard.html"><img
+                    src="assets/images/logo.png" alt="ROBOTECH Logo"
+                    onerror="this.style.display='none'" /><span>ROBOTECH</span></a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown"><i class="fas fa-bell fa-lg"></i><span
+                            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none">0</span></a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 400px" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown"><i class="fas fa-user-circle"></i>
+                        <span id="usuarioNombre"></span></a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">
+                                email@ejemplo.com
+                            </h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="representante-dashboard.html"><i
+                                    class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html"><i class="fas fa-user-edit me-2"></i>Mi
+                                Perfil</a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                    class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-user-tie"></i> Representante</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="representante-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="representante-clubes.html"><i class="fas fa-shield-alt"></i> Mi Club</a>
+            </li>
+            <li>
+                <a href="representante-miembros.html"><i class="fas fa-users"></i> Miembros</a>
+            </li>
+            <li>
+                <a href="representante-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a>
+            </li>
+            <li>
+                <a href="representante-solicitudes.html"><i class="fas fa-user-plus"></i> Solicitudes</a>
+            </li>
+            <li>
+                <a href="representante-inscripciones.html"><i class="fas fa-clipboard-list"></i> Inscripciones</a>
+            </li>
+            <li>
+                <a href="representante-inscripciones-pendientes.html"><i class="fas fa-clock"></i> Pendientes</a>
+            </li>
+        </ul>
+    </div>
+    <div class="main-content" style="margin-top: 60px">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <button class="btn btn-outline-secondary" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </button>
+            </div>
+            <div class="editar-hero">
+                <h1 class="mb-2">
+                    <i class="fas fa-edit"></i> Editar Información del Club
+                </h1>
+                <p class="mb-0" style="font-size: 1.1rem; opacity: 0.95">
+                    Actualiza los datos de tu club
+                </p>
+            </div>
+            <div class="alert-cambios" id="alertCambios">
+                <div class="alert-cambios-title">
+                    <i class="fas fa-exclamation-triangle"></i> Tienes cambios sin
+                    guardar
+                </div>
+                No olvides guardar los cambios antes de salir
+            </div>
+            <div class="form-container">
+                <form id="formEditarClub" onsubmit="return false;">
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div>
+                                <div class="section-title">Información Básica</div>
+                                <div class="section-subtitle">Datos generales de tu club</div>
+                            </div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-title">
+                                <i class="fas fa-info-circle"></i> Sobre el nombre del club
+                            </div>
+                            <div class="info-card-content">
+                                El nombre del club <strong>no se puede modificar</strong> una
+                                vez creado. Si necesitas cambiarlo, contacta con un
+                                administrador.
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label-custom"><i class="fas fa-tag"></i> Nombre del Club</label><input
+                                type="text" class="form-control-custom" id="nombreClub" disabled />
+                            <div class="input-hint">
+                                <i class="fas fa-lock"></i> El nombre no se puede editar
+                            </div>
+                        </div>
+                        <div class="stats-mini">
+                            <div class="stat-mini-item">
+                                <div class="stat-mini-label">Fecha Creación</div>
+                                <div class="stat-mini-value" id="fechaCreacion" style="font-size: 1rem">
+                                    -
+                                </div>
+                            </div>
+                            <div class="stat-mini-item">
+                                <div class="stat-mini-label">Miembros</div>
+                                <div class="stat-mini-value" id="totalMiembros">0</div>
+                            </div>
+                            <div class="stat-mini-item">
+                                <div class="stat-mini-label">Estado</div>
+                                <div class="stat-mini-value" id="estadoClub" style="font-size: 1rem">
+                                    -
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-align-left"></i>
+                            </div>
+                            <div>
+                                <div class="section-title">Descripción</div>
+                                <div class="section-subtitle">
+                                    Cuéntale al mundo sobre tu club
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-custom"><i class="fas fa-file-alt"></i> Descripción del Club
+                                (Opcional)</label><textarea class="form-control-custom textarea-custom" id="descripcion"
+                                maxlength="500" oninput="actualizarContador()"
+                                placeholder="Describe tu club, sus objetivos, logros destacados..."></textarea>
+                            <div class="char-counter" id="charCounter">
+                                0 / 500 caracteres
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-lightbulb"></i> Una buena descripción ayuda a
+                                los competidores a conocer mejor tu club
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon"><i class="fas fa-image"></i></div>
+                            <div>
+                                <div class="section-title">Logo del Club</div>
+                                <div class="section-subtitle">
+                                    Imagen representativa (opcional)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label-custom"><i class="fas fa-link"></i> URL del Logo</label><input
+                                type="url" class="form-control-custom" id="logoUrl"
+                                placeholder="https://ejemplo.com/logo.png" oninput="validarLogo()" />
+                            <div class="validation-feedback invalid" id="logoError">
+                                URL no válida
+                            </div>
+                            <div class="validation-feedback valid" id="logoSuccess">
+                                URL válida
+                            </div>
+                            <div class="input-hint">
+                                <i class="fas fa-info-circle"></i> Formatos: JPG, PNG, SVG.
+                                Tamaño recomendado: 200x200px
+                            </div>
+                        </div>
+                        <div class="logo-preview-container">
+                            <div id="logoPreview">
+                                <div class="logo-placeholder">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                <div class="logo-info">Vista previa del logo</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="acciones-footer">
+                        <button type="button" class="btn-accion-footer btn-cancelar" onclick="cancelarEdicion()">
+                            <i class="fas fa-times"></i> Cancelar</button><button type="button"
+                            class="btn-accion-footer btn-guardar" onclick="guardarCambios()">
+                            <i class="fas fa-save"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-3 mb-0">Guardando cambios...</p>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+    <script>
+        protectPage(NOMBRES_ROLES.REPRESENTANTE);
+        let clubOriginal = {},
+            cambiosDetectados = false,
+            clubId;
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            document.getElementById("usuarioNombre").textContent =
+                usuario.nombreCompleto || "Representante";
+            document.getElementById("emailUsuarioNav").textContent =
+                usuario.email || "";
+            cargarDatosClub();
+            detectarCambios();
+        });
+        async function cargarDatosClub() {
+            try {
+                const result = await fetchAPI("/api/representante/mi-club", "GET");
+                if (result.success && result.data) {
+                    clubOriginal = result.data;
+                    clubId = result.data.idClub;
+                    llenarFormulario(result.data);
+                } else {
+                    mostrarAlerta("Error al cargar datos del club", "error");
+                    setTimeout(() => {
+                        window.location.href = "representante-dashboard.html";
+                    }, 2000);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                mostrarAlerta("Error de conexión", "error");
+            }
+        }
+        function llenarFormulario(club) {
+            document.getElementById("nombreClub").value = club.nombreClub || "";
+            document.getElementById("descripcion").value = club.descripcion || "";
+            document.getElementById("logoUrl").value = club.logoUrl || "";
+            document.getElementById("fechaCreacion").textContent =
+                club.fechaCreacion ? formatearFechaCorta(club.fechaCreacion) : "-";
+            document.getElementById("totalMiembros").textContent =
+                club.totalMiembros || 0;
+            document.getElementById("estadoClub").textContent = obtenerTextoEstado(
+                club.estado
+            );
+            actualizarContador();
+            if (club.logoUrl) mostrarPreviewLogo(club.logoUrl);
+        }
+        function obtenerTextoEstado(estado) {
+            const estados = {
+                VALIDADO: "Validado",
+                PENDIENTE: "Pendiente",
+                RECHAZADO: "Rechazado",
+                INACTIVO: "Inactivo",
+            };
+            return estados[estado] || estado;
+        }
+        function detectarCambios() {
+            const inputs = document.querySelectorAll(
+                "#formEditarClub input:not([disabled]), #formEditarClub textarea"
+            );
+            inputs.forEach((input) => {
+                input.addEventListener("input", () => {
+                    cambiosDetectados = true;
+                    document.getElementById("alertCambios").classList.add("show");
+                });
+            });
+        }
+        function actualizarContador() {
+            const textarea = document.getElementById("descripcion");
+            const counter = document.getElementById("charCounter");
+            const length = textarea.value.length;
+            const max = 500;
+            counter.textContent = `${length} / ${max} caracteres`;
+            if (length > max * 0.9) {
+                counter.classList.add("warning");
+            } else {
+                counter.classList.remove("warning");
+            }
+            if (length >= max) {
+                counter.classList.add("danger");
+            } else {
+                counter.classList.remove("danger");
+            }
+        }
+        function validarLogo() {
+            const input = document.getElementById("logoUrl");
+            const url = input.value.trim();
+            const errorDiv = document.getElementById("logoError");
+            const successDiv = document.getElementById("logoSuccess");
+            if (url === "") {
+                input.classList.remove("is-invalid", "is-valid");
+                errorDiv.style.display = "none";
+                successDiv.style.display = "none";
+                document.getElementById("logoPreview").innerHTML =
+                    '<div class="logo-placeholder"><i class="fas fa-image"></i></div><div class="logo-info">Vista previa del logo</div>';
+                return;
+            }
+            try {
+                new URL(url);
+                const validExtensions = [".jpg", ".jpeg", ".png", ".svg", ".webp"];
+                const hasValidExt = validExtensions.some((ext) =>
+                    url.toLowerCase().endsWith(ext)
+                );
+                if (
+                    hasValidExt ||
+                    url.includes("imgur") ||
+                    url.includes("cloudinary")
+                ) {
+                    input.classList.remove("is-invalid");
+                    input.classList.add("is-valid");
+                    errorDiv.style.display = "none";
+                    successDiv.style.display = "block";
+                    mostrarPreviewLogo(url);
+                } else {
+                    input.classList.remove("is-valid");
+                    input.classList.add("is-invalid");
+                    errorDiv.textContent = "URL debe ser una imagen (jpg, png, svg)";
+                    errorDiv.style.display = "block";
+                    successDiv.style.display = "none";
+                }
+            } catch (e) {
+                input.classList.remove("is-valid");
+                input.classList.add("is-invalid");
+                errorDiv.textContent = "URL no válida";
+                errorDiv.style.display = "block";
+                successDiv.style.display = "none";
+            }
+        }
+        function mostrarPreviewLogo(url) {
+            const preview = document.getElementById("logoPreview");
+            preview.innerHTML = `<img src="${escaparHTML(
+                url
+            )}" alt="Logo" class="logo-preview" onerror="this.style.display='none';this.nextElementSibling.style.display='block';"><div class="logo-info" style="display:none;">Error al cargar la imagen</div><div class="logo-info mt-2">Logo actual del club</div>`;
+        }
+        function cancelarEdicion() {
+            if (cambiosDetectados) {
+                if (!confirmar("¿Descartar los cambios realizados?")) return;
+            }
+            window.history.back();
+        }
+        async function guardarCambios() {
+            const descripcion = document.getElementById("descripcion").value.trim();
+            const logoUrl = document.getElementById("logoUrl").value.trim();
+            if (descripcion.length > 500) {
+                mostrarAlerta(
+                    "La descripción no puede exceder 500 caracteres",
+                    "warning"
+                );
+                return;
+            }
+            const logoInput = document.getElementById("logoUrl");
+            if (logoUrl && logoInput.classList.contains("is-invalid")) {
+                mostrarAlerta("La URL del logo no es válida", "warning");
+                return;
+            }
+            if (!cambiosDetectados) {
+                mostrarAlerta("No hay cambios para guardar", "info");
+                return;
+            }
+            if (!confirmar("¿Guardar los cambios realizados?")) return;
+            document.getElementById("loadingOverlay").classList.add("show");
+            try {
+                const formData = new URLSearchParams();
+                if (descripcion) formData.append("descripcion", descripcion);
+                if (logoUrl) formData.append("logoUrl", logoUrl);
+                const result = await fetchAPI(
+                    `/api/representante/clubes/${clubId}/editar?${formData.toString()}`,
+                    "PUT"
+                );
+                document.getElementById("loadingOverlay").classList.remove("show");
+                if (result.success) {
+                    mostrarAlerta("¡Cambios guardados exitosamente!", "success");
+                    cambiosDetectados = false;
+                    document.getElementById("alertCambios").classList.remove("show");
+                    setTimeout(() => {
+                        window.location.href = "representante-clubes.html";
+                    }, 1500);
+                } else {
+                    mostrarAlerta(
+                        result.data?.message || "Error al guardar cambios",
+                        "error"
+                    );
+                }
+            } catch (error) {
+                document.getElementById("loadingOverlay").classList.remove("show");
+                console.error("Error:", error);
+                mostrarAlerta("Error de conexión", "error");
+            }
+        }
+        window.addEventListener("beforeunload", function (e) {
+            if (cambiosDetectados) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        });
+    </script>
+</body>
+
+</html>

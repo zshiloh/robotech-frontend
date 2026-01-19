@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrar Club - ROBOTECH</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ============================================
+       ESTILOS GLOBALES Y VARIABLES
+    ============================================ */
+    :root {
+      --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --primary-color: #667eea;
+      --secondary-color: #764ba2;
+      --success-color: #48bb78;
+      --danger-color: #f56565;
+      --warning-color: #ed8936;
+      --info-color: #4299e1;
+      --dark-color: #2d3748;
+      --light-gray: #718096;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--primary-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+      line-height: 1.6;
+      color: #2d3748;
+    }
+
+    /* ============================================
+       CONTENEDOR PRINCIPAL
+    ============================================ */
+    .register-container {
+      max-width: 580px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .register-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 3rem;
+      animation: slideUp 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .register-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--primary-gradient);
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ============================================
+       SECCIÓN DEL LOGO
+    ============================================ */
+    .logo-section {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .logo-icon {
+      width: 90px;
+      height: 90px;
+      background: var(--primary-gradient);
+      border-radius: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      animation: float 3s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      background: var(--primary-gradient);
+      border-radius: 24px;
+      opacity: 0.3;
+      filter: blur(10px);
+      z-index: -1;
+    }
+
+    .logo-icon i {
+      font-size: 2.8rem;
+      color: white;
+    }
+
+    .brand-name {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+
+    .page-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: var(--light-gray);
+      margin-bottom: 0;
+      font-size: 1.05rem;
+    }
+
+    /* ============================================
+       TÍTULOS DE SECCIÓN
+    ============================================ */
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 3px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+
+    .section-title i {
+      color: var(--primary-color);
+      font-size: 1.3rem;
+    }
+
+    /* ============================================
+       CAMPOS DE FORMULARIO
+    ============================================ */
+    .form-label {
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .form-control,
+    .form-select {
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.85rem 1.15rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 0.95rem;
+      background-color: #f8f9fa;
+    }
+
+    .form-control:hover,
+    .form-select:hover {
+      border-color: #cbd5e0;
+      background-color: white;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+      background-color: white;
+      outline: none;
+    }
+
+    .form-control::placeholder {
+      color: #a0aec0;
+    }
+
+    /* IMPORTANTE: Solo mostrar validación después de submit o blur */
+    .form-control.is-invalid,
+    .form-control.is-valid {
+      padding-right: calc(1.5em + 0.85rem);
+      background-repeat: no-repeat;
+      background-position: right calc(0.375em + 0.2125rem) center;
+      background-size: calc(0.75em + 0.425rem) calc(0.75em + 0.425rem);
+    }
+
+    .form-control.is-invalid {
+      border-color: var(--danger-color);
+      background-color: #fff5f5;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23f56565'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23f56565' stroke='none'/%3e%3c/svg%3e");
+    }
+
+    .form-control.is-invalid:focus {
+      box-shadow: 0 0 0 4px rgba(245, 101, 101, 0.1);
+    }
+
+    .form-control.is-valid {
+      border-color: var(--success-color);
+      background-color: #f0fff4;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2348bb78' d='M2.3 6.73.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+    }
+
+    .form-control.is-valid:focus {
+      box-shadow: 0 0 0 4px rgba(72, 187, 120, 0.1);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-text {
+      color: var(--light-gray);
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .form-text i {
+      font-size: 0.9rem;
+    }
+
+    .invalid-feedback,
+    .valid-feedback {
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+      display: none;
+      /* Oculto por defecto */
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    /* Solo mostrar cuando el campo tenga la clase correspondiente */
+    .form-control.is-invalid~.invalid-feedback {
+      display: flex;
+      color: var(--danger-color);
+    }
+
+    .form-control.is-valid~.valid-feedback {
+      display: flex;
+      color: var(--success-color);
+    }
+
+    /* ============================================
+       INDICADOR DE FUERZA DE CONTRASEÑA
+    ============================================ */
+    .password-strength {
+      height: 5px;
+      background: var(--border-color);
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0%;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .password-strength-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .password-strength-bar.weak {
+      width: 33%;
+      background: linear-gradient(90deg, #f56565, #fc8181);
+    }
+
+    .password-strength-bar.medium {
+      width: 66%;
+      background: linear-gradient(90deg, #ed8936, #f6ad55);
+    }
+
+    .password-strength-bar.strong {
+      width: 100%;
+      background: linear-gradient(90deg, #48bb78, #68d391);
+    }
+
+    /* ============================================
+       CONTADOR DE CARACTERES
+    ============================================ */
+    .char-counter {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--light-gray);
+      margin-top: 0.35rem;
+      font-weight: 500;
+    }
+
+    /* ============================================
+       BOTONES
+    ============================================ */
+    .btn-primary-custom {
+      background: var(--primary-gradient);
+      border: none;
+      padding: 1rem 2rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      color: white;
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-primary-custom:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary-custom:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-primary-custom:active:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary-custom:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ============================================
+       ALERT PERSONALIZADA
+    ============================================ */
+    .alert-custom {
+      border-radius: 12px;
+      border: none;
+      padding: 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(102, 126, 234, 0.08);
+      color: #4c51bf;
+      border-left: 4px solid var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-custom i {
+      font-size: 1.4rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .alert-custom strong {
+      color: var(--primary-color);
+    }
+
+    /* ============================================
+       DIVISOR
+    ============================================ */
+    .divider {
+      margin: 2.5rem 0;
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+    }
+
+    /* ============================================
+       FOOTER LINKS
+    ============================================ */
+    .footer-links {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 2px solid var(--border-color);
+    }
+
+    .footer-links p {
+      margin-bottom: 0.75rem;
+      color: var(--light-gray);
+    }
+
+    .footer-links a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary-gradient);
+      transition: width 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--secondary-color);
+    }
+
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--light-gray);
+      text-decoration: none;
+      transition: all 0.3s;
+      margin-top: 1.25rem;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      color: var(--primary-color);
+      gap: 0.75rem;
+    }
+
+    .back-link i {
+      transition: transform 0.3s;
+    }
+
+    .back-link:hover i {
+      transform: translateX(-3px);
+    }
+
+    /* ============================================
+       ALERT TOAST CONTAINER
+    ============================================ */
+    #alertContainer {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      min-width: 380px;
+      max-width: 500px;
+    }
+
+    .toast-alert {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      border-left: 5px solid;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(120px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .toast-alert.success {
+      border-left-color: var(--success-color);
+    }
+
+    .toast-alert.success i {
+      color: var(--success-color);
+    }
+
+    .toast-alert.error {
+      border-left-color: var(--danger-color);
+    }
+
+    .toast-alert.error i {
+      color: var(--danger-color);
+    }
+
+    .toast-alert.info {
+      border-left-color: var(--info-color);
+    }
+
+    .toast-alert.info i {
+      color: var(--info-color);
+    }
+
+    .toast-alert i {
+      font-size: 1.5rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--dark-color);
+      font-size: 1rem;
+    }
+
+    .toast-message {
+      color: var(--light-gray);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: #a0aec0;
+      cursor: pointer;
+      padding: 0;
+      font-size: 1.25rem;
+      transition: all 0.3s;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+
+    .toast-close:hover {
+      background: #f7fafc;
+      color: var(--dark-color);
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .register-card {
+        padding: 2.5rem 2rem;
+      }
+
+      .page-title {
+        font-size: 1.6rem;
+      }
+
+      .brand-name {
+        font-size: 2rem;
+      }
+
+      .logo-icon {
+        width: 80px;
+        height: 80px;
+      }
+
+      .logo-icon i {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      body {
+        padding: 1rem 0;
+      }
+
+      .register-card {
+        padding: 2rem 1.5rem;
+        border-radius: 15px;
+      }
+
+      #alertContainer {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+      }
+
+      .page-title {
+        font-size: 1.4rem;
+      }
+
+      .brand-name {
+        font-size: 1.8rem;
+      }
+
+      .logo-icon {
+        width: 70px;
+        height: 70px;
+      }
+
+      .logo-icon i {
+        font-size: 2rem;
+      }
+
+      .toast-alert {
+        padding: 1rem;
+      }
+
+      .btn-primary-custom {
+        padding: 0.9rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Alert Container -->
+  <div id="alertContainer"></div>
+
+  <div class="register-container">
+    <div class="register-card">
+      <!-- Logo Section -->
+      <div class="logo-section">
+        <div class="logo-icon">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h1 class="brand-name">ROBOTECH</h1>
+        <h2 class="page-title">Registrar Club</h2>
+        <p class="page-subtitle">Crea tu cuenta y registra tu club de robótica</p>
+      </div>
+
+      <!-- Form -->
+      <form id="registroClubForm" novalidate>
+        <!-- Información Personal -->
+        <div class="section-title">
+          <i class="fas fa-user"></i>
+          <span>Información Personal</span>
+        </div>
+
+        <div class="mb-3">
+          <label for="nombreCompleto" class="form-label">Nombre Completo *</label>
+          <input type="text" class="form-control" id="nombreCompleto" required minlength="3" maxlength="100"
+            placeholder="Ej: Juan Pérez García">
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            El nombre debe tener entre 3 y 100 caracteres
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Correo Electrónico *</label>
+          <input type="email" class="form-control" id="email" required placeholder="ejemplo@correo.com">
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            Ingresa un correo electrónico válido
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="telefono" class="form-label">Teléfono *</label>
+          <input type="tel" class="form-control" id="telefono" placeholder="987654321" required
+            pattern="^(\+51)?9\d{8}$">
+          <div class="form-text">
+            <i class="fas fa-info-circle"></i>
+            Formato: 987654321 o +51987654321
+          </div>
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            Formato de teléfono inválido
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Contraseña *</label>
+          <input type="password" class="form-control" id="password" required minlength="8"
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            placeholder="Contraseña segura">
+          <div class="password-strength">
+            <div class="password-strength-bar" id="passwordStrengthBar"></div>
+          </div>
+          <div class="form-text">
+            <i class="fas fa-shield-alt"></i>
+            Mínimo 8 caracteres: mayúsculas, minúsculas, números y especiales (@$!%*?&)
+          </div>
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            La contraseña debe cumplir con los requisitos de seguridad
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirmarPassword" class="form-label">Confirmar Contraseña *</label>
+          <input type="password" class="form-control" id="confirmarPassword" required minlength="8"
+            placeholder="Repite tu contraseña">
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            Las contraseñas deben coincidir
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="preguntaSeguridad" class="form-label">
+            Pregunta de Seguridad <span class="text-muted">(Opcional)</span>
+          </label>
+          <select class="form-select" id="preguntaSeguridad">
+            <option value="">No deseo configurar ahora</option>
+          </select>
+          <div class="form-text">
+            <i class="fas fa-info-circle"></i>
+            Necesaria para recuperar tu contraseña. Puedes configurarla después
+          </div>
+        </div>
+
+        <div class="mb-4" id="respuestaDiv" style="display: none;">
+          <label for="respuestaSeguridad" class="form-label">Respuesta de Seguridad *</label>
+          <input type="text" class="form-control" id="respuestaSeguridad" placeholder="Tu respuesta">
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            La respuesta es requerida
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Información del Club -->
+        <div class="section-title">
+          <i class="fas fa-users"></i>
+          <span>Información del Club</span>
+        </div>
+
+        <div class="mb-3">
+          <label for="nombreClub" class="form-label">Nombre del Club *</label>
+          <input type="text" class="form-control" id="nombreClub" required minlength="3" maxlength="100"
+            placeholder="Ej: RoboWarriors Club">
+          <div class="invalid-feedback">
+            <i class="fas fa-exclamation-circle"></i>
+            El nombre del club debe tener entre 3 y 100 caracteres
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="descripcionClub" class="form-label">Descripción del Club (opcional)</label>
+          <textarea class="form-control" id="descripcionClub" rows="4" maxlength="500"
+            placeholder="Describe tu club de robótica, su misión, visión o cualquier detalle relevante..."></textarea>
+          <div class="char-counter">
+            <span id="charCount">0</span>/500 caracteres
+          </div>
+        </div>
+
+        <div class="alert-custom">
+          <i class="fas fa-info-circle"></i>
+          <div>
+            <strong>Importante:</strong> Tu club será revisado por un administrador antes de ser activado. Recibirás una
+            notificación cuando sea aprobado.
+          </div>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary-custom" id="btnRegistro">
+            <i class="fas fa-user-plus me-2"></i>Registrar Club
+          </button>
+        </div>
+      </form>
+
+      <!-- Footer Links -->
+      <div class="footer-links">
+        <p>
+          ¿Ya tienes cuenta?
+          <a href="login.html">Inicia sesión aquí</a>
+        </p>
+        <p>
+          ¿Solo quieres registrarte sin club?
+          <a href="registro.html">Registro simple</a>
+        </p>
+      </div>
+
+      <div class="text-center">
+        <a href="index.html" class="back-link">
+          <i class="fas fa-arrow-left"></i>
+          <span>Volver al inicio</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+
+  <script>
+    // Mostrar alertas tipo toast
+    function mostrarAlertaRegistro(mensaje, tipo) {
+      const alertContainer = document.getElementById('alertContainer');
+
+      const tipoClase = tipo === 'success' ? 'success' : tipo === 'error' ? 'error' : 'info';
+      const icono = tipo === 'success' ? 'fa-check-circle' : tipo === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle';
+      const titulo = tipo === 'success' ? '¡Éxito!' : tipo === 'error' ? 'Error' : 'Información';
+
+      const toast = document.createElement('div');
+      toast.className = `toast-alert ${tipoClase}`;
+      toast.innerHTML = `
+        <i class="fas ${icono}"></i>
+        <div class="toast-content">
+          <div class="toast-title">${titulo}</div>
+          <div class="toast-message">${mensaje}</div>
+        </div>
+        <button class="toast-close" onclick="this.parentElement.remove()">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+
+      alertContainer.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(120px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 5000);
+    }
+
+    // Validar fuerza de contraseña
+    function validarFuerzaPassword(password) {
+      const strengthBar = document.getElementById('passwordStrengthBar');
+
+      // Si el campo está vacío, resetear la barra
+      if (!password || password.length === 0) {
+        strengthBar.className = 'password-strength-bar';
+        strengthBar.style.width = '0%';
+        return;
+      }
+
+      let strength = 0;
+
+      if (password.length >= 8) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/\d/.test(password)) strength++;
+      if (/[@$!%*?&]/.test(password)) strength++;
+
+      strengthBar.className = 'password-strength-bar';
+
+      if (strength <= 2) {
+        strengthBar.classList.add('weak');
+      } else if (strength <= 4) {
+        strengthBar.classList.add('medium');
+      } else {
+        strengthBar.classList.add('strong');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // ✅ DECLARAR AL INICIO (ANTES DE USARLO)
+      const registroClubForm = document.getElementById('registroClubForm');
+      const btnRegistro = document.getElementById('btnRegistro');
+
+      // Cargar preguntas de seguridad
+      const selectPregunta = document.getElementById('preguntaSeguridad');
+      PREGUNTAS_SEGURIDAD.forEach(pregunta => {
+        const option = document.createElement('option');
+        option.value = pregunta;
+        option.textContent = pregunta;
+        selectPregunta.appendChild(option);
+      });
+
+      // Mostrar/ocultar respuesta de seguridad
+      selectPregunta.addEventListener('change', function () {
+        const respuestaDiv = document.getElementById('respuestaDiv');
+        const respuestaInput = document.getElementById('respuestaSeguridad');
+
+        if (this.value) {
+          respuestaDiv.style.display = 'block';
+          respuestaInput.required = true;
+        } else {
+          respuestaDiv.style.display = 'none';
+          respuestaInput.required = false;
+          respuestaInput.value = '';
+        }
+      });
+
+      // Contador de caracteres
+      const descripcionClub = document.getElementById('descripcionClub');
+      const charCount = document.getElementById('charCount');
+      descripcionClub.addEventListener('input', () => {
+        charCount.textContent = descripcionClub.value.length;
+      });
+
+      // Validar contraseña en tiempo real
+      const passwordInput = document.getElementById('password');
+      passwordInput.addEventListener('input', function () {
+        validarFuerzaPassword(this.value);
+      });
+
+      // Validar coincidencia de contraseñas
+      const confirmarPassword = document.getElementById('confirmarPassword');
+      confirmarPassword.addEventListener('input', function () {
+        const password = passwordInput.value;
+        if (this.value && this.value !== password) {
+          this.setCustomValidity('Las contraseñas no coinciden');
+        } else {
+          this.setCustomValidity('');
+        }
+      });
+
+      // IMPORTANTE: Validación SOLO en blur (cuando pierde el foco)
+      // NO validar mientras escribe para evitar mensajes molestos
+      const inputs = registroClubForm.querySelectorAll('input:not([type="password"]), textarea, select');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function () {
+          // Solo validar si el campo tiene contenido
+          if (this.value) {
+            if (this.checkValidity()) {
+              this.classList.remove('is-invalid');
+              this.classList.add('is-valid');
+            } else {
+              this.classList.remove('is-valid');
+              this.classList.add('is-invalid');
+            }
+          }
+        });
+
+        // Limpiar validación al enfocar
+        input.addEventListener('focus', function () {
+          this.classList.remove('is-invalid', 'is-valid');
+        });
+      });
+
+      // Validación especial para contraseñas (solo al perder foco)
+      [passwordInput, confirmarPassword].forEach(input => {
+        input.addEventListener('blur', function () {
+          if (this.value) {
+            if (this.checkValidity()) {
+              this.classList.remove('is-invalid');
+              this.classList.add('is-valid');
+            } else {
+              this.classList.remove('is-valid');
+              this.classList.add('is-invalid');
+            }
+          }
+        });
+
+        input.addEventListener('focus', function () {
+          this.classList.remove('is-invalid', 'is-valid');
+        });
+      });
+
+      registroClubForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Validar y marcar todos los campos
+        const todosLosInputs = registroClubForm.querySelectorAll('input, textarea, select');
+        let formValido = true;
+
+        todosLosInputs.forEach(input => {
+          if (input.required || input.value) {
+            if (!input.checkValidity()) {
+              input.classList.add('is-invalid');
+              input.classList.remove('is-valid');
+              formValido = false;
+            } else {
+              input.classList.add('is-valid');
+              input.classList.remove('is-invalid');
+            }
+          }
+        });
+
+        if (!formValido) {
+          mostrarAlertaRegistro('Por favor completa correctamente todos los campos obligatorios', 'error');
+          // Scroll al primer campo inválido
+          const primerInvalido = registroClubForm.querySelector('.is-invalid');
+          if (primerInvalido) {
+            primerInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            primerInvalido.focus();
+          }
+          return;
+        }
+
+        const preguntaSeleccionada = document.getElementById('preguntaSeguridad').value;
+        const respuestaSeguridad = document.getElementById('respuestaSeguridad').value.trim();
+
+        const datos = {
+          nombreCompleto: document.getElementById('nombreCompleto').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          telefono: document.getElementById('telefono').value.trim(),
+          password: document.getElementById('password').value,
+          confirmarPassword: document.getElementById('confirmarPassword').value,
+          preguntaSeguridad: preguntaSeleccionada || null,
+          respuestaSeguridad: respuestaSeguridad || null,
+          nombreClub: document.getElementById('nombreClub').value.trim(),
+          descripcionClub: document.getElementById('descripcionClub').value.trim() || null
+        };
+
+        btnRegistro.disabled = true;
+        btnRegistro.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registrando...';
+
+
+        console.log('📤 Datos a enviar:', JSON.stringify(datos, null, 2));
+
+        try {
+          const result = await registrarUsuarioConClub(datos);
+
+          if (result.success) {
+            mostrarAlertaRegistro('¡Registro exitoso! Tu club está en proceso de validación. Redirigiendo al login...', 'success');
+            setTimeout(() => {
+              window.location.href = 'login.html';
+            }, 3000);
+          } else {
+            let mensajeError = result.message || 'Error en el registro';
+
+            if (mensajeError.toLowerCase().includes('nombre del club')) {
+              mensajeError = 'El nombre del club ya está registrado. Por favor usa otro nombre.';
+            } else if (mensajeError.toLowerCase().includes('teléfono')) {
+              mensajeError = 'El número de teléfono ya está registrado. Usa otro número.';
+            } else if (mensajeError.toLowerCase().includes('email')) {
+              mensajeError = 'El email ya está registrado. ¿Ya tienes cuenta?';
+            }
+
+            mostrarAlertaRegistro(mensajeError, 'error');
+
+            btnRegistro.disabled = false;
+            btnRegistro.innerHTML = '<i class="fas fa-user-plus me-2"></i>Registrar Club';
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          mostrarAlertaRegistro('Error de conexión con el servidor. Intenta nuevamente.', 'error');
+
+          btnRegistro.disabled = false;
+          btnRegistro.innerHTML = '<i class="fas fa-user-plus me-2"></i>Registrar Club';
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

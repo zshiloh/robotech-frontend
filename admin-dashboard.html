@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin - ROBOTECH</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --admin-gradient: linear-gradient(135deg, #e91e63 0%, #c2185b 100%);
+      --admin-color: #e91e63;
+      --admin-dark: #c2185b;
+      --sidebar-width: 280px;
+      --navbar-height: 70px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+
+    /* ============================================
+       NAVBAR MODERNA
+    ============================================ */
+    .navbar-modern {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      height: var(--navbar-height);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 0 2rem;
+    }
+
+    .navbar-brand-modern {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+    }
+
+    .navbar-brand-modern .logo-circle {
+      width: 45px;
+      height: 45px;
+      background: var(--admin-gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+    }
+
+    .navbar-brand-modern .logo-circle i {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .navbar-brand-modern .brand-text {
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: var(--admin-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.5px;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .navbar-actions .dropdown {
+      position: relative;
+    }
+
+    .notification-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .notification-btn:hover {
+      background: var(--admin-color);
+      transform: translateY(-2px);
+    }
+
+    .notification-btn:hover i {
+      color: white;
+    }
+
+    .notification-btn i {
+      color: #6c757d;
+      font-size: 1.1rem;
+      transition: all 0.3s;
+    }
+
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--admin-gradient);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.4rem;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 1rem;
+      background: #f8f9fa;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .user-menu:hover {
+      background: var(--admin-color);
+    }
+
+    .user-menu:hover .user-name,
+    .user-menu:hover i {
+      color: white;
+    }
+
+    .user-avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 10px;
+      background: var(--admin-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: #2d3748;
+      transition: all 0.3s;
+    }
+
+    /* ============================================
+       DROPDOWN MEJORADO
+    ============================================ */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      min-width: 280px;
+      border: none;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      border-radius: 16px;
+      margin-top: 0.75rem !important;
+      padding: 0.5rem;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+      pointer-events: none;
+    }
+
+    .dropdown-menu-end {
+      right: 0 !important;
+      left: auto !important;
+    }
+
+    .dropdown-menu.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .dropdown-item {
+      transition: all 0.3s;
+    }
+
+    .dropdown-item:hover {
+      background: linear-gradient(135deg, rgba(233, 30, 99, 0.1), rgba(194, 24, 91, 0.1));
+    }
+
+    .dropdown-item.text-danger:hover {
+      background: rgba(244, 67, 54, 0.1);
+    }
+
+    /* Dropdown de Notificaciones */
+    .notifications-dropdown {
+      width: 400px !important;
+      max-height: 500px;
+      overflow-y: auto;
+      right: 0 !important;
+      left: auto !important;
+      transform-origin: top right !important;
+    }
+
+    .notifications-header {
+      padding: 1rem;
+      border-bottom: 2px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .notifications-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #2d3748;
+    }
+
+    .notification-item {
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .notification-item:hover {
+      background: rgba(233, 30, 99, 0.05);
+    }
+
+    .notification-item.unread {
+      background: rgba(233, 30, 99, 0.05);
+      border-left: 3px solid #e91e63;
+    }
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--admin-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .notification-message {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-bottom: 0.25rem;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .notification-time {
+      font-size: 0.7rem;
+      color: #718096;
+    }
+
+    .notification-badge-new {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .notifications-footer {
+      padding: 0.75rem 1rem;
+      text-align: center;
+      border-top: 2px solid #f0f0f0;
+    }
+
+    .notifications-footer a {
+      color: #e91e63;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .notifications-footer a:hover {
+      color: #c2185b;
+    }
+
+    .empty-notifications {
+      padding: 3rem 2rem;
+      text-align: center;
+      color: #718096;
+    }
+
+    .empty-notifications i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    /* ============================================
+       SIDEBAR MODERNA
+    ============================================ */
+    .sidebar-modern {
+      position: fixed;
+      top: var(--navbar-height);
+      left: 0;
+      height: calc(100vh - var(--navbar-height));
+      width: var(--sidebar-width);
+      background: white;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+      padding: 2rem 0;
+      overflow-y: auto;
+      z-index: 999;
+    }
+
+    .sidebar-header-modern {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 2px solid #f0f0f0;
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-header-modern h5 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #6c757d;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-menu-modern {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar-menu-modern li {
+      padding: 0 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-menu-modern li a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #6c757d;
+      font-weight: 600;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .sidebar-menu-modern li a i {
+      width: 24px;
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+
+    .sidebar-menu-modern li a:hover {
+      background: linear-gradient(135deg, rgba(233, 30, 99, 0.1) 0%, rgba(194, 24, 91, 0.1) 100%);
+      color: var(--admin-color);
+      transform: translateX(5px);
+    }
+
+    .sidebar-menu-modern li a.active {
+      background: var(--admin-gradient);
+      color: white;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+    }
+
+    .sidebar-menu-modern li a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: white;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* ============================================
+       MAIN CONTENT
+    ============================================ */
+    .main-content-modern {
+      margin-left: var(--sidebar-width);
+      margin-top: var(--navbar-height);
+      padding: 2.5rem;
+      min-height: calc(100vh - var(--navbar-height));
+    }
+
+    /* ============================================
+       HERO BANNER
+    ============================================ */
+    .hero-banner-admin {
+      background: var(--admin-gradient);
+      border-radius: 24px;
+      padding: 3rem;
+      color: white;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 20px 60px rgba(233, 30, 99, 0.35);
+      position: relative;
+      overflow: hidden;
+      animation: slideDown 0.6s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-banner-admin::before {
+      content: '\f521';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      font-size: 18rem;
+      opacity: 0.08;
+      right: -5rem;
+      top: 50%;
+      transform: translateY(-50%) rotate(-15deg);
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(-50%) rotate(-15deg);
+      }
+
+      50% {
+        transform: translateY(-55%) rotate(-10deg);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-banner-admin h1 {
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-banner-admin p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      margin-bottom: 0;
+    }
+
+    /* ============================================
+       KPI CARDS
+    ============================================ */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .kpi-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.25rem;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.6s ease both;
+      border: 2px solid transparent;
+    }
+
+    .kpi-card:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .kpi-card:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .kpi-card:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .kpi-card:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .kpi-card:nth-child(5) {
+      animation-delay: 0.5s;
+    }
+
+    .kpi-card:nth-child(6) {
+      animation-delay: 0.6s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background: var(--kpi-color);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+      border-color: var(--kpi-color);
+    }
+
+    .kpi-card.red {
+      --kpi-color: #e91e63;
+    }
+
+    .kpi-card.blue {
+      --kpi-color: #2196f3;
+    }
+
+    .kpi-card.green {
+      --kpi-color: #4caf50;
+    }
+
+    .kpi-card.orange {
+      --kpi-color: #ff9800;
+    }
+
+    .kpi-card.purple {
+      --kpi-color: #9c27b0;
+    }
+
+    .kpi-card.teal {
+      --kpi-color: #009688;
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--kpi-color), var(--kpi-color));
+      opacity: 0.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      transition: all 0.4s;
+    }
+
+    .kpi-card:hover .kpi-icon {
+      opacity: 1;
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .kpi-card:hover .kpi-icon i {
+      color: white;
+    }
+
+    .kpi-value {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+
+    .kpi-label {
+      color: #6c757d;
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 1rem;
+    }
+
+    .kpi-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .kpi-trend.up {
+      background: rgba(76, 175, 80, 0.1);
+      color: #4caf50;
+    }
+
+    .kpi-trend.down {
+      background: rgba(244, 67, 54, 0.1);
+      color: #f44336;
+    }
+
+    .kpi-trend.neutral {
+      background: rgba(108, 117, 125, 0.1);
+      color: #6c757d;
+    }
+
+    /* ============================================
+       SECTION CARDS
+    ============================================ */
+    .section-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+      animation: fadeIn 0.6s ease both;
+    }
+
+    .section-card:nth-of-type(1) {
+      animation-delay: 0.7s;
+    }
+
+    .section-card:nth-of-type(2) {
+      animation-delay: 0.8s;
+    }
+
+    .section-card:nth-of-type(3) {
+      animation-delay: 0.9s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid #f0f0f0;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-title .icon-circle {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(233, 30, 99, 0.1), rgba(194, 24, 91, 0.1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section-title .icon-circle i {
+      color: var(--admin-color);
+      font-size: 1.3rem;
+    }
+
+    /* ============================================
+       ALERT ITEMS
+    ============================================ */
+    .alert-item {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 16px;
+      border-left: 5px solid;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      animation: slideInRight 0.5s ease both;
+    }
+
+    .alert-item:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .alert-item:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .alert-item:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .alert-item:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    .alert-item:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .alert-item:hover {
+      background: white;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transform: translateX(8px);
+    }
+
+    .alert-item.warning {
+      border-left-color: #ffc107;
+    }
+
+    .alert-item.danger {
+      border-left-color: #f44336;
+    }
+
+    .alert-item.info {
+      border-left-color: #2196f3;
+    }
+
+    .alert-icon-box {
+      width: 55px;
+      height: 55px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .alert-icon-box.warning {
+      background: linear-gradient(135deg, #ffc107, #ff9800);
+      color: white;
+    }
+
+    .alert-icon-box.danger {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+      color: white;
+    }
+
+    .alert-icon-box.info {
+      background: linear-gradient(135deg, #2196f3, #1976d2);
+      color: white;
+    }
+
+    .alert-content {
+      flex-grow: 1;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+      font-size: 1.05rem;
+    }
+
+    .alert-text {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    /* ============================================
+       ACTIVITY FEED
+    ============================================ */
+    .activity-item {
+      display: flex;
+      align-items: start;
+      gap: 1.25rem;
+      padding: 1.5rem;
+      border-radius: 16px;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      background: #f8f9fa;
+      animation: slideInRight 0.5s ease both;
+    }
+
+    .activity-item:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .activity-item:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .activity-item:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .activity-item:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    .activity-item:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+
+    .activity-item:nth-child(6) {
+      animation-delay: 0.3s;
+    }
+
+    .activity-item:nth-child(7) {
+      animation-delay: 0.35s;
+    }
+
+    .activity-item:nth-child(8) {
+      animation-delay: 0.4s;
+    }
+
+    .activity-item:nth-child(9) {
+      animation-delay: 0.45s;
+    }
+
+    .activity-item:nth-child(10) {
+      animation-delay: 0.5s;
+    }
+
+    .activity-item:hover {
+      background: white;
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.1);
+      transform: translateX(8px);
+    }
+
+    .activity-icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--admin-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+      font-size: 1.2rem;
+    }
+
+    .activity-content {
+      flex-grow: 1;
+    }
+
+    .activity-title {
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 0.3rem;
+    }
+
+    .activity-meta {
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+
+    /* ============================================
+       QUICK ACTIONS
+    ============================================ */
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .quick-action-item {
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      border-radius: 20px;
+      padding: 2.25rem 1.75rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: 3px solid transparent;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+      animation: zoomIn 0.5s ease both;
+    }
+
+    .quick-action-item:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .quick-action-item:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .quick-action-item:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .quick-action-item:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes zoomIn {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .quick-action-item:hover {
+      border-color: var(--admin-color);
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(233, 30, 99, 0.2);
+      background: white;
+    }
+
+    .quick-action-icon-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--admin-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      color: white;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 8px 20px rgba(233, 30, 99, 0.4);
+      transition: all 0.4s;
+    }
+
+    .quick-action-item:hover .quick-action-icon-circle {
+      transform: scale(1.15) rotate(8deg);
+      box-shadow: 0 12px 30px rgba(233, 30, 99, 0.6);
+    }
+
+    .quick-action-title {
+      font-weight: 700;
+      color: #2d3748;
+      font-size: 1.05rem;
+    }
+
+    /* ============================================
+       EMPTY STATE
+    ============================================ */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #6c757d;
+    }
+
+    .empty-state i {
+      font-size: 5rem;
+      opacity: 0.2;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    /* ============================================
+       BUTTONS
+    ============================================ */
+    .btn-action {
+      background: var(--admin-gradient);
+      color: white;
+      border: none;
+      padding: 0.7rem 1.75rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(233, 30, 99, 0.5);
+      color: white;
+    }
+
+    /* ============================================
+       BADGE
+    ============================================ */
+    .badge-count {
+      background: var(--admin-gradient);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(233, 30, 99, 0.35);
+    }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
+    @media (max-width: 768px) {
+      .sidebar-modern {
+        transform: translateX(-100%);
+      }
+
+      .sidebar-modern.show {
+        transform: translateX(0);
+      }
+
+      .main-content-modern {
+        margin-left: 0;
+        padding: 1.5rem;
+      }
+
+      .hero-banner-admin {
+        padding: 2rem;
+      }
+
+      .hero-banner-admin h1 {
+        font-size: 2rem;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .notifications-dropdown {
+        width: 320px !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .notifications-dropdown {
+        width: 280px !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar Moderna -->
+  <nav class="navbar-modern">
+    <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+      <a href="index.html" class="navbar-brand-modern">
+        <div class="logo-circle">
+          <i class="fas fa-robot"></i>
+        </div>
+        <span class="brand-text">ROBOTECH</span>
+      </a>
+
+      <div class="navbar-actions">
+        <!-- Notificaciones -->
+        <div class="dropdown">
+          <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown" data-bs-display="static"
+            aria-expanded="false">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+            <li class="dropdown-item-text text-center py-3">
+              <div class="spinner-border spinner-border-sm"></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Usuario -->
+        <div class="dropdown">
+          <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            <div class="user-avatar">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <span class="user-name" id="usuarioNombre">Admin</span>
+            <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+          </div>
+          <ul class="dropdown-menu dropdown-menu-end shadow-lg"
+            style="min-width: 250px; border-radius: 16px; border: none; padding: 0.5rem;">
+            <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="user-avatar" style="width: 40px; height: 40px;">
+                  <i class="fas fa-user-shield"></i>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;" id="usuarioNombreMenu">Admin</div>
+                  <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav"></div>
+                </div>
+              </div>
+            </li>
+            <li class="mt-2">
+              <a class="dropdown-item d-flex align-items-center gap-2" href="usuario-perfil.html"
+                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                <i class="fas fa-user-edit"></i>
+                <span>Mi Perfil</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="#" onclick="logout()"
+                style="border-radius: 10px; padding: 0.75rem 1rem; font-weight: 600;">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Cerrar Sesión</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Moderna -->
+  <aside class="sidebar-modern">
+    <div class="sidebar-header-modern">
+      <h5><i class="fas fa-user-shield"></i> Panel de Control</h5>
+    </div>
+    <ul class="sidebar-menu-modern">
+      <li><a href="admin-dashboard.html" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+      <li><a href="admin-usuarios.html"><i class="fas fa-users"></i> <span>Usuarios</span></a></li>
+      <li><a href="admin-clubes.html"><i class="fas fa-shield-alt"></i> <span>Clubes</span></a></li>
+      <li><a href="admin-torneos.html"><i class="fas fa-trophy"></i> <span>Torneos</span></a></li>
+      <li><a href="admin-configuracion.html"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content-modern">
+
+    <!-- Hero Banner -->
+    <div class="hero-banner-admin">
+      <div class="hero-content">
+        <h1><i class="fas fa-user-shield"></i> Panel de Administración</h1>
+        <p>Control total del sistema ROBOTECH</p>
+      </div>
+    </div>
+
+    <!-- KPIs Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card red">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiUsuarios">0</div>
+            <div class="kpi-label">Usuarios Totales</div>
+            <div class="kpi-trend up" id="trendUsuarios">
+              <i class="fas fa-arrow-up"></i> <span>+12 esta semana</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-users"></i></div>
+        </div>
+      </div>
+
+      <div class="kpi-card blue">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiClubes">0</div>
+            <div class="kpi-label">Clubes Registrados</div>
+            <div class="kpi-trend up" id="trendClubes">
+              <i class="fas fa-arrow-up"></i> <span>+3 este mes</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-shield-alt"></i></div>
+        </div>
+      </div>
+
+      <div class="kpi-card green">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiTorneos">0</div>
+            <div class="kpi-label">Torneos Activos</div>
+            <div class="kpi-trend neutral" id="trendTorneos">
+              <i class="fas fa-minus"></i> <span>Sin cambios</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-trophy"></i></div>
+        </div>
+      </div>
+
+      <div class="kpi-card orange">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiRobots">0</div>
+            <div class="kpi-label">Robots Registrados</div>
+            <div class="kpi-trend up" id="trendRobots">
+              <i class="fas fa-arrow-up"></i> <span>+8 esta semana</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-robot"></i></div>
+        </div>
+      </div>
+
+      <div class="kpi-card purple">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiCombates">0</div>
+            <div class="kpi-label">Combates Realizados</div>
+            <div class="kpi-trend up" id="trendCombates">
+              <i class="fas fa-arrow-up"></i> <span>+25 esta semana</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-fist-raised"></i></div>
+        </div>
+      </div>
+
+      <div class="kpi-card teal">
+        <div class="kpi-header">
+          <div>
+            <div class="kpi-value" id="kpiPendientes">0</div>
+            <div class="kpi-label">Validaciones Pendientes</div>
+            <div class="kpi-trend neutral" id="trendPendientes">
+              <i class="fas fa-exclamation-triangle"></i> <span>Requiere atención</span>
+            </div>
+          </div>
+          <div class="kpi-icon"><i class="fas fa-check-circle"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acciones Pendientes -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">
+          <div class="icon-circle">
+            <i class="fas fa-exclamation-triangle"></i>
+          </div>
+          <span>Acciones Pendientes</span>
+        </div>
+        <span class="badge-count" id="badgeAcciones">0</span>
+      </div>
+      <div id="listaAcciones">
+        <div class="text-center py-3">
+          <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Actividad Reciente -->
+      <div class="col-lg-6 mb-4">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-circle">
+                <i class="fas fa-history"></i>
+              </div>
+              <span>Actividad Reciente</span>
+            </div>
+          </div>
+          <div id="listaActividad">
+            <div class="text-center py-3">
+              <div class="spinner-border text-primary spinner-border-sm" role="status"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones Rápidas -->
+      <div class="col-lg-6 mb-4">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">
+              <div class="icon-circle">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <span>Acciones Rápidas</span>
+            </div>
+          </div>
+          <div class="quick-actions-grid">
+            <div class="quick-action-item" onclick="window.location.href='admin-usuarios.html'">
+              <div class="quick-action-icon-circle"><i class="fas fa-user-plus"></i></div>
+              <div class="quick-action-title">Crear Usuario</div>
+            </div>
+            <div class="quick-action-item" onclick="window.location.href='admin-clubes.html'">
+              <div class="quick-action-icon-circle"><i class="fas fa-shield-alt"></i></div>
+              <div class="quick-action-title">Validar Clubes</div>
+            </div>
+            <div class="quick-action-item" onclick="window.location.href='admin-torneos.html'">
+              <div class="quick-action-icon-circle"><i class="fas fa-trophy"></i></div>
+              <div class="quick-action-title">Gestionar Torneos</div>
+            </div>
+            <div class="quick-action-item" onclick="window.location.href='admin-configuracion.html'">
+              <div class="quick-action-icon-circle"><i class="fas fa-cog"></i></div>
+              <div class="quick-action-title">Configuración</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/constants.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/notificaciones.js"></script>
+
+  <script>
+    protectPage(NOMBRES_ROLES.ADMINISTRADOR);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const usuario = getCurrentUser();
+      const nombreCompleto = usuario.nombreCompleto || 'Administrador';
+      const email = usuario.email || '';
+
+      document.getElementById('usuarioNombre').textContent = nombreCompleto;
+      document.getElementById('usuarioNombreMenu').textContent = nombreCompleto;
+      document.getElementById('emailUsuarioNav').textContent = email;
+
+      cargarDashboard();
+    });
+
+    async function cargarDashboard() {
+      await Promise.all([
+        cargarKPIs(),
+        //cargarAccionesPendientes(),
+        //cargarActividadReciente()
+      ]);
+
+    }
+
+    document.getElementById('listaAcciones').innerHTML = `
+    <div class="empty-state">
+        <i class="fas fa-code"></i>
+        <p class="mb-0">Próximamente: Acciones pendientes</p>
+    </div>
+`;
+
+    document.getElementById('listaActividad').innerHTML = `
+    <div class="empty-state">
+        <i class="fas fa-code"></i>
+        <p class="mb-0">Próximamente: Actividad reciente</p>
+    </div>
+`;
+
+    async function cargarKPIs() {
+      try {
+        const result = await fetchAPI('/api/admin/estadisticas', 'GET');
+        if (result.success && result.data) {
+          document.getElementById('kpiUsuarios').textContent = result.data.totalUsuarios || 0;
+          document.getElementById('kpiClubes').textContent = result.data.totalClubes || 0;
+          document.getElementById('kpiTorneos').textContent = result.data.torneosActivos || 0;
+          document.getElementById('kpiRobots').textContent = result.data.totalRobots || 0;
+          document.getElementById('kpiCombates').textContent = result.data.totalCombates || 0;
+          document.getElementById('kpiPendientes').textContent = result.data.validacionesPendientes || 0;
+        }
+      } catch (error) {
+        console.error('Error al cargar KPIs:', error);
+      }
+    }
+
+    async function cargarAccionesPendientes() {
+      const contenedor = document.getElementById('listaAcciones');
+
+      try {
+        const result = await fetchAPI('/api/admin/pendientes', 'GET');
+
+        if (result.success && result.data && result.data.length > 0) {
+          document.getElementById('badgeAcciones').textContent = result.data.length;
+
+          let html = '';
+          result.data.forEach(accion => {
+            const tipo = accion.tipo || 'info';
+            html += `
+              <div class="alert-item ${tipo}">
+                <div class="alert-icon-box ${tipo}">
+                  <i class="fas fa-${tipo === 'warning' ? 'exclamation-triangle' : tipo === 'danger' ? 'times-circle' : 'info-circle'}"></i>
+                </div>
+                <div class="alert-content">
+                  <div class="alert-title">${escaparHTML(accion.titulo)}</div>
+                  <div class="alert-text">${escaparHTML(accion.descripcion)}</div>
+                </div>
+                ${accion.url ? `<a href="${accion.url}" class="btn btn-action">Ver <i class="fas fa-arrow-right"></i></a>` : ''}
+              </div>
+            `;
+          });
+          contenedor.innerHTML = html;
+        } else {
+          document.getElementById('badgeAcciones').textContent = '0';
+          contenedor.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-check-circle"></i>
+              <p class="mb-0">No hay acciones pendientes</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        contenedor.innerHTML = '<div class="alert alert-danger">Error al cargar</div>';
+      }
+    }
+
+    async function cargarActividadReciente() {
+      const contenedor = document.getElementById('listaActividad');
+
+      try {
+        const result = await fetchAPI('/api/admin/actividad', 'GET');
+
+        if (result.success && result.data && result.data.length > 0) {
+          let html = '';
+          result.data.slice(0, 10).forEach(actividad => {
+            html += `
+              <div class="activity-item">
+                <div class="activity-icon-circle">
+                  <i class="fas fa-${actividad.icono || 'circle'}"></i>
+                </div>
+                <div class="activity-content">
+                  <div class="activity-title">${escaparHTML(actividad.titulo)}</div>
+                  <div class="activity-meta">
+                    ${escaparHTML(actividad.usuario || 'Sistema')} - ${actividad.fecha ? formatearFechaRelativa(actividad.fecha) : 'Ahora'}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          contenedor.innerHTML = html;
+        } else {
+          contenedor.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-history"></i>
+              <p class="mb-0">Sin actividad reciente</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        contenedor.innerHTML = '<div class="alert alert-danger">Error al cargar</div>';
+      }
+    }
+  </script>
+</body>
+
+</html>

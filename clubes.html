@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio de Clubes - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --dark-color: #2d3748;
+            --light-gray: #718096;
+            --border-color: #e2e8f0;
+            --navbar-height: 70px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            padding-top: var(--navbar-height);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        /* ============================================
+           NAVBAR MODERNA
+        ============================================ */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav-center {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link-modern {
+            color: var(--dark-color);
+            font-weight: 500;
+            padding: 0.75rem 1.25rem;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .nav-link-modern:hover {
+            color: var(--primary-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .nav-link-modern.active {
+            color: var(--primary-color);
+        }
+
+        .nav-link-modern.active::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-outline-modern {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s;
+            background: transparent;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline-modern:hover {
+            background: var(--primary-gradient);
+            border-color: transparent;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-modern {
+            background: var(--primary-gradient);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--primary-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .user-menu:hover {
+            background: var(--primary-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: all 0.3s;
+            white-space: nowrap;
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .dropdown-menu .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .dropdown-menu .dropdown-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .dropdown-menu .dropdown-item.text-danger {
+            color: #f56565 !important;
+        }
+
+        .dropdown-menu .dropdown-item.text-danger:hover {
+            background: rgba(245, 101, 101, 0.1);
+            color: #f56565 !important;
+        }
+
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* ============================================
+           HERO SECTION
+        ============================================ */
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 80px 0 60px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '\f3ed';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 20rem;
+            opacity: 0.05;
+            right: -5rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-section h1 {
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-size: 3rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+
+        /* ============================================
+           SEARCH BOX
+        ============================================ */
+        .search-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+            border: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box .form-label {
+            color: var(--dark-color);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-box .form-label i {
+            color: var(--primary-color);
+        }
+
+        .search-box .form-control,
+        .search-box .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box .form-control:focus,
+        .search-box .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
+        }
+
+        /* ============================================
+           CLUB CARDS - DISEÑO MEJORADO 2 COLUMNAS
+        ============================================ */
+        .club-card {
+            background: white;
+            border-radius: 24px;
+            padding: 0;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .club-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25);
+            border-color: var(--primary-color);
+        }
+
+        .club-card-header {
+            background: var(--primary-gradient);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .club-card-header::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        .club-logo-modern {
+            width: 100px;
+            height: 100px;
+            border-radius: 20px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-name-modern {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .club-card-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .club-description-modern {
+            color: var(--light-gray);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1rem;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .badge-acepta-modern {
+            background: var(--success-gradient);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .club-stats-modern {
+            display: flex;
+            gap: 0;
+            margin-bottom: 25px;
+            background: #f7fafc;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .stat-item-modern {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            border-right: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .stat-item-modern:last-child {
+            border-right: none;
+        }
+
+        .stat-item-modern:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .stat-icon-modern {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-icon-modern i {
+            color: white;
+            font-size: 1.3rem;
+        }
+
+        .stat-value-modern {
+            font-weight: 800;
+            color: var(--dark-color);
+            font-size: 1.8rem;
+            display: block;
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .stat-label-modern {
+            color: var(--light-gray);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .club-actions-modern {
+            display: flex;
+            gap: 12px;
+            margin-top: auto;
+        }
+
+        .btn-ver-detalle-modern {
+            flex: 1;
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            font-weight: 700;
+            padding: 14px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn-ver-detalle-modern:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-solicitar-modern {
+            flex: 1;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            font-weight: 700;
+            padding: 14px;
+            border-radius: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-solicitar-modern:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: #cbd5e0;
+            margin-bottom: 25px;
+        }
+
+        .empty-state h3 {
+            color: var(--dark-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: var(--light-gray);
+            font-size: 1.1rem;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .loading-spinner .spinner-border {
+            width: 4rem;
+            height: 4rem;
+            border-width: 0.4rem;
+        }
+
+        /* ============================================
+           RESPONSIVE
+        ============================================ */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+
+            .club-card-header {
+                padding: 30px 20px;
+            }
+
+            .club-logo-modern {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+
+            .club-name-modern {
+                font-size: 1.4rem;
+            }
+
+            .club-stats-modern {
+                flex-direction: column;
+            }
+
+            .stat-item-modern {
+                border-right: none;
+                border-bottom: 2px solid #e2e8f0;
+            }
+
+            .stat-item-modern:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* Estilos de notificaciones */
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 3px solid #667eea;
+        }
+
+        .notification-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #667eea;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        .empty-notifications i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Moderna -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-nav-center d-none d-lg-flex ms-auto">
+                <a href="index.html" class="nav-link-modern">Inicio</a>
+                <a href="clubes.html" class="nav-link-modern active">Clubes</a>
+                <a href="torneos.html" class="nav-link-modern">Torneos</a>
+                <a href="rankings.html" class="nav-link-modern">Rankings</a>
+            </div>
+
+            <div class="navbar-actions" style="margin-left: 2rem;">
+                <!-- No Autenticado -->
+                <div id="navActionsGuest" style="display: flex; gap: 1rem;">
+                    <a href="login.html" class="btn-outline-modern">
+                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                    </a>
+                    <a href="registro.html" class="btn-primary-modern">
+                        <i class="fas fa-user-plus me-2"></i>Registrarse
+                    </a>
+                </div>
+
+                <!-- Autenticado -->
+                <div id="navActionsAuth" style="display: none; align-items: center; gap: 1rem;">
+                    <!-- Notificaciones -->
+                    <div class="dropdown">
+                        <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end notifications-dropdown"
+                            id="notificacionesDropdownMenu">
+                            <li class="text-center py-3">
+                                <div class="spinner-border spinner-border-sm"></div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="dropdown">
+                        <div class="user-menu" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar" id="avatarUsuarioNav">U</div>
+                            <span class="user-name" id="nombreUsuarioNav">Usuario</span>
+                            <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <div class="user-avatar" style="width: 40px; height: 40px;" id="avatarUsuarioMenu">U
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                                            id="nombreUsuarioMenu">Usuario</div>
+                                        <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav">email</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="mt-2">
+                                <a class="dropdown-item" href="#" onclick="irAMiDashboard(); return false;">
+                                    <i class="fas fa-tachometer-alt"></i>
+                                    <span>Mi Dashboard</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="usuario-perfil.html">
+                                    <i class="fas fa-user-edit"></i>
+                                    <span>Mi Perfil</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center hero-content">
+            <h1><i class="fas fa-shield-alt me-3"></i>Directorio de Clubes</h1>
+            <p class="lead">Explora todos los clubes de robótica competitiva</p>
+        </div>
+    </div>
+
+    <!-- Barra de Búsqueda -->
+    <div class="container">
+        <div class="search-box">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label">
+                        <i class="fas fa-search"></i> Buscar por nombre
+                    </label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Nombre del club...">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="fas fa-sort"></i> Ordenar por
+                    </label>
+                    <select class="form-select" id="ordenarSelect">
+                        <option value="nombre">Nombre (A-Z)</option>
+                        <option value="puntos">Puntos (Mayor a Menor)</option>
+                        <option value="competidores">Competidores (Mayor a Menor)</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary-modern w-100" onclick="buscarClubes()">
+                        <i class="fas fa-search me-2"></i>Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Clubes -->
+    <div class="container mt-5 mb-5">
+        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted fw-bold">Cargando clubes...</p>
+        </div>
+
+        <div id="clubesContainer" class="row g-4">
+            <!-- Los clubes se cargarán aquí en 2 COLUMNAS -->
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h3>No se encontraron clubes</h3>
+            <p>Intenta con otros términos de búsqueda</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        let clubes = [];
+
+        function irAMiDashboard() {
+            redirectToDashboard();
+        }
+
+        function actualizarNavbar() {
+            const navActionsGuest = document.getElementById("navActionsGuest");
+            const navActionsAuth = document.getElementById("navActionsAuth");
+            const nombreUsuarioNav = document.getElementById("nombreUsuarioNav");
+            const nombreUsuarioMenu = document.getElementById("nombreUsuarioMenu");
+            const emailUsuarioNav = document.getElementById("emailUsuarioNav");
+            const avatarUsuarioNav = document.getElementById("avatarUsuarioNav");
+            const avatarUsuarioMenu = document.getElementById("avatarUsuarioMenu");
+
+            if (isAuthenticated()) {
+                navActionsGuest.style.display = "none";
+                navActionsAuth.style.display = "flex";
+
+                const usuario = getCurrentUser();
+                if (usuario) {
+                    const nombreCompleto = usuario.nombreCompleto || "Usuario";
+                    const email = usuario.email || "";
+                    const iniciales = nombreCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+                    nombreUsuarioNav.textContent = nombreCompleto;
+                    nombreUsuarioMenu.textContent = nombreCompleto;
+                    emailUsuarioNav.textContent = email;
+                    avatarUsuarioNav.textContent = iniciales;
+                    avatarUsuarioMenu.textContent = iniciales;
+                }
+            } else {
+                navActionsGuest.style.display = "flex";
+                navActionsAuth.style.display = "none";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            actualizarNavbar();
+
+            // Permitir búsqueda con Enter
+            document.getElementById('searchInput').addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    buscarClubes();
+                }
+            });
+
+            // Cargar clubes inicialmente
+            cargarClubes();
+        });
+
+        async function cargarClubes() {
+            const search = document.getElementById('searchInput').value.trim();
+            const ordenar = document.getElementById('ordenarSelect').value;
+
+            mostrarLoading(true);
+
+            try {
+                let url = '/api/public/clubes';
+                const params = new URLSearchParams();
+
+                if (search) params.append('search', search);
+                if (ordenar) params.append('ordenar', ordenar);
+
+                if (params.toString()) url += '?' + params.toString();
+
+                const result = await fetchAPI(url, 'GET');
+
+                console.log('Respuesta del servidor:', result);
+
+                // El endpoint puede devolver directamente un array O un objeto {success, data}
+                if (Array.isArray(result)) {
+                    clubes = result;
+                } else if (result.success && result.data) {
+                    clubes = result.data;
+                } else if (result.data) {
+                    clubes = result.data;
+                } else {
+                    clubes = result;
+                }
+
+                console.log('Clubes procesados:', clubes);
+
+                // ✅ HABILITADO: Cargar solicitudes del usuario si está autenticado
+                if (isAuthenticated()) {
+                    await cargarSolicitudesUsuario();
+                }
+
+                renderizarClubes();
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarError('Error de conexión');
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+
+        // ✅ HABILITADO: Cargar solicitudes previas del usuario
+        let solicitudesUsuario = [];
+        async function cargarSolicitudesUsuario() {
+            try {
+                const result = await fetchAPI('/api/competidor/solicitudes', 'GET');
+
+                if (result.success && result.data) {
+                    solicitudesUsuario = result.data;
+                } else if (Array.isArray(result)) {
+                    solicitudesUsuario = result;
+                } else {
+                    solicitudesUsuario = [];
+                }
+
+                console.log('📋 Solicitudes del usuario:', solicitudesUsuario);
+            } catch (error) {
+                console.log('⚠️ No se pudieron cargar solicitudes del usuario:', error.message);
+                solicitudesUsuario = [];
+            }
+        }
+
+        // ✅ HABILITADO: Verificar si ya tiene solicitud pendiente
+        function tieneSolicitudPendiente(clubId) {
+            return solicitudesUsuario.some(sol => {
+                const estado = (sol.estado || '').toUpperCase();
+                return sol.idClub === clubId && estado === 'PENDIENTE';
+            });
+        }
+
+        function buscarClubes() {
+            cargarClubes();
+        }
+
+        function renderizarClubes() {
+            const container = document.getElementById('clubesContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            console.log('Renderizando clubes:', clubes);
+
+            if (!clubes || clubes.length === 0) {
+                container.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            // ✅ CAMBIO: col-lg-6 en vez de col-lg-4 (2 columnas en vez de 3)
+            container.innerHTML = clubes.map(club => `
+                <div class="col-md-6" data-club-id="${club.idClub}">
+                    <div class="club-card">
+                        <!-- Header con gradiente -->
+                        <div class="club-card-header">
+                            <div class="club-logo-modern">${escaparHTML(club.nombreClub).charAt(0)}</div>
+                            <h3 class="club-name-modern">${escaparHTML(club.nombreClub)}</h3>
+                        </div>
+                        
+                        <!-- Body del card -->
+                        <div class="club-card-body">
+                            ${club.aceptaSolicitudes ? `
+                                <div class="text-center">
+                                    <span class="badge-acepta-modern">
+                                        <i class="fas fa-check-circle"></i> Acepta Solicitudes
+                                    </span>
+                                </div>
+                            ` : ''}
+                            
+                            <p class="club-description-modern">${escaparHTML(club.descripcion) || 'Sin descripción disponible'}</p>
+                            
+                            <!-- Stats modernos -->
+                            <div class="club-stats-modern">
+                                <div class="stat-item-modern">
+                                    <div class="stat-icon-modern">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <span class="stat-value-modern">${club.competidoresActivos || 0}</span>
+                                    <span class="stat-label-modern">Competidores</span>
+                                </div>
+                                <div class="stat-item-modern">
+                                    <div class="stat-icon-modern">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <span class="stat-value-modern">${club.puntajeTotalHistorico || 0}</span>
+                                    <span class="stat-label-modern">Puntos</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Acciones -->
+                            <div class="club-actions-modern">
+                                <button class="btn-ver-detalle-modern" onclick="verDetalle(${club.idClub})">
+                                    <i class="fas fa-info-circle"></i> Ver Detalle
+                                </button>
+                                ${club.aceptaSolicitudes && isAuthenticated() ?
+                    tieneSolicitudPendiente(club.idClub) ? `
+                                        <button class="btn-solicitar-modern" disabled style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); cursor: not-allowed; opacity: 0.8;">
+                                            <i class="fas fa-check-circle"></i> Solicitud Enviada
+                                        </button>
+                                    ` : `
+                                        <button class="btn-solicitar-modern" onclick="solicitarUnirse(${club.idClub})">
+                                            <i class="fas fa-paper-plane"></i> Solicitar
+                                        </button>
+                                    `
+                    : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function verDetalle(clubId) {
+            window.location.href = `club-detalle.html?id=${clubId}`;
+        }
+
+        async function solicitarUnirse(clubId) {
+            if (!isAuthenticated()) {
+                await mostrarModalAlerta(
+                    'Iniciar Sesión',
+                    'Debes iniciar sesión para solicitar unirte a un club',
+                    'info'
+                );
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // ✅ Nuevo modal con textarea para mensaje opcional
+            const mensaje = await mostrarModalSolicitud(
+                'Solicitar Unirse al Club',
+                '¿Deseas enviar una solicitud para unirte a este club?'
+            );
+
+            if (mensaje === null) return; // Usuario canceló
+
+            mostrarLoading(true);
+
+            try {
+                // ✅ Enviar body con el mensaje (puede estar vacío)
+                const body = {
+                    mensajeOpcional: mensaje.trim()
+                };
+
+                const result = await fetchAPI(`/api/competidor/clubes/${clubId}/solicitar`, 'POST', body);
+
+                if (result.success) {
+                    await mostrarModalAlerta(
+                        'Solicitud Enviada',
+                        'Tu solicitud ha sido enviada exitosamente. El representante la revisará pronto.',
+                        'success'
+                    );
+
+                    // ✅ NUEVO: Actualizar botón a "Solicitud Enviada"
+                    actualizarBotonSolicitud(clubId);
+                } else {
+                    await mostrarModalAlerta(
+                        'Error',
+                        result.message || result.mensaje || 'Error al enviar solicitud',
+                        'error'
+                    );
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                await mostrarModalAlerta(
+                    'Error',
+                    'Error de conexión con el servidor',
+                    'error'
+                );
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+
+        // ✅ NUEVA FUNCIÓN: Actualizar botón después de enviar solicitud
+        function actualizarBotonSolicitud(clubId) {
+            const clubCard = document.querySelector(`[data-club-id="${clubId}"]`);
+            if (clubCard) {
+                const btnSolicitar = clubCard.querySelector('.btn-solicitar-modern');
+                if (btnSolicitar) {
+                    btnSolicitar.innerHTML = '<i class="fas fa-check-circle me-2"></i>Solicitud Enviada';
+                    btnSolicitar.disabled = true;
+                    btnSolicitar.style.background = 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)';
+                    btnSolicitar.style.cursor = 'not-allowed';
+                    btnSolicitar.style.opacity = '0.8';
+                    btnSolicitar.onclick = null;
+                }
+            }
+        }
+
+        // ✅ Modal de solicitud con textarea para mensaje opcional
+        function mostrarModalSolicitud(titulo, mensaje) {
+            return new Promise((resolve) => {
+                const modalId = 'modalSolicitud_' + Date.now();
+
+                const modalHTML = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1" data-bs-backdrop="static">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content" style="border-radius: 20px; border: none; overflow: hidden;">
+                                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 2rem;">
+                                    <h5 class="modal-title" style="font-weight: 700; font-size: 1.3rem;">
+                                        <i class="fas fa-paper-plane me-2"></i>${titulo}
+                                    </h5>
+                                </div>
+                                <div class="modal-body" style="padding: 2rem;">
+                                    <p style="font-size: 1.05rem; margin-bottom: 1.5rem; color: #2d3748; line-height: 1.6;">
+                                        ${mensaje}
+                                    </p>
+                                    <div class="mb-3">
+                                        <label class="form-label" style="font-weight: 600; color: #2d3748; display: flex; align-items: center; gap: 0.5rem;">
+                                            <i class="fas fa-comment-dots" style="color: #667eea;"></i>
+                                            Mensaje Opcional
+                                        </label>
+                                        <textarea 
+                                            class="form-control" 
+                                            id="mensajeSolicitud_${modalId}" 
+                                            rows="4" 
+                                            placeholder="Escribe un mensaje para el representante del club (opcional)..."
+                                            style="border: 2px solid #e2e8f0; border-radius: 12px; padding: 1rem; font-size: 0.95rem; resize: none; transition: all 0.3s;"
+                                            maxlength="500"
+                                        ></textarea>
+                                        <small class="text-muted" style="font-size: 0.85rem;">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Puedes dejarlo en blanco si no deseas agregar un mensaje
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="border: none; padding: 1.5rem 2rem; background: #f7fafc;">
+                                    <button type="button" class="btn btn-secondary" data-accion="cancelar" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600;">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-accion="enviar" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 600; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                        <i class="fas fa-paper-plane me-2"></i>Enviar Solicitud
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                const modalElement = document.getElementById(modalId);
+                const textareaElement = document.getElementById(`mensajeSolicitud_${modalId}`);
+                const modal = new bootstrap.Modal(modalElement);
+
+                // Agregar efecto focus al textarea
+                textareaElement.addEventListener('focus', function () {
+                    this.style.borderColor = '#667eea';
+                    this.style.boxShadow = '0 0 0 0.2rem rgba(102, 126, 234, 0.15)';
+                });
+
+                textareaElement.addEventListener('blur', function () {
+                    this.style.borderColor = '#e2e8f0';
+                    this.style.boxShadow = 'none';
+                });
+
+                modalElement.querySelectorAll('[data-accion]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const accion = btn.dataset.accion;
+                        modal.hide();
+
+                        if (accion === 'enviar') {
+                            resolve(textareaElement.value || ''); // Retorna el mensaje o string vacío
+                        } else {
+                            resolve(null); // Usuario canceló
+                        }
+                    });
+                });
+
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    modalElement.remove();
+                });
+
+                modal.show();
+
+                // Auto-focus en el textarea después de que el modal se muestre
+                modalElement.addEventListener('shown.bs.modal', () => {
+                    textareaElement.focus();
+                });
+            });
+        }
+
+        // Modal de confirmación personalizado
+        function mostrarModalConfirmacion(titulo, mensaje, tipo = 'warning') {
+            return new Promise((resolve) => {
+                const config = {
+                    warning: {
+                        icono: 'fa-exclamation-triangle',
+                        color: '#ff9800',
+                        gradient: 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)'
+                    },
+                    info: {
+                        icono: 'fa-info-circle',
+                        color: '#667eea',
+                        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                    }
+                };
+
+                const conf = config[tipo] || config.warning;
+                const modalId = 'modalConfirmacion_' + Date.now();
+
+                const mensajeHTML = mensaje.replace(/\n/g, '<br>');
+
+                const modalHTML = `
+                    <div class="modal fade" id="${modalId}" tabindex="-1" data-bs-backdrop="static">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content" style="border-radius: 16px; border: none;">
+                                <div class="modal-header" style="background: ${conf.gradient}; color: white; border-radius: 16px 16px 0 0; padding: 1.5rem 2rem;">
+                                    <h5 class="modal-title">
+                                        <i class="fas ${conf.icono} me-2"></i>${titulo}
+                                    </h5>
+                                </div>
+                                <div class="modal-body" style="padding: 2rem; font-size: 1rem; line-height: 1.6;">
+                                    ${mensajeHTML}
+                                </div>
+                                <div class="modal-footer" style="border: none; padding: 1rem 2rem;">
+                                    <button type="button" class="btn btn-secondary" data-accion="cancelar" style="padding: 0.6rem 1.5rem;">
+                                        <i class="fas fa-times me-2"></i>Cancelar
+                                    </button>
+                                    <button type="button" class="btn btn-primary" data-accion="aceptar" style="padding: 0.6rem 1.5rem; background: ${conf.color}; border-color: ${conf.color};">
+                                        <i class="fas fa-check me-2"></i>Aceptar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                const modalElement = document.getElementById(modalId);
+                const modal = new bootstrap.Modal(modalElement);
+
+                modalElement.querySelectorAll('[data-accion]').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const accion = btn.dataset.accion;
+                        modal.hide();
+                        resolve(accion === 'aceptar');
+                    });
+                });
+
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    modalElement.remove();
+                });
+
+                modal.show();
+            });
+        }
+
+        function mostrarLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
+            document.getElementById('clubesContainer').style.display = show ? 'none' : 'flex';
+        }
+
+        function mostrarError(mensaje) {
+            console.error(mensaje);
+        }
+    </script>
+</body>
+
+</html>

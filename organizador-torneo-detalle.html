@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Torneo - ROBOTECH</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        :root {
+            --org-gradient: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            --org-color: #ff9800;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR MODERNA */
+        .navbar-modern {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: 70px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+        }
+
+        .navbar-brand-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .navbar-brand-modern .logo-circle {
+            width: 45px;
+            height: 45px;
+            background: var(--org-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        .navbar-brand-modern .logo-circle i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand-modern .brand-text {
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: var(--org-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .notification-btn:hover {
+            background: var(--org-color);
+            transform: translateY(-2px);
+        }
+
+        .notification-btn:hover i {
+            color: white;
+        }
+
+        .notification-btn i {
+            color: #6c757d;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--org-gradient);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.4rem;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-menu:hover {
+            background: var(--org-color);
+        }
+
+        .user-menu:hover .user-name,
+        .user-menu:hover i {
+            color: white;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            background: var(--org-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #2d3748;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu {
+            min-width: 280px;
+            border: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            margin-top: 0.75rem !important;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            transition: all 0.3s;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1), rgba(255, 87, 34, 0.1));
+        }
+
+        /* Dropdown de Notificaciones */
+        .notifications-dropdown {
+            width: 400px !important;
+            max-height: 500px;
+            overflow-y: auto;
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        .notifications-header {
+            padding: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .notification-item {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: rgba(255, 152, 0, 0.05);
+        }
+
+        .notification-item.unread {
+            background: rgba(255, 152, 0, 0.05);
+            border-left: 3px solid #ff9800;
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--org-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .notification-message {
+            font-size: 0.8rem;
+            color: #718096;
+            margin-bottom: 0.25rem;
+        }
+
+        .notification-time {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .notification-badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+        }
+
+        .notifications-footer {
+            padding: 0.75rem 1rem;
+            text-align: center;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .notifications-footer a {
+            color: #ff9800;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .empty-notifications {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #718096;
+        }
+
+        /* SIDEBAR */
+        .sidebar-modern {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            height: calc(100vh - 70px);
+            width: 280px;
+            background: white;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.06);
+            padding: 2rem 0;
+            overflow-y: auto;
+            z-index: 999;
+        }
+
+        .sidebar-header-modern {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header-modern h5 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-menu-modern li {
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-menu-modern li a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #6c757d;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu-modern li a:hover {
+            background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 87, 34, 0.1) 100%);
+            color: var(--org-color);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu-modern li a.active {
+            background: var(--org-gradient);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main-content-modern {
+            margin-left: 280px;
+            margin-top: 70px;
+            padding: 2.5rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* HERO SECTION */
+        .detalle-hero {
+            background: var(--org-gradient);
+            border-radius: 24px;
+            padding: 3rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 60px rgba(255, 152, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .detalle-hero::before {
+            content: '\f091';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 14rem;
+            opacity: 0.08;
+            right: -3rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .torneo-titulo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .torneo-descripcion {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 1rem;
+        }
+
+        .badge-estado-grande {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+        }
+
+        /* INFO CARDS */
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid var(--org-color);
+            margin-bottom: 2rem;
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .info-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .info-card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--org-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1.25rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--org-color);
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: #fff3e0;
+            transform: translateX(5px);
+        }
+
+        .info-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn-action {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-iniciar {
+            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-iniciar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.5);
+            color: white;
+        }
+
+        .btn-finalizar {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-finalizar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.5);
+            color: white;
+        }
+
+        .btn-ver {
+            background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(156, 39, 176, 0.4);
+        }
+
+        .btn-ver:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(156, 39, 176, 0.5);
+            color: white;
+        }
+
+        .btn-agregar {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-agregar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.5);
+            color: white;
+        }
+
+        .btn-agregar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-agregar:disabled:hover {
+            transform: none;
+            box-shadow: 0 6px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        /* CATEGORIAS */
+        .categoria-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid var(--org-color);
+            transition: all 0.3s ease;
+        }
+
+        .categoria-card:hover {
+            box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .categoria-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .categoria-nombre {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-categoria-estado {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .categoria-info {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .categoria-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6c757d;
+        }
+
+        .categoria-stat i {
+            color: var(--org-color);
+            font-size: 1.2rem;
+        }
+
+        .progress-inscripciones {
+            margin-top: 1rem;
+        }
+
+        .progress {
+            height: 25px;
+            border-radius: 15px;
+            background: #e9ecef;
+        }
+
+        .progress-bar-torneo {
+            background: var(--org-gradient);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar-modern {
+                transform: translateX(-100%);
+            }
+
+            .main-content-modern {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+
+            .detalle-hero {
+                padding: 2rem;
+            }
+
+            .torneo-titulo {
+                font-size: 1.8rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar-modern">
+        <div class="container-fluid d-flex justify-content-between align-items-center h-100">
+            <a href="index.html" class="navbar-brand-modern">
+                <div class="logo-circle">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span class="brand-text">ROBOTECH</span>
+            </a>
+
+            <div class="navbar-actions">
+                <!-- Notificaciones -->
+                <div class="dropdown">
+                    <button class="notification-btn" id="notificacionesBtn" data-bs-toggle="dropdown"
+                        data-bs-display="static" aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notificacionesBadge" style="display: none;">0</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end notifications-dropdown" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Usuario -->
+                <div class="dropdown">
+                    <div class="user-menu" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <div class="user-avatar">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <span class="user-name" id="usuarioNombre">Organizador</span>
+                        <i class="fas fa-chevron-down" style="color: #6c757d; font-size: 0.8rem;"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="px-3 py-2" style="border-bottom: 2px solid #f0f0f0;">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <div class="user-avatar">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; color: #2d3748; font-size: 0.95rem;"
+                                        id="usuarioNombreMenu">Organizador</div>
+                                    <div style="font-size: 0.8rem; color: #6c757d;" id="emailUsuarioNav"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="mt-2">
+                            <a class="dropdown-item" href="organizador-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i> Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i> Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar-modern">
+        <div class="sidebar-header-modern">
+            <h5><i class="fas fa-calendar-check"></i> Organizador</h5>
+        </div>
+        <ul class="sidebar-menu-modern">
+            <li><a href="organizador-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="organizador-torneos.html"><i class="fas fa-trophy"></i> Mis Torneos</a></li>
+            <li><a href="organizador-categorias.html"><i class="fas fa-layer-group"></i> Categorías</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content-modern">
+        <div class="mb-3">
+            <button class="btn btn-outline-secondary" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Volver
+            </button>
+        </div>
+
+        <div id="loadingState" class="text-center py-5">
+            <div class="spinner-border text-warning" style="width: 4rem; height: 4rem;"></div>
+            <p class="mt-3 text-muted">Cargando torneo...</p>
+        </div>
+
+        <div id="torneoContent" style="display: none;">
+            <!-- Hero Section -->
+            <div class="detalle-hero">
+                <div class="d-flex justify-content-between align-items-start flex-wrap">
+                    <div style="flex: 1;">
+                        <h1 class="torneo-titulo" id="torneoNombre">Cargando...</h1>
+                        <p class="torneo-descripcion" id="torneoDescripcion"></p>
+                        <div class="d-flex gap-2 align-items-center flex-wrap">
+                            <span class="badge badge-estado-grande" id="estadoBadge">CONFIGURACION</span>
+                            <span class="badge bg-light text-dark" style="padding: 0.75rem 1.5rem; font-size: 1rem;">
+                                <i class="fas fa-calendar"></i>
+                                <span id="fechasTorneo"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info General -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="info-card-title">
+                        <div class="info-card-icon">
+                            <i class="fas fa-info-circle"></i>
+                        </div>
+                        Información General
+                    </div>
+                </div>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Sede</div>
+                        <div class="info-value" id="sedeNombre">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Categorías</div>
+                        <div class="info-value" id="totalCategorias">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Inscritos</div>
+                        <div class="info-value" id="totalInscritos">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Estado</div>
+                        <div class="info-value" id="estadoTexto">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons" id="actionButtons"></div>
+
+            <!-- Categorías -->
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="info-card-title">
+                        <div class="info-card-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        Categorías del Torneo
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <!-- Botón Ver Resultados (solo visible cuando está finalizado) -->
+                        <button class="btn btn-ver" onclick="verResultados()" id="btnVerResultados"
+                            style="display: none; padding: 0.75rem 1.5rem; font-size: 0.95rem;">
+                            <i class="fas fa-trophy"></i> Ver Resultados
+                        </button>
+                        <!-- Botón Agregar Categoría -->
+                        <button class="btn btn-agregar" onclick="agregarCategoria()" id="btnAgregarCategoria">
+                            <i class="fas fa-plus"></i> Agregar Categoría
+                        </button>
+                    </div>
+                </div>
+                <div id="categoriasContent">
+                    <div class="text-center py-3">
+                        <div class="spinner-border text-warning"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.ORGANIZADOR);
+
+        let torneoId, torneo, categorias = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const usuario = getCurrentUser();
+            document.getElementById("usuarioNombre").textContent = usuario.nombreCompleto || "Organizador";
+            document.getElementById("usuarioNombreMenu").textContent = usuario.nombreCompleto || "Organizador";
+            document.getElementById("emailUsuarioNav").textContent = usuario.email || "";
+
+            const params = new URLSearchParams(window.location.search);
+            torneoId = params.get("id");
+
+            if (!torneoId) {
+                mostrarModalAlerta("Error", "ID de torneo no proporcionado", "error");
+                setTimeout(() => window.location.href = "organizador-torneos.html", 2000);
+                return;
+            }
+
+            cargarTorneo();
+        });
+
+        async function cargarTorneo() {
+            try {
+                const result = await fetchAPI(`/api/organizador/torneos`, 'GET');
+
+                console.log('🔍 Torneos recibidos:', result);
+
+                if (result.success && result.data) {
+                    torneo = result.data.find(t => t.idTorneo == torneoId);
+
+                    console.log('📋 Torneo encontrado:', torneo);
+
+                    if (!torneo) {
+                        await mostrarModalAlerta("Error", "Torneo no encontrado", "error");
+                        setTimeout(() => window.history.back(), 2000);
+                        return;
+                    }
+
+                    renderizarTorneo();
+                    await cargarCategorias();
+                } else {
+                    await mostrarModalAlerta("Error", "Error al cargar torneo", "error");
+                }
+            } catch (error) {
+                console.error("❌ Error:", error);
+                await mostrarModalAlerta("Error", "Error de conexión", "error");
+            }
+        }
+
+        function renderizarTorneo() {
+            document.getElementById("torneoNombre").textContent = torneo.nombreTorneo || "Torneo";
+            document.getElementById("torneoDescripcion").textContent = torneo.descripcion || "";
+            document.getElementById("sedeNombre").textContent = torneo.nombreSede || "N/A";
+
+            const estadoTexto = torneo.estadoDescripcion || torneo.estado || "Desconocido";
+            document.getElementById("estadoTexto").textContent = estadoTexto;
+
+            const fechas = `${formatearFechaCorta(torneo.fechaInicio)} al ${formatearFechaCorta(torneo.fechaFin)}`;
+            document.getElementById("fechasTorneo").textContent = fechas;
+
+            const estadoBadge = document.getElementById("estadoBadge");
+            estadoBadge.textContent = estadoTexto;
+            estadoBadge.className = "badge badge-estado-grande bg-" + obtenerColorEstado(estadoTexto);
+
+            renderizarBotones();
+
+            document.getElementById("loadingState").style.display = "none";
+            document.getElementById("torneoContent").style.display = "block";
+        }
+
+        function renderizarBotones() {
+            const container = document.getElementById("actionButtons");
+            const btnAgregar = document.getElementById("btnAgregarCategoria");
+            const btnVerResultados = document.getElementById("btnVerResultados");
+            let html = "";
+
+            const estado = (torneo.estadoDescripcion || torneo.estado || '').toLowerCase();
+
+            console.log('🎯 Estado del torneo:', estado);
+
+            // CONFIGURACIÓN - Puede iniciar y agregar categorías
+            if (estado.includes('configuracion')) {
+                html += `<button class="btn btn-action btn-iniciar" onclick="iniciarTorneo()"><i class="fas fa-play"></i> Iniciar Torneo</button>`;
+                btnAgregar.disabled = false;
+                btnAgregar.style.display = 'inline-flex';
+                btnVerResultados.style.display = 'none';
+            }
+            // EN CURSO - Puede ver brackets y finalizar
+            else if (estado.includes('en curso') || estado.includes('progreso')) {
+                html += `<button class="btn btn-action btn-ver" onclick="verBrackets()"><i class="fas fa-sitemap"></i> Ver Brackets</button>`;
+                html += `<button class="btn btn-action btn-finalizar" onclick="finalizarTorneo()"><i class="fas fa-flag-checkered"></i> Finalizar Torneo</button>`;
+                btnAgregar.disabled = true;
+                btnAgregar.style.display = 'none';
+                btnVerResultados.style.display = 'none';
+            }
+            // FINALIZADO - Mostrar botón de resultados en categorías
+            else if (estado.includes('finalizado')) {
+                btnAgregar.disabled = true;
+                btnAgregar.style.display = 'none';
+                btnVerResultados.style.display = 'inline-flex';
+            }
+            // DESCONOCIDO - Ocultar todo
+            else {
+                btnAgregar.disabled = true;
+                btnAgregar.style.display = 'none';
+                btnVerResultados.style.display = 'none';
+            }
+
+            container.innerHTML = html;
+        }
+
+        async function cargarCategorias() {
+            try {
+                const result = await fetchAPI(`/api/organizador/torneos/${torneoId}/categorias`, 'GET');
+
+                console.log('📊 Categorías recibidas:', result);
+
+                if (result.success && result.data) {
+                    categorias = result.data;
+                    document.getElementById("totalCategorias").textContent = categorias.length;
+
+                    const totalInscritos = categorias.reduce((sum, cat) => sum + (cat.inscritosActuales || 0), 0);
+                    document.getElementById("totalInscritos").textContent = totalInscritos;
+
+                    renderizarCategorias();
+                } else {
+                    document.getElementById("categoriasContent").innerHTML = '<div class="alert alert-warning">No se pudieron cargar las categorías</div>';
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("categoriasContent").innerHTML = '<div class="alert alert-danger">Error al cargar categorías</div>';
+            }
+        }
+
+        function renderizarCategorias() {
+            const container = document.getElementById("categoriasContent");
+
+            if (categorias.length === 0) {
+                container.innerHTML = '<div class="alert alert-info"><i class="fas fa-info-circle"></i> No hay categorías registradas. Agrega la primera categoría para comenzar.</div>';
+                return;
+            }
+
+            let html = "";
+            categorias.forEach((cat) => {
+                const inscritos = cat.inscritosActuales || 0;
+                const cupoMax = cat.cupoMaximo || 0;
+                const cupoMin = cat.cupoMinimo || 2;
+                const porcentaje = cupoMax > 0 ? Math.round((inscritos / cupoMax) * 100) : 0;
+
+                // Determinar el texto de la barra
+                let textoProgreso = "";
+
+                if (porcentaje === 100) {
+                    textoProgreso = "100% lleno";
+                } else if (inscritos < cupoMin) {
+                    textoProgreso = `${porcentaje}% (mínimo ${cupoMin})`;
+                } else {
+                    textoProgreso = `${porcentaje}%`;
+                }
+
+                // Obtener estado de la categoría
+                const estadoCategoria = cat.estado || "Desconocido";
+                const estadoId = cat.idEstado || 0;
+                const badgeColorCategoria = obtenerColorEstadoCategoria(estadoId);
+
+                console.log(`📌 Categoría: ${cat.nombreCategoria}, Estado: ${estadoCategoria} (ID: ${estadoId})`);
+
+                html += `
+                    <div class="categoria-card">
+                        <div class="categoria-header">
+                            <div>
+                                <div class="categoria-nombre">${escaparHTML(cat.nombreCategoria)}</div>
+                            </div>
+                            <span class="badge badge-categoria-estado bg-${badgeColorCategoria}">${escaparHTML(estadoCategoria)}</span>
+                        </div>
+                        <div class="categoria-info">
+                            <div class="categoria-stat">
+                                <i class="fas fa-weight-hanging"></i> ${escaparHTML(cat.nombreCategoriaPeso || "Libre")}
+                            </div>
+                            <div class="categoria-stat">
+                                <i class="fas fa-users"></i> ${inscritos}/${cupoMax}
+                            </div>
+                            <div class="categoria-stat">
+                                <i class="fas fa-trophy"></i> ${cupoMin} mínimo
+                            </div>
+                        </div>
+                        ${cat.descripcion ? `<p class="text-muted mb-2">${escaparHTML(cat.descripcion)}</p>` : ""}
+                        <div class="progress-inscripciones">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-torneo" style="width:${porcentaje}%">${textoProgreso}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        async function iniciarTorneo() {
+            if (categorias.length === 0) {
+                await mostrarModalAlerta("Error", "Debes agregar al menos una categoría", "warning");
+                return;
+            }
+
+            const confirmado = await confirmarModal(
+                "Iniciar Torneo",
+                "¿Iniciar el torneo? Se generarán los brackets automáticamente y no podrás modificar las categorías.",
+                "Sí, Iniciar",
+                "Cancelar"
+            );
+
+            if (!confirmado) return;
+
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/organizador/torneos/${torneoId}/iniciar`, "POST");
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta("¡Torneo Iniciado!", "Brackets generados automáticamente.", "success");
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    await mostrarModalAlerta("Error", result.message || "Error al iniciar torneo", "error");
+                }
+            } catch (error) {
+                ocultarLoading();
+                await mostrarModalAlerta("Error", "Error de conexión", "error");
+            }
+        }
+
+        async function finalizarTorneo() {
+            // Contar cuántas categorías NO están finalizadas
+            const categoriasActivas = categorias.filter(cat => {
+                const estadoId = cat.idEstado || 0;
+                return estadoId !== 15; // 15 = FINALIZADA
+            });
+
+            console.log('🔍 Categorías activas:', categoriasActivas.length);
+
+            // Si hay categorías activas, mostrar advertencia
+            if (categoriasActivas.length > 0) {
+                const nombresCategorias = categoriasActivas.map(c => c.nombreCategoria).join(', ');
+
+                const confirmado = await confirmarModal(
+                    "⚠️ Categorías Pendientes",
+                    `Aún hay ${categoriasActivas.length} categoría(s) que no han finalizado: ${nombresCategorias}. ¿Estás seguro de finalizar el torneo?`,
+                    "Sí, Finalizar de Todos Modos",
+                    "Cancelar"
+                );
+
+                if (!confirmado) return;
+            } else {
+                // Si todas están finalizadas, confirmación normal
+                const confirmado = await confirmarModal(
+                    "Finalizar Torneo",
+                    "Todas las categorías han finalizado. ¿Deseas finalizar el torneo oficialmente?",
+                    "Sí, Finalizar",
+                    "Cancelar"
+                );
+
+                if (!confirmado) return;
+            }
+
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/organizador/torneos/${torneoId}/finalizar`, "POST");
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta("¡Torneo Finalizado!", "El torneo se ha finalizado exitosamente.", "success");
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    await mostrarModalAlerta("Error", result.message || "Error al finalizar", "error");
+                }
+            } catch (error) {
+                ocultarLoading();
+                await mostrarModalAlerta("Error", "Error de conexión", "error");
+            }
+        }
+
+        async function agregarCategoria() {
+            const estado = (torneo.estadoDescripcion || torneo.estado || '').toLowerCase();
+
+            if (!estado.includes('configuracion')) {
+                await mostrarModalAlerta(
+                    "Acción No Permitida",
+                    "Solo puedes agregar categorías cuando el torneo está en configuración.",
+                    "warning"
+                );
+                return;
+            }
+
+            // Cargar categorías disponibles
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/organizador/categorias-peso/disponibles?torneoId=${torneoId}`, 'GET');
+                ocultarLoading();
+
+                if (!result.success || !result.data || result.data.length === 0) {
+                    await mostrarModalAlerta(
+                        "Sin Categorías Disponibles",
+                        "No hay categorías de peso disponibles para agregar. Todas las categorías ya están asignadas al torneo.",
+                        "info"
+                    );
+                    return;
+                }
+
+                const categorias = result.data;
+
+                // Crear el modal
+                const modalHTML = `
+            <div class="modal fade" id="modalAgregarCategoria" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content" style="border-radius: 20px; overflow: hidden;">
+                        <div class="modal-header" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; border: none;">
+                            <h5 class="modal-title" style="font-weight: 700;">
+                                <i class="fas fa-plus-circle me-2"></i>Agregar Categoría al Torneo
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" style="padding: 2rem;">
+                            <form id="formAgregarCategoria">
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Categoría de Peso *</label>
+                                    <select class="form-select form-select-lg" id="selectCategoriaPeso" required style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        <option value="">Selecciona una categoría...</option>
+                                        ${categorias.map(cat => `
+                                            <option value="${cat.idCategoriaPeso}" 
+                                                    data-nombre="${escaparHTML(cat.nombre)}"
+                                                    data-descripcion="${escaparHTML(cat.descripcion || '')}"
+                                                    data-peso="${cat.pesoMinimo}-${cat.pesoMaximo}kg">
+                                                ${escaparHTML(cat.nombre)} (${cat.pesoMinimo}-${cat.pesoMaximo} kg)
+                                            </option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+
+                                <div class="mb-4" id="infoCategoriaSeleccionada" style="display: none; background: #f8f9fa; padding: 1.5rem; border-radius: 12px; border-left: 4px solid #ff9800;">
+                                    <h6 style="color: #ff9800; font-weight: 700; margin-bottom: 0.75rem;">
+                                        <i class="fas fa-info-circle me-2"></i>Información de la Categoría
+                                    </h6>
+                                    <p class="mb-0" id="descripcionCategoriaSeleccionada" style="color: #6c757d;"></p>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Cupo Mínimo *</label>
+                                        <input type="number" class="form-control form-control-lg" id="cupoMinimo" 
+                                               min="2" step="2" value="2" required 
+                                               style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>Debe ser un número par
+                                        </small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Cupo Máximo *</label>
+                                        <input type="number" class="form-control form-control-lg" id="cupoMaximo" 
+                                               min="2" value="8" required 
+                                               style="border-radius: 12px; border: 2px solid #e0e0e0;">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>Capacidad total
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">Descripción Adicional (Opcional)</label>
+                                    <textarea class="form-control" id="descripcionCategoria" rows="3" 
+                                              placeholder="Agrega información adicional sobre esta categoría en el torneo..."
+                                              style="border-radius: 12px; border: 2px solid #e0e0e0;"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer" style="border: none; padding: 1.5rem 2rem; background: #f8f9fa;">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" 
+                                    style="border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                                <i class="fas fa-times me-2"></i>Cancelar
+                            </button>
+                            <button type="button" class="btn" onclick="guardarNuevaCategoria()" 
+                                    style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; border: none; border-radius: 10px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                                <i class="fas fa-check me-2"></i>Agregar Categoría
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+                // Agregar modal al DOM
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+                // Mostrar información cuando se selecciona una categoría
+                document.getElementById('selectCategoriaPeso').addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const descripcion = selectedOption.getAttribute('data-descripcion');
+                    const infoDiv = document.getElementById('infoCategoriaSeleccionada');
+                    const descripcionP = document.getElementById('descripcionCategoriaSeleccionada');
+
+                    if (this.value && descripcion) {
+                        descripcionP.textContent = descripcion;
+                        infoDiv.style.display = 'block';
+                    } else {
+                        infoDiv.style.display = 'none';
+                    }
+                });
+
+                // Validar cupo mínimo (debe ser par)
+                document.getElementById('cupoMinimo').addEventListener('input', function () {
+                    if (parseInt(this.value) % 2 !== 0) {
+                        this.setCustomValidity('El cupo mínimo debe ser un número par');
+                    } else {
+                        this.setCustomValidity('');
+                    }
+                });
+
+                // Mostrar modal
+                const modal = new bootstrap.Modal(document.getElementById('modalAgregarCategoria'));
+                modal.show();
+
+                // Limpiar modal al cerrarse
+                document.getElementById('modalAgregarCategoria').addEventListener('hidden.bs.modal', function () {
+                    this.remove();
+                });
+
+            } catch (error) {
+                ocultarLoading();
+                console.error("Error:", error);
+                await mostrarModalAlerta("Error", "No se pudieron cargar las categorías disponibles", "error");
+            }
+        }
+
+        async function guardarNuevaCategoria() {
+            const idCategoriaPeso = document.getElementById('selectCategoriaPeso').value;
+            const cupoMinimo = parseInt(document.getElementById('cupoMinimo').value);
+            const cupoMaximo = parseInt(document.getElementById('cupoMaximo').value);
+            const descripcion = document.getElementById('descripcionCategoria').value.trim();
+
+            // Validaciones
+            if (!idCategoriaPeso) {
+                await mostrarModalAlerta("Error", "Debes seleccionar una categoría", "warning");
+                return;
+            }
+
+            if (cupoMinimo % 2 !== 0) {
+                await mostrarModalAlerta("Error", "El cupo mínimo debe ser un número par", "warning");
+                return;
+            }
+
+            if (cupoMaximo < cupoMinimo) {
+                await mostrarModalAlerta("Error", "El cupo máximo no puede ser menor al mínimo", "warning");
+                return;
+            }
+
+            // Cerrar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalAgregarCategoria'));
+            modal.hide();
+
+            mostrarLoading();
+            try {
+                const result = await fetchAPI(`/api/organizador/torneos/${torneoId}/categorias/agregar`, 'POST', {
+                    idCategoriaPeso: parseInt(idCategoriaPeso),
+                    cupoMinimo: cupoMinimo,
+                    cupoMaximo: cupoMaximo,
+                    descripcion: descripcion || null
+                });
+
+                ocultarLoading();
+
+                if (result.success) {
+                    await mostrarModalAlerta("¡Categoría Agregada!", "La categoría se agregó exitosamente al torneo.", "success");
+                    setTimeout(() => window.location.reload(), 1500);
+                } else {
+                    await mostrarModalAlerta("Error", result.message || "Error al agregar categoría", "error");
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error("Error:", error);
+                await mostrarModalAlerta("Error", "Error al agregar la categoría", "error");
+            }
+        }
+
+        function verBrackets() {
+            window.location.href = `organizador-brackets.html?torneoId=${torneoId}`;
+        }
+
+        function verResultados() {
+            window.location.href = `resultados.html?id=${torneoId}`;
+        }
+
+        function obtenerColorEstado(estado) {
+            const estadoLower = (estado || '').toLowerCase();
+            if (estadoLower.includes('configuracion')) return 'warning';
+            if (estadoLower.includes('en curso') || estadoLower.includes('progreso')) return 'success';
+            if (estadoLower.includes('finalizado')) return 'secondary';
+            return 'secondary';
+        }
+
+        function obtenerColorEstadoCategoria(estadoId) {
+            // 11 = Activa (Configuración)
+            // 13 = Cerrada (En Curso)
+            // 15 = Finalizada
+
+            switch (estadoId) {
+                case 11: // Activa
+                    return 'info';
+                case 13: // Cerrada (En Curso)
+                    return 'success';
+                case 15: // Finalizada
+                    return 'secondary';
+                default:
+                    return 'secondary';
+            }
+        }
+    </script>
+</body>
+
+</html>

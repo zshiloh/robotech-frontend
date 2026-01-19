@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluar Combate - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para evaluación */
+        .evaluar-hero {
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(103, 58, 183, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .evaluar-hero::before {
+            content: '\f46d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .combate-info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border-top: 5px solid #673ab7;
+        }
+
+        .combate-vs {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .robot-card {
+            flex: 1;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 3px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .robot-card:hover {
+            border-color: #673ab7;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(103, 58, 183, 0.2);
+        }
+
+        .robot-titulo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .robot-detalle {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vs-divider {
+            font-size: 3rem;
+            color: #673ab7;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .torneo-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .evaluation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .evaluation-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .evaluation-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #212529;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .evaluation-title i {
+            color: #673ab7;
+            font-size: 1.5rem;
+        }
+
+        .criterio-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #673ab7;
+        }
+
+        .criterio-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .criterio-descripcion {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .puntuacion-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .puntuacion-input {
+            width: 120px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .puntuacion-input:focus {
+            outline: none;
+            border-color: #673ab7;
+            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+        }
+
+        .puntuacion-range {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .puntuacion-range input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #ff5252 0%, #ffc107 50%, #4caf50 100%);
+            border-radius: 10px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .puntuacion-range input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #673ab7;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(103, 58, 183, 0.4);
+        }
+
+        .puntuacion-range input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #673ab7;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(103, 58, 183, 0.4);
+        }
+
+        .puntuacion-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .nota-final-display {
+            background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 20px rgba(255, 179, 0, 0.3);
+        }
+
+        .nota-final-label {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #000;
+            margin-bottom: 0.5rem;
+        }
+
+        .nota-final-value {
+            font-size: 4rem;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .observaciones-box {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+
+        .observaciones-box:focus {
+            outline: none;
+            border-color: #673ab7;
+            box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .btn-guardar {
+            background: linear-gradient(135deg, #673ab7 0%, #512da8 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(103, 58, 183, 0.3);
+        }
+
+        .btn-guardar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(103, 58, 183, 0.4);
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: #6c757d;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cancelar:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .alert-info-custom {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-left: 4px solid #2196f3;
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .readonly-mode .puntuacion-input,
+        .readonly-mode .puntuacion-range input,
+        .readonly-mode .observaciones-box {
+            pointer-events: none;
+            opacity: 0.7;
+            background: #f8f9fa;
+        }
+
+        .readonly-badge {
+            background: #2196f3;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="jurado-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="width: 400px;" id="notificacionesDropdownMenu">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="jurado-dashboard.html"><i
+                                    class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
+                        <li><a class="dropdown-item" href="usuario-perfil.html"><i class="fas fa-user-edit me-2"></i>Mi
+                                Perfil</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i
+                                    class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-gavel"></i> Jurado</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="jurado-dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="jurado-combates.html"><i class="fas fa-list"></i> Mis Combates</a></li>
+            <li><a href="jurado-evaluar.html" class="active"><i class="fas fa-clipboard-check"></i> Evaluar</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <div class="evaluar-hero">
+                <h1 class="mb-2"><i class="fas fa-clipboard-check"></i> Evaluación de Combate</h1>
+                <p class="mb-0" style="font-size: 1.1rem; opacity: 0.95;">
+                    Evalúa el combate con imparcialidad y profesionalismo
+                </p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="text-center py-5">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+                <p class="mt-3">Cargando información del combate...</p>
+            </div>
+
+            <!-- Content -->
+            <div id="evaluationContent" style="display: none;">
+
+                <!-- Combate Info -->
+                <div class="combate-info-card">
+                    <div id="readonlyBadge"></div>
+
+                    <div class="torneo-info">
+                        <strong><i class="fas fa-trophy"></i> <span id="nombreTorneo"></span></strong>
+                        <span id="faseInfo"></span>
+                    </div>
+
+                    <div class="combate-vs">
+                        <div class="robot-card">
+                            <div class="robot-titulo">
+                                <i class="fas fa-robot"></i>
+                                <span id="robot1Nombre"></span>
+                            </div>
+                            <div class="robot-detalle">
+                                <i class="fas fa-user"></i>
+                                <span id="robot1Competidor"></span>
+                            </div>
+                            <div class="robot-detalle">
+                                <i class="fas fa-shield-alt"></i>
+                                <span id="robot1Club"></span>
+                            </div>
+                        </div>
+
+                        <div class="vs-divider">⚡</div>
+
+                        <div class="robot-card">
+                            <div class="robot-titulo">
+                                <i class="fas fa-robot"></i>
+                                <span id="robot2Nombre"></span>
+                            </div>
+                            <div class="robot-detalle">
+                                <i class="fas fa-user"></i>
+                                <span id="robot2Competidor"></span>
+                            </div>
+                            <div class="robot-detalle">
+                                <i class="fas fa-shield-alt"></i>
+                                <span id="robot2Club"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluation Form -->
+                <form id="evaluationForm">
+
+                    <!-- Criterio 1: Diseño -->
+                    <div class="evaluation-card">
+                        <div class="evaluation-header">
+                            <div class="evaluation-title">
+                                <i class="fas fa-drafting-compass"></i>
+                                <span>Criterios de Evaluación</span>
+                            </div>
+                        </div>
+
+                        <div class="criterio-group">
+                            <div class="criterio-label">
+                                <span>1. Diseño y Construcción</span>
+                                <span class="text-muted">(0-20 puntos)</span>
+                            </div>
+                            <div class="criterio-descripcion">
+                                Calidad del diseño, innovación, materiales utilizados, acabados
+                            </div>
+                            <div class="puntuacion-container">
+                                <input type="number" class="puntuacion-input" id="diseno" min="0" max="20" step="0.5"
+                                    value="0">
+                                <div class="puntuacion-range">
+                                    <input type="range" id="disenoRange" min="0" max="20" step="0.5" value="0">
+                                    <div class="puntuacion-label">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="criterio-group">
+                            <div class="criterio-label">
+                                <span>2. Funcionalidad</span>
+                                <span class="text-muted">(0-20 puntos)</span>
+                            </div>
+                            <div class="criterio-descripcion">
+                                Efectividad de los mecanismos, precisión de movimientos, respuesta de controles
+                            </div>
+                            <div class="puntuacion-container">
+                                <input type="number" class="puntuacion-input" id="funcionalidad" min="0" max="20"
+                                    step="0.5" value="0">
+                                <div class="puntuacion-range">
+                                    <input type="range" id="funcionalidadRange" min="0" max="20" step="0.5" value="0">
+                                    <div class="puntuacion-label">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="criterio-group">
+                            <div class="criterio-label">
+                                <span>3. Estrategia de Combate</span>
+                                <span class="text-muted">(0-20 puntos)</span>
+                            </div>
+                            <div class="criterio-descripcion">
+                                Táctica empleada, adaptación durante el combate, decisiones del piloto
+                            </div>
+                            <div class="puntuacion-container">
+                                <input type="number" class="puntuacion-input" id="estrategia" min="0" max="20"
+                                    step="0.5" value="0">
+                                <div class="puntuacion-range">
+                                    <input type="range" id="estrategiaRange" min="0" max="20" step="0.5" value="0">
+                                    <div class="puntuacion-label">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="criterio-group">
+                            <div class="criterio-label">
+                                <span>4. Agresividad y Control</span>
+                                <span class="text-muted">(0-20 puntos)</span>
+                            </div>
+                            <div class="criterio-descripcion">
+                                Balance entre ofensiva y defensa, control del robot, dominio del combate
+                            </div>
+                            <div class="puntuacion-container">
+                                <input type="number" class="puntuacion-input" id="agresividad" min="0" max="20"
+                                    step="0.5" value="0">
+                                <div class="puntuacion-range">
+                                    <input type="range" id="agresividadRange" min="0" max="20" step="0.5" value="0">
+                                    <div class="puntuacion-label">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="criterio-group">
+                            <div class="criterio-label">
+                                <span>5. Resistencia y Durabilidad</span>
+                                <span class="text-muted">(0-20 puntos)</span>
+                            </div>
+                            <div class="criterio-descripcion">
+                                Capacidad de resistir daños, mantenerse funcional, recuperación ante impactos
+                            </div>
+                            <div class="puntuacion-container">
+                                <input type="number" class="puntuacion-input" id="resistencia" min="0" max="20"
+                                    step="0.5" value="0">
+                                <div class="puntuacion-range">
+                                    <input type="range" id="resistenciaRange" min="0" max="20" step="0.5" value="0">
+                                    <div class="puntuacion-label">
+                                        <span>0</span>
+                                        <span>20</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Nota Final -->
+                    <div class="nota-final-display">
+                        <div class="nota-final-label">Nota Final</div>
+                        <div class="nota-final-value" id="notaFinal">0.0</div>
+                        <div class="mt-2" style="font-size: 0.875rem; color: #000;">/ 100 puntos</div>
+                    </div>
+
+                    <!-- Observaciones -->
+                    <div class="evaluation-card">
+                        <div class="evaluation-header">
+                            <div class="evaluation-title">
+                                <i class="fas fa-comment-alt"></i>
+                                <span>Observaciones</span>
+                            </div>
+                        </div>
+                        <textarea class="observaciones-box" id="observaciones"
+                            placeholder="Escribe tus observaciones sobre el combate (opcional)..."
+                            maxlength="1000"></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span> / 1000 caracteres
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-cancelar" onclick="cancelar()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-guardar" id="btnGuardar">
+                            <i class="fas fa-save"></i> Guardar Evaluación
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.JURADO);
+
+        let idCombate = null;
+        let isReadOnly = false;
+        let combateData = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Jurado';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            // Obtener ID del combate de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            idCombate = urlParams.get('id');
+            isReadOnly = urlParams.get('view') === 'true';
+
+            if (!idCombate) {
+                mostrarAlerta('No se especificó un combate', 'error');
+                setTimeout(() => window.location.href = 'jurado-combates.html', 2000);
+                return;
+            }
+
+            cargarCombate();
+            inicializarEventos();
+        });
+
+        function inicializarEventos() {
+            // Sincronizar inputs con ranges
+            ['diseno', 'funcionalidad', 'estrategia', 'agresividad', 'resistencia'].forEach(criterio => {
+                const input = document.getElementById(criterio);
+                const range = document.getElementById(criterio + 'Range');
+
+                input.addEventListener('input', () => {
+                    range.value = input.value;
+                    calcularNotaFinal();
+                });
+
+                range.addEventListener('input', () => {
+                    input.value = range.value;
+                    calcularNotaFinal();
+                });
+            });
+
+            // Contador de caracteres
+            document.getElementById('observaciones').addEventListener('input', (e) => {
+                document.getElementById('charCount').textContent = e.target.value.length;
+            });
+
+            // Form submit
+            document.getElementById('evaluationForm').addEventListener('submit', guardarEvaluacion);
+        }
+
+        async function cargarCombate() {
+            try {
+                const result = await fetchAPI(`/api/jurado/combates/${idCombate}`, 'GET');
+
+                if (result.success && result.data) {
+                    combateData = result.data;
+                    mostrarDatosCombate();
+
+                    if (isReadOnly || combateData.evaluado) {
+                        activarModoLectura();
+                    }
+
+                    document.getElementById('loadingState').style.display = 'none';
+                    document.getElementById('evaluationContent').style.display = 'block';
+                } else {
+                    throw new Error('No se pudo cargar el combate');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarAlerta('Error al cargar el combate', 'error');
+                setTimeout(() => window.location.href = 'jurado-combates.html', 2000);
+            }
+        }
+
+        function mostrarDatosCombate() {
+            document.getElementById('nombreTorneo').textContent = combateData.nombreTorneo || 'Torneo';
+            document.getElementById('faseInfo').textContent = combateData.fase ? ` - ${combateData.fase}` : '';
+
+            document.getElementById('robot1Nombre').textContent = combateData.nombreRobot1 || 'Robot 1';
+            document.getElementById('robot1Competidor').textContent = combateData.nombreCompetidor1 || 'Competidor';
+            document.getElementById('robot1Club').textContent = combateData.nombreClub1 || 'Club';
+
+            document.getElementById('robot2Nombre').textContent = combateData.nombreRobot2 || 'Robot 2';
+            document.getElementById('robot2Competidor').textContent = combateData.nombreCompetidor2 || 'Competidor';
+            document.getElementById('robot2Club').textContent = combateData.nombreClub2 || 'Club';
+
+            if (combateData.evaluado && combateData.evaluacion) {
+                cargarEvaluacion(combateData.evaluacion);
+            }
+        }
+
+        function cargarEvaluacion(evaluacion) {
+            document.getElementById('diseno').value = evaluacion.diseno || 0;
+            document.getElementById('disenoRange').value = evaluacion.diseno || 0;
+
+            document.getElementById('funcionalidad').value = evaluacion.funcionalidad || 0;
+            document.getElementById('funcionalidadRange').value = evaluacion.funcionalidad || 0;
+
+            document.getElementById('estrategia').value = evaluacion.estrategia || 0;
+            document.getElementById('estrategiaRange').value = evaluacion.estrategia || 0;
+
+            document.getElementById('agresividad').value = evaluacion.agresividad || 0;
+            document.getElementById('agresividadRange').value = evaluacion.agresividad || 0;
+
+            document.getElementById('resistencia').value = evaluacion.resistencia || 0;
+            document.getElementById('resistenciaRange').value = evaluacion.resistencia || 0;
+
+            document.getElementById('observaciones').value = evaluacion.observaciones || '';
+            document.getElementById('charCount').textContent = (evaluacion.observaciones || '').length;
+
+            calcularNotaFinal();
+        }
+
+        function activarModoLectura() {
+            document.getElementById('evaluationContent').classList.add('readonly-mode');
+            document.getElementById('readonlyBadge').innerHTML = '<span class="readonly-badge"><i class="fas fa-eye"></i> Modo Lectura</span>';
+            document.getElementById('btnGuardar').style.display = 'none';
+        }
+
+        function calcularNotaFinal() {
+            const diseno = parseFloat(document.getElementById('diseno').value) || 0;
+            const funcionalidad = parseFloat(document.getElementById('funcionalidad').value) || 0;
+            const estrategia = parseFloat(document.getElementById('estrategia').value) || 0;
+            const agresividad = parseFloat(document.getElementById('agresividad').value) || 0;
+            const resistencia = parseFloat(document.getElementById('resistencia').value) || 0;
+
+            const total = diseno + funcionalidad + estrategia + agresividad + resistencia;
+            document.getElementById('notaFinal').textContent = total.toFixed(1);
+        }
+
+        async function guardarEvaluacion(e) {
+            e.preventDefault();
+
+            if (isReadOnly || (combateData && combateData.evaluado)) {
+                mostrarAlerta('Esta evaluación ya fue guardada', 'warning');
+                return;
+            }
+
+            const evaluacion = {
+                diseno: parseFloat(document.getElementById('diseno').value),
+                funcionalidad: parseFloat(document.getElementById('funcionalidad').value),
+                estrategia: parseFloat(document.getElementById('estrategia').value),
+                agresividad: parseFloat(document.getElementById('agresividad').value),
+                resistencia: parseFloat(document.getElementById('resistencia').value),
+                observaciones: document.getElementById('observaciones').value.trim()
+            };
+
+            const notaFinal = Object.values(evaluacion).filter(v => typeof v === 'number').reduce((a, b) => a + b, 0);
+
+            if (notaFinal === 0) {
+                mostrarAlerta('Debes asignar al menos alguna puntuación', 'warning');
+                return;
+            }
+
+            if (!confirmar('¿Deseas guardar esta evaluación? No podrás modificarla después.')) {
+                return;
+            }
+
+            mostrarLoading();
+
+            try {
+                const result = await fetchAPI(`/api/jurado/combates/${idCombate}/evaluar`, 'POST', evaluacion);
+
+                ocultarLoading();
+
+                if (result.success) {
+                    mostrarAlerta('Evaluación guardada exitosamente', 'success');
+                    setTimeout(() => window.location.href = 'jurado-combates.html', 1500);
+                } else {
+                    mostrarAlerta(result.data?.message || 'Error al guardar', 'error');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión', 'error');
+            }
+        }
+
+        function cancelar() {
+            if (confirmar('¿Deseas cancelar? Los cambios no guardados se perderán.')) {
+                window.location.href = 'jurado-combates.html';
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Miembros - ROBOTECH</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        /* Estilos personalizados para miembros */
+        .miembros-hero {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .miembros-hero::before {
+            content: '\f0c0';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 10rem;
+            opacity: 0.08;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-box-hero {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-box-hero-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .stat-box-hero-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .toolbar {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: #4facfe;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus {
+            border-color: #4facfe;
+            outline: none;
+        }
+
+        .member-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover {
+            border-color: #4facfe;
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-avatar-lg {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+        }
+
+        .member-main-info {
+            flex-grow: 1;
+        }
+
+        .member-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0.25rem;
+        }
+
+        .member-email {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 0.5rem;
+        }
+
+        .member-robot-name {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .member-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-stat {
+            text-align: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+
+        .member-stat.points {
+            border-left-color: #ffc107;
+        }
+
+        .member-stat.wins {
+            border-left-color: #28a745;
+        }
+
+        .member-stat.losses {
+            border-left-color: #dc3545;
+        }
+
+        .member-stat.winrate {
+            border-left-color: #17a2b8;
+        }
+
+        .member-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #212529;
+        }
+
+        .member-stat-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .btn-view {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            color: white;
+        }
+
+        .btn-expulsar {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-expulsar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+            color: white;
+        }
+
+        .empty-state-members {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-state-members i {
+            font-size: 5rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .member-phone {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom fixed-top">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand d-flex align-items-center" href="representante-dashboard.html">
+                <img src="assets/images/logo.png" alt="ROBOTECH Logo" onerror="this.style.display='none'">
+                <span>ROBOTECH</span>
+            </a>
+            <div class="d-flex align-items-center">
+                <!-- Notificaciones -->
+                <div class="dropdown me-3">
+                    <a class="nav-link text-white position-relative" href="#" id="notificacionesDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                            id="notificacionesBadge" style="display: none;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end"
+                        style="width: 400px; max-height: 500px; overflow-y: auto;" id="notificacionesDropdownMenu"
+                        aria-labelledby="notificacionesDropdown">
+                        <li class="dropdown-item-text text-center py-3">
+                            <div class="spinner-border spinner-border-sm" role="status">
+                                <span class="visually-hidden">Cargando...</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Dropdown de Usuario -->
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> <span id="usuarioNombre"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <h6 class="dropdown-header" id="emailUsuarioNav">email@ejemplo.com</h6>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="representante-dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>Mi Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="usuario-perfil.html">
+                                <i class="fas fa-user-edit me-2"></i>Mi Perfil
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                                <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h5><i class="fas fa-user-tie"></i> Representante</h5>
+        </div>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="representante-dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+            </li>
+            <li>
+                <a href="representante-club.html"><i class="fas fa-shield-alt"></i> Mi Club</a>
+            </li>
+            <li>
+                <a href="representante-miembros.html" class="active"><i class="fas fa-users"></i> Miembros</a>
+            </li>
+            <li>
+                <a href="representante-invitaciones.html"><i class="fas fa-envelope"></i> Invitaciones</a>
+            </li>
+            <li>
+                <a href="representante-solicitudes.html"><i class="fas fa-inbox"></i> Solicitudes</a>
+            </li>
+            <li>
+                <a href="representante-inscripciones.html"><i class="fas fa-clipboard-list"></i> Inscripciones</a>
+            </li>
+            <li>
+                <a href="representante-inscripciones-pendientes.html"><i class="fas fa-clock"></i> Pendientes</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" style="margin-top: 60px;">
+        <div class="container-fluid">
+
+            <!-- Hero Section -->
+            <div class="miembros-hero">
+                <h1 class="mb-3"><i class="fas fa-users"></i> Gestión de Miembros</h1>
+                <p class="mb-3" style="font-size: 1.1rem; opacity: 0.95;">
+                    Administra tu equipo y monitorea el rendimiento de cada competidor
+                </p>
+                <div class="stats-bar">
+                    <div class="stat-box-hero">
+                        <span class="stat-box-hero-value" id="statTotal">0</span>
+                        <span class="stat-box-hero-label">Total Miembros</span>
+                    </div>
+                    <div class="stat-box-hero">
+                        <span class="stat-box-hero-value" id="statActivos">0</span>
+                        <span class="stat-box-hero-label">Activos</span>
+                    </div>
+                    <div class="stat-box-hero">
+                        <span class="stat-box-hero-value" id="statPuntos">0</span>
+                        <span class="stat-box-hero-label">Puntos Totales</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por nombre, email o robot..."
+                        oninput="filtrarMiembros()">
+                </div>
+                <select class="filter-select" id="sortSelect" onchange="ordenarMiembros()">
+                    <option value="nombre">Ordenar por Nombre</option>
+                    <option value="puntos">Ordenar por Puntos</option>
+                    <option value="victorias">Ordenar por Victorias</option>
+                    <option value="winrate">Ordenar por Win Rate</option>
+                </select>
+                <div class="badge bg-primary" style="font-size: 1rem; padding: 0.75rem 1rem;">
+                    <span id="contadorMiembros">0</span> resultados
+                </div>
+            </div>
+
+            <!-- Lista de Miembros -->
+            <div id="listaMiembros">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Cargando miembros...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/notificaciones.js"></script>
+
+    <script>
+        protectPage(NOMBRES_ROLES.REPRESENTANTE);
+
+        let miembros = [];
+        let miembrosFiltrados = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const usuario = getCurrentUser();
+            document.getElementById('usuarioNombre').textContent = usuario.nombreCompleto || 'Representante';
+            document.getElementById('emailUsuarioNav').textContent = usuario.email || '';
+
+            cargarMiembros();
+        });
+
+        // =====================================
+        // CARGAR MIEMBROS
+        // =====================================
+        async function cargarMiembros() {
+            try {
+                console.log('👥 Cargando miembros...');
+
+                const result = await fetchAPI('/api/representante/miembros', 'GET');
+
+                console.log('📦 Respuesta:', result);
+
+                if (result.success && result.data) {
+                    miembros = result.data;
+                    miembrosFiltrados = [...miembros];
+                    console.log('✅ Miembros cargados:', miembros.length);
+
+                    actualizarEstadisticas();
+                    renderizarMiembros();
+                } else {
+                    throw new Error('No se pudieron cargar los miembros');
+                }
+            } catch (error) {
+                console.error('💥 Error al cargar miembros:', error);
+                mostrarError();
+            }
+        }
+
+        // =====================================
+        // ACTUALIZAR ESTADÍSTICAS
+        // =====================================
+        function actualizarEstadisticas() {
+            const total = miembros.length;
+            const activos = miembros.filter(m => m.estadoRobot === 'Activo').length;
+            const puntosTotales = miembros.reduce((sum, m) => sum + (m.puntosTotales || 0), 0);
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statActivos').textContent = activos;
+            document.getElementById('statPuntos').textContent = puntosTotales;
+        }
+
+        // =====================================
+        // RENDERIZAR MIEMBROS
+        // =====================================
+        function renderizarMiembros() {
+            const contenedor = document.getElementById('listaMiembros');
+
+            document.getElementById('contadorMiembros').textContent = miembrosFiltrados.length;
+
+            if (miembros.length === 0) {
+                contenedor.innerHTML = `
+          <div class="empty-state-members">
+            <i class="fas fa-users"></i>
+            <h4>No hay miembros en el club</h4>
+            <p class="text-muted">Los miembros que aceptes aparecerán aquí</p>
+          </div>
+        `;
+                return;
+            }
+
+            if (miembrosFiltrados.length === 0) {
+                contenedor.innerHTML = `
+          <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h5>No se encontraron resultados</h5>
+            <p class="text-muted">Intenta con otros términos de búsqueda</p>
+          </div>
+        `;
+                return;
+            }
+
+            let html = '';
+
+            miembrosFiltrados.forEach(miembro => {
+                const inicial = miembro.nombreCompleto.charAt(0).toUpperCase();
+                const winRate = calcularWinRate(miembro.victorias, miembro.derrotas);
+
+                html += `
+          <div class="member-card">
+            
+            <div class="member-header">
+              <div class="member-avatar-lg">
+                ${inicial}
+              </div>
+              <div class="member-main-info">
+                <div class="member-name">${escaparHTML(miembro.nombreCompleto)}</div>
+                <div class="member-email">
+                  <i class="fas fa-envelope me-1"></i>${escaparHTML(miembro.email)}
+                </div>
+                ${miembro.telefono ? `
+                  <div class="member-phone">
+                    <i class="fas fa-phone"></i>${escaparHTML(miembro.telefono)}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="member-robot-name">
+                <i class="fas fa-robot"></i>
+                ${escaparHTML(miembro.nombreRobot || 'Sin robot')}
+              </div>
+            </div>
+
+            <div class="member-stats-grid">
+              <div class="member-stat points">
+                <div class="member-stat-value">${miembro.puntosTotales || 0}</div>
+                <div class="member-stat-label">Puntos</div>
+              </div>
+              <div class="member-stat wins">
+                <div class="member-stat-value">${miembro.victorias || 0}</div>
+                <div class="member-stat-label">Victorias</div>
+              </div>
+              <div class="member-stat losses">
+                <div class="member-stat-value">${miembro.derrotas || 0}</div>
+                <div class="member-stat-label">Derrotas</div>
+              </div>
+              <div class="member-stat winrate">
+                <div class="member-stat-value">${winRate}%</div>
+                <div class="member-stat-label">Win Rate</div>
+              </div>
+            </div>
+
+            <div class="member-actions">
+              <button class="btn btn-view" onclick="verDetalleMiembro(${miembro.idUsuario})">
+                <i class="fas fa-eye"></i> Ver Perfil
+              </button>
+              <button class="btn btn-expulsar" onclick="expulsarMiembro(${miembro.idUsuario}, '${escaparHTML(miembro.nombreCompleto)}')">
+                <i class="fas fa-user-times"></i> Expulsar
+              </button>
+            </div>
+
+          </div>
+        `;
+            });
+
+            contenedor.innerHTML = html;
+        }
+
+        // =====================================
+        // FILTRAR MIEMBROS
+        // =====================================
+        function filtrarMiembros() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            if (searchTerm === '') {
+                miembrosFiltrados = [...miembros];
+            } else {
+                miembrosFiltrados = miembros.filter(miembro => {
+                    return miembro.nombreCompleto.toLowerCase().includes(searchTerm) ||
+                        miembro.email.toLowerCase().includes(searchTerm) ||
+                        (miembro.nombreRobot && miembro.nombreRobot.toLowerCase().includes(searchTerm)) ||
+                        (miembro.telefono && miembro.telefono.includes(searchTerm));
+                });
+            }
+
+            renderizarMiembros();
+        }
+
+        // =====================================
+        // ORDENAR MIEMBROS
+        // =====================================
+        function ordenarMiembros() {
+            const criterio = document.getElementById('sortSelect').value;
+
+            miembrosFiltrados.sort((a, b) => {
+                switch (criterio) {
+                    case 'nombre':
+                        return a.nombreCompleto.localeCompare(b.nombreCompleto);
+                    case 'puntos':
+                        return (b.puntosTotales || 0) - (a.puntosTotales || 0);
+                    case 'victorias':
+                        return (b.victorias || 0) - (a.victorias || 0);
+                    case 'winrate':
+                        const wrA = calcularWinRate(a.victorias, a.derrotas);
+                        const wrB = calcularWinRate(b.victorias, b.derrotas);
+                        return wrB - wrA;
+                    default:
+                        return 0;
+                }
+            });
+
+            renderizarMiembros();
+        }
+
+        // =====================================
+        // VER DETALLE DE MIEMBRO
+        // =====================================
+        function verDetalleMiembro(idUsuario) {
+            // Implementación futura: Modal con detalles completos
+            mostrarAlerta('Próximamente: Ver perfil completo del miembro', 'info');
+        }
+
+        // =====================================
+        // EXPULSAR MIEMBRO
+        // =====================================
+        async function expulsarMiembro(idUsuario, nombreMiembro) {
+            const confirmado = confirmar(
+                `¿Estás seguro de que deseas expulsar a "${nombreMiembro}" del club?\n\n` +
+                `Esta acción no se puede deshacer. El miembro perderá acceso al club y deberá unirse a otro.`
+            );
+
+            if (!confirmado) return;
+
+            mostrarLoading();
+
+            try {
+                const result = await fetchAPI(`/api/representante/miembros/${idUsuario}/expulsar`, 'DELETE');
+
+                ocultarLoading();
+
+                if (result.success) {
+                    mostrarAlerta(`${nombreMiembro} ha sido expulsado del club`, 'success');
+
+                    // Recargar miembros
+                    await cargarMiembros();
+                } else {
+                    mostrarAlerta(result.data?.message || 'Error al expulsar al miembro', 'error');
+                }
+            } catch (error) {
+                ocultarLoading();
+                console.error('Error:', error);
+                mostrarAlerta('Error de conexión al expulsar miembro', 'error');
+            }
+        }
+
+        // =====================================
+        // HELPERS
+        // =====================================
+        function calcularWinRate(victorias, derrotas) {
+            victorias = victorias || 0;
+            derrotas = derrotas || 0;
+            const total = victorias + derrotas;
+
+            if (total === 0) return 0;
+
+            return Math.round((victorias / total) * 100);
+        }
+
+        function mostrarError() {
+            document.getElementById('listaMiembros').innerHTML = `
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-triangle"></i>
+          Error al cargar miembros. Por favor, recarga la página.
+        </div>
+      `;
+        }
+    </script>
+</body>
+
+</html>
