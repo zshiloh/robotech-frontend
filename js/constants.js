@@ -9,8 +9,8 @@ const API_URL = (() => {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:8080/api';
   }
-
-  return 'https://api.robotech.com/api';
+  // Producción en GitHub Pages
+  return 'https://robotech-backend.onrender.com/api';
 })();
 
 // ================================
